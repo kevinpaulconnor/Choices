@@ -1,5 +1,5 @@
 //
-//  FirstViewController.swift
+//  SetLoaderViewController.swift
 //  PreferencePicker
 //
 //  Created by Kevin Connor on 2/18/16.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FirstViewController: UIViewController {
+class SetLoaderViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
