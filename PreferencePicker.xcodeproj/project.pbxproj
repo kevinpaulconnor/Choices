@@ -15,9 +15,13 @@
 		6D1496CE1C765704004E6017 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D1496CC1C765704004E6017 /* LaunchScreen.storyboard */; };
 		6D1496D91C765704004E6017 /* PreferencePickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1496D81C765704004E6017 /* PreferencePickerTests.swift */; };
 		6D1496E41C765704004E6017 /* PreferencePickerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1496E31C765704004E6017 /* PreferencePickerUITests.swift */; };
-		6D1496F21C77EA44004E6017 /* DisplaySetTypesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1496F11C77EA44004E6017 /* DisplaySetTypesTableViewController.swift */; };
+		6D1496F21C77EA44004E6017 /* DisplayPreferenceSetTypesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1496F11C77EA44004E6017 /* DisplayPreferenceSetTypesTableViewController.swift */; };
 		6D1496F61C77F460004E6017 /* PreferenceSetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1496F51C77F460004E6017 /* PreferenceSetType.swift */; };
 		6D1496F81C7B9BCE004E6017 /* PreferenceSetTypeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1496F71C7B9BCE004E6017 /* PreferenceSetTypeManager.swift */; };
+		6D1496FA1C7BC9BF004E6017 /* DisplayPreferenceSetsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1496F91C7BC9BF004E6017 /* DisplayPreferenceSetsTableViewController.swift */; };
+		6D1496FC1C7BCDA2004E6017 /* PreferenceSetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1496FB1C7BCDA2004E6017 /* PreferenceSetManager.swift */; };
+		6D1496FE1C7BCDBF004E6017 /* PreferenceSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1496FD1C7BCDBF004E6017 /* PreferenceSet.swift */; };
+		6D1497001C7BCDED004E6017 /* iTunesPlaylistPreferenceSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1496FF1C7BCDED004E6017 /* iTunesPlaylistPreferenceSet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,9 +56,13 @@
 		6D1496DF1C765704004E6017 /* PreferencePickerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PreferencePickerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D1496E31C765704004E6017 /* PreferencePickerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencePickerUITests.swift; sourceTree = "<group>"; };
 		6D1496E51C765704004E6017 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6D1496F11C77EA44004E6017 /* DisplaySetTypesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplaySetTypesTableViewController.swift; sourceTree = "<group>"; };
+		6D1496F11C77EA44004E6017 /* DisplayPreferenceSetTypesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayPreferenceSetTypesTableViewController.swift; sourceTree = "<group>"; };
 		6D1496F51C77F460004E6017 /* PreferenceSetType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceSetType.swift; sourceTree = "<group>"; };
 		6D1496F71C7B9BCE004E6017 /* PreferenceSetTypeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceSetTypeManager.swift; sourceTree = "<group>"; };
+		6D1496F91C7BC9BF004E6017 /* DisplayPreferenceSetsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayPreferenceSetsTableViewController.swift; sourceTree = "<group>"; };
+		6D1496FB1C7BCDA2004E6017 /* PreferenceSetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceSetManager.swift; sourceTree = "<group>"; };
+		6D1496FD1C7BCDBF004E6017 /* PreferenceSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceSet.swift; sourceTree = "<group>"; };
+		6D1496FF1C7BCDED004E6017 /* iTunesPlaylistPreferenceSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iTunesPlaylistPreferenceSet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,9 +117,13 @@
 				6D1496C31C765704004E6017 /* SetLoaderViewController.swift */,
 				6D1496C51C765704004E6017 /* SecondViewController.swift */,
 				6D1496C71C765704004E6017 /* Main.storyboard */,
-				6D1496F11C77EA44004E6017 /* DisplaySetTypesTableViewController.swift */,
+				6D1496F11C77EA44004E6017 /* DisplayPreferenceSetTypesTableViewController.swift */,
+				6D1496F91C7BC9BF004E6017 /* DisplayPreferenceSetsTableViewController.swift */,
 				6D1496F51C77F460004E6017 /* PreferenceSetType.swift */,
 				6D1496F71C7B9BCE004E6017 /* PreferenceSetTypeManager.swift */,
+				6D1496FB1C7BCDA2004E6017 /* PreferenceSetManager.swift */,
+				6D1496FD1C7BCDBF004E6017 /* PreferenceSet.swift */,
+				6D1496FF1C7BCDED004E6017 /* iTunesPlaylistPreferenceSet.swift */,
 				6D1496CA1C765704004E6017 /* Assets.xcassets */,
 				6D1496CC1C765704004E6017 /* LaunchScreen.storyboard */,
 				6D1496CF1C765704004E6017 /* Info.plist */,
@@ -270,10 +282,14 @@
 			files = (
 				6D1496C61C765704004E6017 /* SecondViewController.swift in Sources */,
 				6D1496F61C77F460004E6017 /* PreferenceSetType.swift in Sources */,
+				6D1496FA1C7BC9BF004E6017 /* DisplayPreferenceSetsTableViewController.swift in Sources */,
+				6D1496FC1C7BCDA2004E6017 /* PreferenceSetManager.swift in Sources */,
 				6D1496C21C765704004E6017 /* AppDelegate.swift in Sources */,
+				6D1496FE1C7BCDBF004E6017 /* PreferenceSet.swift in Sources */,
 				6D1496C41C765704004E6017 /* SetLoaderViewController.swift in Sources */,
 				6D1496F81C7B9BCE004E6017 /* PreferenceSetTypeManager.swift in Sources */,
-				6D1496F21C77EA44004E6017 /* DisplaySetTypesTableViewController.swift in Sources */,
+				6D1496F21C77EA44004E6017 /* DisplayPreferenceSetTypesTableViewController.swift in Sources */,
+				6D1497001C7BCDED004E6017 /* iTunesPlaylistPreferenceSet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
