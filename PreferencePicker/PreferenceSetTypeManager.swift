@@ -10,7 +10,7 @@
 import Foundation
 
 class PreferenceSetTypeManager {
-    let types = [PreferenceSetType](
+    private let types = [PreferenceSetType](
         arrayLiteral: PreferenceSetType(id:PreferenceSetTypeIds.iTunesPlaylist,
                         description: "iTunes Playlist"
         )
@@ -20,16 +20,12 @@ class PreferenceSetTypeManager {
         static let iTunesPlaylist = "iTunesPlayList"
     }
     
-    func preferenceSetTypeDescriptions() -> [String] {
-        var descriptions = [String]()
-        for type in types {
-            descriptions.append(type.description)
-        }
-        return descriptions
+    func allPreferenceSetTypes() -> [PreferenceSetType] {
+        return types
     }
     
-    func getSetType(psId: PreferenceSetTypeIds) -> PreferenceSetType {
-        return types[psId.hashValue]
-    }
+    //func getSetType(psId: PreferenceSetTypeIds) -> PreferenceSetType {
+    //    return types[psId.hashValue]
+    //}
     
 }
