@@ -11,13 +11,13 @@ import Foundation
 
 class PreferenceSetTypeManager {
     let types = [PreferenceSetType](
-        arrayLiteral: PreferenceSetType(id:"iTunesPlaylist",
+        arrayLiteral: PreferenceSetType(id:PreferenceSetTypeIds.iTunesPlaylist,
                         description: "iTunes Playlist"
         )
     )
 
-    enum PreferenceSetTypeIds {
-        case iTunesPlaylist
+    struct PreferenceSetTypeIds {
+        static let iTunesPlaylist = "iTunesPlayList"
     }
     
     func preferenceSetTypeDescriptions() -> [String] {
