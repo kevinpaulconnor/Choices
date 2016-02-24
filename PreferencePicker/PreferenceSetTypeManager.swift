@@ -8,10 +8,11 @@
 //
 
 import Foundation
+import MediaPlayer
 
 class PreferenceSetTypeManager {
     private let types = [PreferenceSetType](
-        arrayLiteral: PreferenceSetType(id:PreferenceSetTypeIds.iTunesPlaylist,
+        arrayLiteral: iTunesPreferenceSetType(id:PreferenceSetTypeIds.iTunesPlaylist,
                         description: "iTunes Playlist"
         )
     )
@@ -28,4 +29,40 @@ class PreferenceSetTypeManager {
     //    return types[psId.hashValue]
     //}
     
+}
+
+class PreferenceSetType {
+    var importable: Bool = true
+    var creatable: Bool = false
+    var description: String?
+    var id: String?
+    
+    init(id: String, description: String) {
+        self.id = id
+        self.description = description
+    }
+    
+    class func getAvailableSetsForImport() {
+        
+    }
+
+}
+
+class iTunesPreferenceSetType: PreferenceSetType {
+    
+    override init(id: String, description: String) {
+        super.init(id: id, description: description)
+    }
+    
+    class override func getAvailableSetsForImport() {
+        // var albumPredicate: MPMediaPropertyPredicate =
+        //MPMediaPropertyPredicate(value: MPMediaType.Music, forProperty: MPMediaItemPropertyMediaType)
+        
+        var playlists = MPMediaQuery.playlistsQuery()
+        
+        for item in playlists.items! {
+            print("\(item)")
+        }
+        
+    }
 }
