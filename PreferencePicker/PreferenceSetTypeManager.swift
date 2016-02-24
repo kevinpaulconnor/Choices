@@ -42,7 +42,7 @@ class PreferenceSetType {
         self.description = description
     }
     
-    class func getAvailableSetsForImport() {
+    func getAvailableSetsForImport() {
         
     }
 
@@ -54,7 +54,7 @@ class iTunesPreferenceSetType: PreferenceSetType {
         super.init(id: id, description: description)
     }
     
-    class override func getAvailableSetsForImport() {
+    override func getAvailableSetsForImport() {
         // var albumPredicate: MPMediaPropertyPredicate =
         //MPMediaPropertyPredicate(value: MPMediaType.Music, forProperty: MPMediaItemPropertyMediaType)
         
