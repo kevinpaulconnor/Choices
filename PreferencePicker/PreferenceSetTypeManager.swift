@@ -12,14 +12,8 @@ import MediaPlayer
 
 class PreferenceSetTypeManager {
     private let types = [PreferenceSetType](
-        arrayLiteral: iTunesPreferenceSetType(id:PreferenceSetTypeIds.iTunesPlaylist,
-                        description: "iTunes Playlist"
-        )
+        arrayLiteral: iTunesPreferenceSetType()
     )
-
-    struct PreferenceSetTypeIds {
-        static let iTunesPlaylist = "iTunesPlayList"
-    }
     
     func allPreferenceSetTypes() -> [PreferenceSetType] {
         return types
@@ -31,37 +25,34 @@ class PreferenceSetTypeManager {
     
 }
 
-class PreferenceSetType {
-    var importable: Bool = true
-    var creatable: Bool = false
-    var description: String?
-    var id: String?
-    
-    init(id: String, description: String) {
-        self.id = id
-        self.description = description
-    }
-    
-    func getAvailableSetsForImport() {
-        
-    }
+struct PreferenceSetTypeIds {
+    static let iTunesPlaylist = "iTunesPlayList"
+}
 
+protocol PreferenceSetType {
+    var importable: Bool { get }
+    var creatable: Bool { get }
+    var description: String { get }
+    var id: String { get }
+
+    func getAvailableSetsForImport() -> [MPMediaItemCollection]
+    
 }
 
 class iTunesPreferenceSetType: PreferenceSetType {
+    var importable = true
+    var creatable = false
+    var description = "iTunes Playlist"
+    var id = PreferenceSetTypeIds.iTunesPlaylist
     
-    override init(id: String, description: String) {
-        super.init(id: id, description: description)
-    }
-    
-    override func getAvailableSetsForImport() {
+    func getAvailableSetsForImport() -> [MPMediaPlaylist] {
         // var albumPredicate: MPMediaPropertyPredicate =
         //MPMediaPropertyPredicate(value: MPMediaType.Music, forProperty: MPMediaItemPropertyMediaType)
         
-        var playlists = MPMediaQuery.playlistsQuery()
-        
-        for item in playlists.items! {
-            print("\(item)")
+        var playlist = MPMediaQuery.playlistsQuery()
+        for collection in playlists.collections! {
+            var playlist = collection as! MPMediaPlaylist
+            print("\(playlist.name!)")
         }
         
     }
