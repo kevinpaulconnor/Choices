@@ -35,7 +35,7 @@ protocol PreferenceSetType {
     var description: String { get }
     var id: String { get }
     
-    func getAvailableSetsForImport() -> [MPMediaItemCollection]?
+    func getAvailableSetsForImport() -> [MPMediaItemCollection]
     
 }
 
@@ -45,13 +45,10 @@ class iTunesPreferenceSetType: PreferenceSetType {
     var description = "iTunes Playlist"
     var id = PreferenceSetTypeIds.iTunesPlaylist
     
-    func getAvailableSetsForImport() -> [MPMediaItemCollection]? {
+    func getAvailableSetsForImport() -> [MPMediaItemCollection] {
         // var albumPredicate: MPMediaPropertyPredicate =
         //MPMediaPropertyPredicate(value: MPMediaType.Music, forProperty: MPMediaItemPropertyMediaType)
         
-        let query = MPMediaQuery.playlistsQuery()
-        let playlists = query.collections as! [MPMediaPlaylist]
-        return playlists
-        
+        return MPMediaQuery.playlistsQuery().collections!
     }
 }
