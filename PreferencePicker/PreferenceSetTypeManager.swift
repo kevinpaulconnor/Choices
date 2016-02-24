@@ -36,6 +36,7 @@ protocol PreferenceSetType {
     var id: String { get }
     
     func getAvailableSetsForImport() -> [MPMediaItemCollection]
+    func displayNameForPotentialSet(potentialSet: MPMediaItemCollection) -> String
     
 }
 
@@ -50,5 +51,10 @@ class iTunesPreferenceSetType: PreferenceSetType {
         //MPMediaPropertyPredicate(value: MPMediaType.Music, forProperty: MPMediaItemPropertyMediaType)
         
         return MPMediaQuery.playlistsQuery().collections!
+    }
+    
+    func displayNameForPotentialSet(potentialSet: MPMediaItemCollection) -> String {
+        let playlist = potentialSet as! MPMediaPlaylist
+        return playlist.name!
     }
 }

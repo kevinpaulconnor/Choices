@@ -7,12 +7,15 @@
 //
 
 import UIKit
+import MediaPlayer
 
 class DisplayPreferenceSetsTableViewController: UITableViewController {
-    var sets = [String]()
+    var candidateSets = [MPMediaItemCollection]()
+    var preferenceSetType: PreferenceSetType?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        candidateSets = preferenceSetType!.getAvailableSetsForImport()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -29,23 +32,25 @@ class DisplayPreferenceSetsTableViewController: UITableViewController {
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return candidateSets.count
     }
 
-    /*
+    private struct Storyboard {
+        static let CellReuseIdentifier = "ChooseSetCell"
+    }
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
-
-        // Configure the cell...
-
+        let cell = tableView.dequeueReusableCellWithIdentifier(Storyboard.CellReuseIdentifier, forIndexPath: indexPath)
+        
+        cell.textLabel?.text = preferenceSetType!.displayNameForPotentialSet(candidateSets[indexPath.row])
+        
         return cell
     }
-    */
 
     /*
     // Override to support conditional editing of the table view.
