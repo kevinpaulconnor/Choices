@@ -9,11 +9,11 @@
 import UIKit
 
 class DisplayPreferenceSetTypesTableViewController: UITableViewController {
-    var types = [String]()
+    var types = [PreferenceSetType]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        types = PreferenceSetTypeManager().preferenceSetTypeDescriptions()
+        types = PreferenceSetTypeManager().allPreferenceSetTypes()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -43,7 +43,7 @@ class DisplayPreferenceSetTypesTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(Storyboard.CellReuseIdentifier, forIndexPath: indexPath)
         
-        cell.textLabel?.text = types[indexPath.row]
+        cell.textLabel?.text = types[indexPath.row].description
 
         return cell
     }
@@ -90,7 +90,8 @@ class DisplayPreferenceSetTypesTableViewController: UITableViewController {
         if ( segue.identifier == "ChooseImportType") {
             if let indexPath = tableView.indexPathForCell(sender as! UITableViewCell) {
                 let preferenceSetVC = segue.destinationViewController as! DisplayPreferenceSetsTableViewController
-                preferenceSetVC.title = types[indexPath.row]
+                preferenceSetVC.title = types[indexPath.row].description
+                preferenceSetVC.preferenceSetType = types[indexPath.row]
             }
         }
     }
