@@ -105,6 +105,7 @@ class DisplayPreferenceSetsTableViewController: UITableViewController {
                 let importController = segue.destinationViewController as! ImportSetViewController
                 importController.candidateSetTitle = self.candidateSetTitleForDisplay(indexPath)
                 importController.candidateSetItemCount = self.candidateSetItemCountForDisplay(indexPath)
+                importController.candidateSet = self.candidateSets[indexPath]
             }
         }
     }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MediaPlayer
 
 class ImportSetViewController: UIViewController {
 
@@ -14,10 +15,10 @@ class ImportSetViewController: UIViewController {
     @IBOutlet weak var candidateSetItemCountDisplay: UILabel!
     var candidateSetTitle: String?
     var candidateSetItemCount: String?
+    var candidateSet: MPMediaItemCollection?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         candidateSetTitleDisplay.text = candidateSetTitle!
         candidateSetItemCountDisplay.text = candidateSetItemCount!
     }
