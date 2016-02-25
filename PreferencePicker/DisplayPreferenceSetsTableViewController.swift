@@ -44,15 +44,23 @@ class DisplayPreferenceSetsTableViewController: UITableViewController {
         static let CellReuseIdentifier = "ChooseSetCell"
     }
     
+    private func candidateSetTitleForDisplay(indexPath: NSIndexPath) -> String {
+        return preferenceSetType!.displayNameForPotentialSet(candidateSets[indexPath.row])
+    }
+    
+    private func candidateSetItemCountForDisplay(indexPath: NSIndexPath) -> String {
+        let count = candidateSets[indexPath.row].count
+        return "\(count) \(preferenceSetType!.nameForItemsOfThisType(count))"
+    }
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(Storyboard.CellReuseIdentifier, forIndexPath: indexPath)
         
-        cell.textLabel?.text = preferenceSetType!.displayNameForPotentialSet(candidateSets[indexPath.row])
-        let count = candidateSets[indexPath.row].count
-        cell.detailTextLabel?.text = "\(count) \(preferenceSetType!.nameForItemsOfThisType(count))"
+        cell.textLabel?.text = self.candidateSetTitleForDisplay(indexPath)
+        cell.detailTextLabel?.text = self.candidateSetItemCountForDisplay(indexPath)
         return cell
     }
-
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -88,14 +96,17 @@ class DisplayPreferenceSetsTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if ( segue.identifier == "ImportSetPopover") {
+            if let indexPath = tableView.indexPathForCell(sender as! UITableViewCell) {
+                let importController = segue.destinationViewController as! ImportSetViewController
+                importController.candidateSetTitle = self.candidateSetTitleForDisplay(indexPath)
+                importController.candidateSetItemCount = self.candidateSetItemCountForDisplay(indexPath)
+            }
+        }
     }
-    */
 
 }
