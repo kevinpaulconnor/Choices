@@ -121,30 +121,51 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D2B-ry-RRr">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gDW-o1-rc3">
-                                        <rect key="frame" x="264" y="285" width="73" height="30"/>
-                                        <state key="normal" title="Import Set"/>
-                                    </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Songs" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dao-CE-0gz">
-                                        <rect key="frame" x="315" y="256" width="49" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zbk-IX-y0b">
-                                        <rect key="frame" x="239" y="256" width="34" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Songs" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dao-CE-0gz">
+                                <rect key="frame" x="20" y="119" width="560" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="52" id="oLC-VB-k9I"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="oLC-VB-k9I"/>
+                                    </mask>
+                                </variation>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zbk-IX-y0b">
+                                <rect key="frame" x="20" y="72" width="560" height="39"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="32"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gDW-o1-rc3">
+                                <rect key="frame" x="20" y="57" width="560" height="486"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="Import Set"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="zbk-IX-y0b" firstAttribute="leading" secondItem="Dao-CE-0gz" secondAttribute="leading" id="3Q9-12-pg8"/>
+                            <constraint firstItem="zbk-IX-y0b" firstAttribute="trailing" secondItem="Dao-CE-0gz" secondAttribute="trailing" id="6Kr-Ca-J8W"/>
+                            <constraint firstItem="Dao-CE-0gz" firstAttribute="top" secondItem="4mE-nL-NDO" secondAttribute="top" constant="123" id="7Oc-LL-9bu"/>
+                            <constraint firstItem="zbk-IX-y0b" firstAttribute="top" secondItem="rBO-ch-bBD" secondAttribute="bottom" constant="8" symbolic="YES" id="Lmc-vE-ZE1"/>
+                            <constraint firstItem="MxA-QC-Pdz" firstAttribute="top" secondItem="gDW-o1-rc3" secondAttribute="bottom" constant="8" symbolic="YES" id="Rwf-ys-fYT"/>
+                            <constraint firstItem="zbk-IX-y0b" firstAttribute="trailing" secondItem="4mE-nL-NDO" secondAttribute="trailingMargin" id="SdH-nF-Ugq"/>
+                            <constraint firstItem="zbk-IX-y0b" firstAttribute="leading" secondItem="4mE-nL-NDO" secondAttribute="leadingMargin" id="Thb-pv-m86"/>
+                            <constraint firstItem="gDW-o1-rc3" firstAttribute="centerY" secondItem="4mE-nL-NDO" secondAttribute="centerY" id="eJ2-FZ-nj8"/>
+                            <constraint firstItem="gDW-o1-rc3" firstAttribute="leading" secondItem="Dao-CE-0gz" secondAttribute="leading" id="o8F-2Y-aKc"/>
+                            <constraint firstItem="Dao-CE-0gz" firstAttribute="top" secondItem="zbk-IX-y0b" secondAttribute="bottom" constant="8" symbolic="YES" id="qmM-5q-VYN"/>
+                            <constraint firstItem="gDW-o1-rc3" firstAttribute="trailing" secondItem="Dao-CE-0gz" secondAttribute="trailing" id="sNG-xl-KpY"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="7Oc-LL-9bu"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="candidateSetItemCountDisplay" destination="Dao-CE-0gz" id="k23-7z-1vJ"/>
@@ -153,7 +174,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mIy-VY-mIu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4188" y="810"/>
+            <point key="canvasLocation" x="4182" y="810"/>
         </scene>
         <!--Import A Set-->
         <scene sceneID="3I8-38-Lsl">
