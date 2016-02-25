@@ -48,7 +48,8 @@ class DisplayPreferenceSetsTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier(Storyboard.CellReuseIdentifier, forIndexPath: indexPath)
         
         cell.textLabel?.text = preferenceSetType!.displayNameForPotentialSet(candidateSets[indexPath.row])
-        cell.detailTextLabel?.text = "\(candidateSets[indexPath.row].count) items"
+        let count = candidateSets[indexPath.row].count
+        cell.detailTextLabel?.text = "\(count) \(preferenceSetType!.nameForItemsOfThisType(count))"
         return cell
     }
 
