@@ -13,6 +13,7 @@ class DisplayPreferenceSetTypesTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // might want to investigate PSTM as a struct and/or not having to instantiate here
         types = PreferenceSetTypeManager().allPreferenceSetTypes()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false

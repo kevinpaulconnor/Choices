@@ -30,8 +30,8 @@ struct PreferenceSetTypeIds {
 }
 
 protocol PreferenceSetType {
-    var importable: Bool { get }
-    var creatable: Bool { get }
+    static var importable: Bool { get }
+    static var creatable: Bool { get }
     var description: String { get }
     var id: String { get }
     
@@ -42,8 +42,8 @@ protocol PreferenceSetType {
 }
 
 class iTunesPreferenceSetType: PreferenceSetType {
-    var importable = true
-    var creatable = false
+    static var importable = true
+    static var creatable = false
     var description = "iTunes Playlist"
     var id = PreferenceSetTypeIds.iTunesPlaylist
     
