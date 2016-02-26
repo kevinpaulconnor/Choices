@@ -7,7 +7,25 @@
 //
 
 import Foundation
+import MediaPlayer
 
-class PreferenceSet {
+protocol PreferenceSet {
+    var items: [PreferenceSetItem] { get set }
+    var imported: Bool { get set }
+    var created: Bool { get set }
     
+    
+}
+
+// would love to figure out how to name this programmatically, e.g. PreferenceSetTypeIds.iTunesPlaylist
+class iTunesPlaylistPreferenceSet : PreferenceSet {
+    var items = [PreferenceSetItem]()
+    var imported = iTunesPreferenceSetType.importable
+    var created = iTunesPreferenceSetType.creatable
+    
+    init(candidateItems: [MPMediaItem]) {
+        for item in candidateItems {
+            items.append(iTunesPreferenceSetItem(candidateItem: item))
+        }
+    }
 }
