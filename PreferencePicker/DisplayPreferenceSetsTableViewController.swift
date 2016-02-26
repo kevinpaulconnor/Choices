@@ -45,7 +45,7 @@ class DisplayPreferenceSetsTableViewController: UITableViewController {
     }
     
     private func candidateSetTitleForDisplay(indexPath: NSIndexPath) -> String {
-        return preferenceSetType!.displayNameForPotentialSet(candidateSets[indexPath.row])
+        return preferenceSetType!.displayNameForCandidateSet(candidateSets[indexPath.row])
     }
     
     private func candidateSetItemCountForDisplay(indexPath: NSIndexPath) -> String {
