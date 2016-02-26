@@ -16,6 +16,7 @@ class ImportSetViewController: UIViewController {
     var candidateSetTitle: String?
     var candidateSetItemCount: String?
     var candidateSet: MPMediaItemCollection?
+    var preferenceSetType: PreferenceSetType?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +30,7 @@ class ImportSetViewController: UIViewController {
     }
     
     func importSet() {
-        
+        var newPreferenceSet = preferenceSetType!.createPreferenceSet(candidateSet!)
     }
 
 }
