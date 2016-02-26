@@ -17,7 +17,7 @@ protocol PreferenceSet {
     
 }
 
-// would love to figure out how to name this programmatically, e.g. PreferenceSetTypeIds.iTunesPlaylist
+// would love to figure out how to classname this programmatically, e.g. PreferenceSetTypeIds.iTunesPlaylist
 class iTunesPlaylistPreferenceSet : PreferenceSet {
     var items = [PreferenceSetItem]()
     var imported = iTunesPreferenceSetType.importable
