@@ -425,7 +425,7 @@
         <!--Load-->
         <scene sceneID="Yy8-bk-MLR">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="mGS-vd-IcI" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="LoadNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="mGS-vd-IcI" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Load" image="first" id="acW-dT-cKf"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="4j0-M5-bsu">

@@ -18,9 +18,12 @@ class PreferencePickerTabBarViewController: UITabBarController {
         static let ActiveSet = 2
     }
     
+    // after importing a set, set ActiveSet to active tab, and reset TabIndex.Load
     @IBAction func importedSet(segue: UIStoryboardSegue) {
         let importController = segue.sourceViewController as! ImportSetViewController
         self.activeSet = importController.importSet()
+ 
+        self.viewControllers![TabIndex.Load] = storyboard!.instantiateViewControllerWithIdentifier("LoadNavigationController")
         let navController = self.viewControllers![TabIndex.ActiveSet] as! UINavigationController
         let ActiveSetVC = navController.topViewController as! DisplayActiveSetTableViewController
         ActiveSetVC.activeSet = self.activeSet
