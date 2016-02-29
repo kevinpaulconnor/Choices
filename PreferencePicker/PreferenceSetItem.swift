@@ -10,24 +10,26 @@ import Foundation
 import MediaPlayer
 
 protocol PreferenceSetItem {
-
+    var mediaItem: MPMediaItem {get set}
+    
     func titleForTableDisplay() -> String
     func subtitleForTableDisplay() -> String
     
 }
 
 class iTunesPreferenceSetItem : PreferenceSetItem {
+    var mediaItem: MPMediaItem
     
     init(candidateItem: MPMediaItem) {
-        
+        self.mediaItem = candidateItem
     }
     
     func titleForTableDisplay() -> String {
-        return  "title"
+        return (self.mediaItem.title ?? "No Title")
     }
     
     func subtitleForTableDisplay() -> String {
-        return  "subtitle"
+        return (self.mediaItem.albumArtist ?? "No Artist")
     }
     
 }
