@@ -32,11 +32,11 @@ class ImportSetViewController: UIViewController {
     
     func importSet() {
         self.newPreferenceSet = preferenceSetType!.createPreferenceSet(candidateSet!)
-        performSegueWithIdentifier("DisplayImportedSet", sender: nil)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if ( segue.identifier == "DisplayImportedSet") {
+        if ( segue.identifier == "ImportAndDisplay") {
+            self.importSet()
             let ActiveSetVC = segue.destinationViewController as! DisplayActiveSetTableViewController
             ActiveSetVC.activeSet = self.newPreferenceSet
         }
