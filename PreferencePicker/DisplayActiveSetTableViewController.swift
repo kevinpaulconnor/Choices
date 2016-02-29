@@ -14,7 +14,7 @@ class DisplayActiveSetTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -31,23 +31,33 @@ class DisplayActiveSetTableViewController: UITableViewController {
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return activeSet!.items.count
     }
-
-    /*
+    
+    private struct Storyboard {
+        static let CellReuseIdentifier = "ChooseActiveSetCell"
+    }
+    
+    private func activeItemTitleForDisplay(indexPath: NSIndexPath) -> String {
+        return activeSet!.items[indexPath.row].titleForTableDisplay()
+    }
+    
+    private func activeItemSubtitleForTableDisplay(indexPath: NSIndexPath) -> String {
+        return activeSet!.items[indexPath.row].subtitleForTableDisplay()
+    }
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
-
-        // Configure the cell...
-
+        let cell = tableView.dequeueReusableCellWithIdentifier(Storyboard.CellReuseIdentifier, forIndexPath: indexPath)
+        
+        cell.textLabel?.text = self.activeItemTitleForDisplay(indexPath)
+        cell.detailTextLabel?.text = self.activeItemSubtitleForTableDisplay(indexPath)
         return cell
     }
-    */
 
     /*
     // Override to support conditional editing of the table view.

@@ -146,7 +146,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Import Set"/>
                                 <connections>
-                                    <segue destination="QMS-6N-qOg" kind="show" id="fhh-RX-0i2"/>
+                                    <segue destination="QMS-6N-qOg" kind="show" identifier="ImportAndDisplay" id="fhh-RX-0i2"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -356,7 +356,7 @@
             </objects>
             <point key="canvasLocation" x="750" y="360"/>
         </scene>
-        <!--Display Active Set Table View Controller-->
+        <!--Active-->
         <scene sceneID="8Dz-eA-Sr2">
             <objects>
                 <tableViewController id="QMS-6N-qOg" customClass="DisplayActiveSetTableViewController" customModule="PreferencePicker" customModuleProvider="target" sceneMemberID="viewController">
@@ -365,12 +365,28 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="D48-93-umz">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChooseActiveSetCell" textLabel="nWb-TU-Vv6" detailTextLabel="k9Q-n0-IbZ" style="IBUITableViewCellStyleSubtitle" id="D48-93-umz">
                                 <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="D48-93-umz" id="UNp-54-fFv">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="nWb-TU-Vv6">
+                                            <rect key="frame" x="15" y="5" width="32" height="20"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="k9Q-n0-IbZ">
+                                            <rect key="frame" x="15" y="25" width="41" height="14"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
@@ -379,6 +395,7 @@
                             <outlet property="delegate" destination="QMS-6N-qOg" id="eja-Zr-Cdg"/>
                         </connections>
                     </tableView>
+                    <tabBarItem key="tabBarItem" title="Active" image="second" id="ebf-Iy-usb"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8LY-if-Gvo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -397,6 +414,7 @@
                     <connections>
                         <segue destination="mGS-vd-IcI" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
                         <segue destination="8rJ-Kc-sve" kind="relationship" relationship="viewControllers" id="lzU-1b-eKA"/>
+                        <segue destination="QMS-6N-qOg" kind="relationship" relationship="viewControllers" id="B4E-iB-xE0"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
@@ -427,4 +445,7 @@
         <image name="first" width="30" height="30"/>
         <image name="second" width="30" height="30"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="fhh-RX-0i2"/>
+    </inferredMetricsTieBreakers>
 </document>

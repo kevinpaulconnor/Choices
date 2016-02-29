@@ -11,12 +11,23 @@ import MediaPlayer
 
 protocol PreferenceSetItem {
 
+    func titleForTableDisplay() -> String
+    func subtitleForTableDisplay() -> String
+    
 }
 
 class iTunesPreferenceSetItem : PreferenceSetItem {
     
     init(candidateItem: MPMediaItem) {
         
+    }
+    
+    func titleForTableDisplay() -> String {
+        return  "title"
+    }
+    
+    func subtitleForTableDisplay() -> String {
+        return  "subtitle"
     }
     
 }
