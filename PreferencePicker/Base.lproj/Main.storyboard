@@ -62,10 +62,10 @@
             </objects>
             <point key="canvasLocation" x="1560" y="-320"/>
         </scene>
-        <!--Display Preference Sets Table View Controller-->
+        <!--Display Candidate Preference Sets Table View Controller-->
         <scene sceneID="DeB-Cp-6vF">
             <objects>
-                <tableViewController id="690-TQ-u8P" customClass="DisplayPreferenceSetsTableViewController" customModule="PreferencePicker" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="690-TQ-u8P" customClass="DisplayCandidatePreferenceSetsTableViewController" customModule="PreferencePicker" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="FTl-wB-Rk8">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

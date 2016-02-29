@@ -1,5 +1,5 @@
 //
-//  DisplayPreferenceSetsTableViewController.swift
+//  DisplayCandidatePreferenceSetsTableViewController.swift
 //  PreferencePicker
 //
 //  Created by Kevin Connor on 2/22/16.
@@ -9,7 +9,7 @@
 import UIKit
 import MediaPlayer
 
-class DisplayPreferenceSetsTableViewController: UITableViewController {
+class DisplayCandidatePreferenceSetsTableViewController: UITableViewController {
     var candidateSets = [MPMediaItemCollection]()
     var preferenceSetType: PreferenceSetType?
     

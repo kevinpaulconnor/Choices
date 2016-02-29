@@ -90,7 +90,7 @@ class DisplayPreferenceSetTypesTableViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if ( segue.identifier == "ChooseImportType") {
             if let indexPath = tableView.indexPathForCell(sender as! UITableViewCell) {
-                let preferenceSetVC = segue.destinationViewController as! DisplayPreferenceSetsTableViewController
+                let preferenceSetVC = segue.destinationViewController as! DisplayCandidatePreferenceSetsTableViewController
                 preferenceSetVC.title = types[indexPath.row].description
                 preferenceSetVC.preferenceSetType = types[indexPath.row]
             }
