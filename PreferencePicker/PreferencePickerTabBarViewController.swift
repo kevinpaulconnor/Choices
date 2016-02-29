@@ -12,14 +12,20 @@ class PreferencePickerTabBarViewController: UITabBarController {
     
     var activeSet: PreferenceSet?
 
+    private struct TabIndex {
+        static let Load = 0
+        static let Second = 1
+        static let ActiveSet = 2
+    }
+    
     @IBAction func importedSet(segue: UIStoryboardSegue) {
         let importController = segue.sourceViewController as! ImportSetViewController
         self.activeSet = importController.importSet()
-        let navController = self.viewControllers![2] as! UINavigationController
+        let navController = self.viewControllers![TabIndex.ActiveSet] as! UINavigationController
         let ActiveSetVC = navController.topViewController as! DisplayActiveSetTableViewController
         ActiveSetVC.activeSet = self.activeSet
         ActiveSetVC.title = self.activeSet!.title
-        self.selectedIndex = 2
+        self.selectedIndex = TabIndex.ActiveSet
     }
     
     override func viewDidLoad() {
