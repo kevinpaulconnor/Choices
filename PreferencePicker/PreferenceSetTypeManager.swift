@@ -38,7 +38,7 @@ protocol PreferenceSetType {
     func getAvailableSetsForImport() -> [MPMediaItemCollection]
     func displayNameForCandidateSet(candidateSet: MPMediaItemCollection) -> String
     func nameForItemsOfThisType(count: Int) -> String
-    func createPreferenceSet(candidateSet: MPMediaItemCollection) -> PreferenceSet
+    func createPreferenceSet(candidateSet: MPMediaItemCollection, title: String) -> PreferenceSet
     
 }
 
@@ -64,8 +64,8 @@ class iTunesPreferenceSetType: PreferenceSetType {
         return (count > 1 ? "songs" : "song")
     }
     
-    func createPreferenceSet(candidateSet: MPMediaItemCollection) -> PreferenceSet {
-        return iTunesPlaylistPreferenceSet(candidateItems: candidateSet.items)
+    func createPreferenceSet(candidateSet: MPMediaItemCollection, title: String) -> PreferenceSet {
+        return iTunesPlaylistPreferenceSet(candidateItems: candidateSet.items, title: title)
     }
     
 }

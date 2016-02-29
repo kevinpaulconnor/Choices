@@ -357,7 +357,7 @@
             </objects>
             <point key="canvasLocation" x="750" y="360"/>
         </scene>
-        <!--Active-->
+        <!--Display Active Set Table View Controller-->
         <scene sceneID="8Dz-eA-Sr2">
             <objects>
                 <tableViewController id="QMS-6N-qOg" customClass="DisplayActiveSetTableViewController" customModule="PreferencePicker" customModuleProvider="target" sceneMemberID="viewController">
@@ -367,7 +367,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChooseActiveSetCell" textLabel="nWb-TU-Vv6" detailTextLabel="k9Q-n0-IbZ" style="IBUITableViewCellStyleSubtitle" id="D48-93-umz">
-                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="D48-93-umz" id="UNp-54-fFv">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
@@ -396,11 +396,11 @@
                             <outlet property="delegate" destination="QMS-6N-qOg" id="eja-Zr-Cdg"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Active" image="second" id="ebf-Iy-usb"/>
+                    <navigationItem key="navigationItem" id="0Lv-g9-yYz"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8LY-if-Gvo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="758" y="1582"/>
+            <point key="canvasLocation" x="1570" y="1582"/>
         </scene>
         <!--Preference Picker Tab Bar View Controller-->
         <scene sceneID="yl2-sM-qoP">
@@ -415,7 +415,7 @@
                     <connections>
                         <segue destination="mGS-vd-IcI" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
                         <segue destination="8rJ-Kc-sve" kind="relationship" relationship="viewControllers" id="lzU-1b-eKA"/>
-                        <segue destination="QMS-6N-qOg" kind="relationship" relationship="viewControllers" id="B4E-iB-xE0"/>
+                        <segue destination="mvR-N5-pVL" kind="relationship" relationship="viewControllers" id="B4E-iB-xE0"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
@@ -440,6 +440,25 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dea-8Z-IoF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="750" y="-320"/>
+        </scene>
+        <!--Active-->
+        <scene sceneID="8Ct-IR-hxx">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="mvR-N5-pVL" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Active" image="second" id="ebf-Iy-usb"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="1p0-pw-Wxo">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="QMS-6N-qOg" kind="relationship" relationship="rootViewController" id="gSs-gq-0kT"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8c4-tV-0T5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="758" y="1582"/>
         </scene>
     </scenes>
     <resources>
