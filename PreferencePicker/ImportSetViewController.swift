@@ -17,7 +17,6 @@ class ImportSetViewController: UIViewController {
     var candidateSetItemCount: String?
     var candidateSet: MPMediaItemCollection?
     var preferenceSetType: PreferenceSetType?
-    var newPreferenceSet: PreferenceSet?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,16 +29,8 @@ class ImportSetViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func importSet() {
-        self.newPreferenceSet = preferenceSetType!.createPreferenceSet(candidateSet!)
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if ( segue.identifier == "ImportAndDisplay") {
-            self.importSet()
-            let ActiveSetVC = segue.destinationViewController as! DisplayActiveSetTableViewController
-            ActiveSetVC.activeSet = self.newPreferenceSet
-        }
+    func importSet() -> PreferenceSet {
+        return preferenceSetType!.createPreferenceSet(candidateSet!)
     }
 
 }
