@@ -9,7 +9,7 @@
         <!--Load Set-->
         <scene sceneID="hNz-n2-bh7">
             <objects>
-                <viewController title="Load Set" id="9pv-A4-QxB" customClass="SetLoaderViewController" customModule="PreferencePicker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoadNewExistingSet" title="Load Set" id="9pv-A4-QxB" customClass="SetLoaderViewController" customModule="PreferencePicker" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Ia1-K6-d13"/>
                         <viewControllerLayoutGuide type="bottom" id="4ug-Mw-9AY"/>
@@ -242,7 +242,7 @@
         <!--Load a New Set-->
         <scene sceneID="c2o-55-0sV">
             <objects>
-                <viewController title="Load a New Set" id="aJV-kX-tSv" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoadNewSet" title="Load a New Set" id="aJV-kX-tSv" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="JTt-bP-TT0"/>
                         <viewControllerLayoutGuide type="bottom" id="OYv-kj-CAB"/>
@@ -288,7 +288,7 @@
         <!--Load an Existing Set-->
         <scene sceneID="WAN-rU-iVw">
             <objects>
-                <tableViewController title="Load an Existing Set" id="nkX-Wo-0ce" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="LoadExistingSet" title="Load an Existing Set" id="nkX-Wo-0ce" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="C0C-KA-sjT">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
