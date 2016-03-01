@@ -11,6 +11,31 @@ import UIKit
 class DisplayActiveSetTableViewController: UITableViewController {
     var activeSet: PreferenceSet?
     
+    override func viewDidAppear(animated: Bool) {
+
+        if self.activeSet == nil {
+            let alert = UIAlertController(
+                title: "No Active Set",
+                message: "Load or Create a Preference Set",
+                preferredStyle: UIAlertControllerStyle.Alert
+            )
+            alert.addAction(UIAlertAction(
+                title: "Create Set",
+                style: UIAlertActionStyle.Default,
+                handler: { (action: UIAlertAction) -> Void in
+            })
+            )
+            alert.addAction(UIAlertAction(
+                title: "Load Set",
+                style: UIAlertActionStyle.Default,
+                handler: { (action: UIAlertAction) -> Void in
+            })
+            )
+            
+            presentViewController(alert, animated: true, completion: nil)
+        }
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,8 +60,8 @@ class DisplayActiveSetTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return activeSet!.items.count
+        //let count = (activeSet ?? activeSet.items.count)
+        return (activeSet != nil ? activeSet!.items.count : 0)
     }
     
     private struct Storyboard {
