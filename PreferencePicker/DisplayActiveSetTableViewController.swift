@@ -11,44 +11,6 @@ import UIKit
 class DisplayActiveSetTableViewController: UITableViewController {
     var activeSet: PreferenceSet?
     
-    override func viewDidAppear(animated: Bool) {
-
-        if self.activeSet == nil {
-            
-            struct HandlerTitles {
-                static let CreateSet = "Create Set"
-                static let LoadSet = "Load Set"
-            }
-            
-            func alertHandler(action: UIAlertAction) -> Void {
-                let loadSetNavController = storyboard!.instantiateViewControllerWithIdentifier("LoadNavigationController") as! UINavigationController
-                loadSetNavController.pushViewController(storyboard!.instantiateViewControllerWithIdentifier("LoadNewExistingSet") as! SetLoaderViewController, animated: true)
-                loadSetNavController.pushViewController(storyboard!.instantiateViewControllerWithIdentifier(action.title!) as! SetLoaderViewController, animated: true )
-
-                self.presentViewController(loadSetNavController, animated: true, completion: nil)
-            }
-            let alert = UIAlertController(
-                title: "No Active Set",
-                message: "Load or Create a Preference Set",
-                preferredStyle: UIAlertControllerStyle.Alert
-            )
-          /*  alert.addAction(UIAlertAction(
-                title: "Create Set",
-                style: UIAlertActionStyle.Default,
-                handler: { (action: UIAlertAction) -> Void in
-            })
-            )*/
-            alert.addAction(UIAlertAction(
-                title: HandlerTitles.LoadSet,
-                style: UIAlertActionStyle.Default,
-                handler: alertHandler
-            ))
-            
-            presentViewController(alert, animated: true, completion: nil)
-        }
-        
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         

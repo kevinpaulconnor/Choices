@@ -405,7 +405,7 @@
         <!--Preference Picker Tab Bar View Controller-->
         <scene sceneID="yl2-sM-qoP">
             <objects>
-                <tabBarController id="49e-Tb-3d3" customClass="PreferencePickerTabBarViewController" customModule="PreferencePicker" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="rootTabController" id="49e-Tb-3d3" customClass="PreferencePickerTabBarViewController" customModule="PreferencePicker" customModuleProvider="target" sceneMemberID="viewController">
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="W28-zg-YXA">
                         <rect key="frame" x="0.0" y="975" width="768" height="49"/>
@@ -444,7 +444,7 @@
         <!--Active-->
         <scene sceneID="8Ct-IR-hxx">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="mvR-N5-pVL" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="ActiveSet" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="mvR-N5-pVL" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Active" image="second" id="ebf-Iy-usb"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="1p0-pw-Wxo">

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PreferencePickerTabBarViewController: UITabBarController {
+class PreferencePickerTabBarViewController: UITabBarController, UITabBarControllerDelegate {
     
     var activeSet: PreferenceSet?
 
@@ -33,6 +33,7 @@ class PreferencePickerTabBarViewController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.delegate = self
 
         // Do any additional setup after loading the view.
     }
@@ -40,6 +41,33 @@ class PreferencePickerTabBarViewController: UITabBarController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func tabBarController(tabBarController: UITabBarController,
+        shouldSelectViewController viewController: UIViewController) -> Bool {
+        var allow = true
+            // do not allow ActiveSet view to load if there is no active set
+            if let restId = viewController.restorationIdentifier {
+                if activeSet == nil && restId == "ActiveSet" {
+                        allow = false
+                        func alertHandler(action: UIAlertAction) -> Void {
+                            self.selectedIndex = TabIndex.Load
+                        }
+                        let alert = UIAlertController(
+                            title: "No Active Set",
+                            message: "Load or Create a Preference Set",
+                            preferredStyle: UIAlertControllerStyle.Alert
+                        )
+                        alert.addAction(UIAlertAction(
+                            title: "Create Or Load A Set",
+                            style: UIAlertActionStyle.Default,
+                            handler: alertHandler
+                            ))
+                        
+                        presentViewController(alert, animated: true, completion: nil)
+                }
+            }
+        return allow
     }
     
 
