@@ -48,7 +48,7 @@ class PreferencePickerTabBarViewController: UITabBarController, UITabBarControll
         var allow = true
             // do not allow ActiveSet view to load if there is no active set
             if let restId = viewController.restorationIdentifier {
-                if activeSet == nil && restId == "ActiveSet" {
+                if activeSet == nil && (restId == "ActiveSet" || restId == "ChoosePreference") {
                         allow = false
                         func alertHandler(action: UIAlertAction) -> Void {
                             self.selectedIndex = TabIndex.Load
