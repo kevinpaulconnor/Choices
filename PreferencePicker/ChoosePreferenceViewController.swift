@@ -1,5 +1,5 @@
 //
-//  SecondViewController.swift
+//  ChoosePreferenceViewController.swift
 //  PreferencePicker
 //
 //  Created by Kevin Connor on 2/18/16.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SecondViewController: UIViewController {
+class ChoosePreferenceViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
