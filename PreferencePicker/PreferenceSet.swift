@@ -12,16 +12,22 @@ import MediaPlayer
 // PreferenceSet protocol provides APIs for the presentation
 // and modification of PreferenceSet in view controllers
 protocol PreferenceSet {
-    var items: [PreferenceSetItem] { get set }
-    var imported: Bool { get set }
-    var created: Bool { get set }
     var title: String {get set }
+    
+    func getItemsForComparison(numberToGet: Int) -> [PreferenceSetItem]
     
 }
 
-// PreferenceSetOperations holds common logic for determining
+// PreferenceSetBase holds common logic for determining
 // and storing user preferences about the items in the set
-class PreferenceSetOperations {
+class PreferenceSetBase : PreferenceSet {
+    var title = String()
+    var items = [PreferenceSetItem]()
+    
+    init(title: String) {
+        self.title = title
+    }
+
     
     func getItemsForComparison(numberToGet: Int) -> [PreferenceSetItem] {
         
@@ -32,14 +38,10 @@ class PreferenceSetOperations {
 // Preference Sets should conform to PreferenceSet, and subclass PreferenceSetOperator
 
 // would love to figure out how to classname this programmatically, e.g. PreferenceSetTypeIds.iTunesPlaylist
-class iTunesPlaylistPreferenceSet : PreferenceSetOperations, PreferenceSet {
-    var items = [PreferenceSetItem]()
-    var imported = iTunesPreferenceSetType.importable
-    var created = iTunesPreferenceSetType.creatable
-    var title = String()
-    
+class iTunesPlaylistPreferenceSet : PreferenceSetBase {
+
     init(candidateItems: [MPMediaItem], title: String) {
-        self.title = title
+        super.init(title: title)
         
         for item in candidateItems {
             items.append(iTunesPreferenceSetItem(candidateItem: item))
