@@ -14,7 +14,9 @@ import MediaPlayer
 protocol PreferenceSet {
     var title: String {get set }
     
+    func itemCount() -> Int
     func getItemsForComparison(numberToGet: Int) -> [PreferenceSetItem]
+    func getItemByIndex(index: Int) -> PreferenceSetItem
     
 }
 
@@ -22,16 +24,23 @@ protocol PreferenceSet {
 // and storing user preferences about the items in the set
 class PreferenceSetBase : PreferenceSet {
     var title = String()
-    var items = [PreferenceSetItem]()
+    private var items = [PreferenceSetItem]()
     
     init(title: String) {
         self.title = title
     }
 
+    func itemCount() -> Int {
+        return items.count
+    }
     
     func getItemsForComparison(numberToGet: Int) -> [PreferenceSetItem] {
         
         return [PreferenceSetItem]()
+    }
+    
+    func getItemByIndex(index: Int) -> PreferenceSetItem {
+        return items[index]
     }
 }
 

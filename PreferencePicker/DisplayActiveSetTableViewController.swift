@@ -35,7 +35,7 @@ class DisplayActiveSetTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //let count = (activeSet ?? activeSet.items.count)
-        return (activeSet != nil ? activeSet!.items.count : 0)
+        return (activeSet != nil ? activeSet!.itemCount() : 0)
     }
     
     private struct Storyboard {
@@ -43,11 +43,11 @@ class DisplayActiveSetTableViewController: UITableViewController {
     }
     
     private func activeItemTitleForDisplay(indexPath: NSIndexPath) -> String {
-        return activeSet!.items[indexPath.row].titleForTableDisplay()
+        return activeSet!.getItemByIndex(indexPath.row).titleForTableDisplay()
     }
     
     private func activeItemSubtitleForTableDisplay(indexPath: NSIndexPath) -> String {
-        return activeSet!.items[indexPath.row].subtitleForTableDisplay()
+        return activeSet!.getItemByIndex(indexPath.row).subtitleForTableDisplay()
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

@@ -18,7 +18,6 @@
 		6D1496F21C77EA44004E6017 /* DisplayPreferenceSetTypesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1496F11C77EA44004E6017 /* DisplayPreferenceSetTypesTableViewController.swift */; };
 		6D1496F81C7B9BCE004E6017 /* PreferenceSetTypeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1496F71C7B9BCE004E6017 /* PreferenceSetTypeManager.swift */; };
 		6D1496FA1C7BC9BF004E6017 /* DisplayCandidatePreferenceSetsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1496F91C7BC9BF004E6017 /* DisplayCandidatePreferenceSetsTableViewController.swift */; };
-		6D1496FC1C7BCDA2004E6017 /* PreferenceSetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1496FB1C7BCDA2004E6017 /* PreferenceSetManager.swift */; };
 		6D1496FE1C7BCDBF004E6017 /* PreferenceSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1496FD1C7BCDBF004E6017 /* PreferenceSet.swift */; };
 		6D1497021C7EA312004E6017 /* ImportSetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1497011C7EA312004E6017 /* ImportSetViewController.swift */; };
 		6D1497041C7FB45C004E6017 /* PreferenceSetItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1497031C7FB45C004E6017 /* PreferenceSetItem.swift */; };
@@ -61,7 +60,6 @@
 		6D1496F11C77EA44004E6017 /* DisplayPreferenceSetTypesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayPreferenceSetTypesTableViewController.swift; sourceTree = "<group>"; };
 		6D1496F71C7B9BCE004E6017 /* PreferenceSetTypeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceSetTypeManager.swift; sourceTree = "<group>"; };
 		6D1496F91C7BC9BF004E6017 /* DisplayCandidatePreferenceSetsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayCandidatePreferenceSetsTableViewController.swift; sourceTree = "<group>"; };
-		6D1496FB1C7BCDA2004E6017 /* PreferenceSetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceSetManager.swift; sourceTree = "<group>"; };
 		6D1496FD1C7BCDBF004E6017 /* PreferenceSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceSet.swift; sourceTree = "<group>"; };
 		6D1497011C7EA312004E6017 /* ImportSetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportSetViewController.swift; sourceTree = "<group>"; };
 		6D1497031C7FB45C004E6017 /* PreferenceSetItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceSetItem.swift; sourceTree = "<group>"; };
@@ -127,7 +125,6 @@
 				6D1496F91C7BC9BF004E6017 /* DisplayCandidatePreferenceSetsTableViewController.swift */,
 				6D1497051C84D76F004E6017 /* DisplayActiveSetTableViewController.swift */,
 				6D1496F71C7B9BCE004E6017 /* PreferenceSetTypeManager.swift */,
-				6D1496FB1C7BCDA2004E6017 /* PreferenceSetManager.swift */,
 				6D1496FD1C7BCDBF004E6017 /* PreferenceSet.swift */,
 				6D1497031C7FB45C004E6017 /* PreferenceSetItem.swift */,
 				6D1496CA1C765704004E6017 /* Assets.xcassets */,
@@ -290,7 +287,6 @@
 				6D1497021C7EA312004E6017 /* ImportSetViewController.swift in Sources */,
 				6D1496C61C765704004E6017 /* ChoosePreferenceViewController.swift in Sources */,
 				6D1496FA1C7BC9BF004E6017 /* DisplayCandidatePreferenceSetsTableViewController.swift in Sources */,
-				6D1496FC1C7BCDA2004E6017 /* PreferenceSetManager.swift in Sources */,
 				6D1496C21C765704004E6017 /* AppDelegate.swift in Sources */,
 				6D1496FE1C7BCDBF004E6017 /* PreferenceSet.swift in Sources */,
 				6D1497041C7FB45C004E6017 /* PreferenceSetItem.swift in Sources */,
