@@ -324,7 +324,82 @@
                     <view key="view" contentMode="scaleToFill" id="QS5-Rx-YEW">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7CB-X5-OMr">
+                                <rect key="frame" x="20" y="28" width="560" height="235"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rfd-aA-3Nu">
+                                        <rect key="frame" x="230" y="165" width="100" height="50"/>
+                                        <color key="backgroundColor" red="1" green="0.39628632273464515" blue="0.40848055426746843" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="100" id="K3G-Th-hz0"/>
+                                            <constraint firstAttribute="height" constant="50" id="V1P-NI-KuZ"/>
+                                        </constraints>
+                                        <state key="normal" title="CHOOSE"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="Rfd-aA-3Nu" secondAttribute="bottom" constant="20" symbolic="YES" id="OyK-U4-FwB"/>
+                                    <constraint firstItem="Rfd-aA-3Nu" firstAttribute="centerX" secondItem="7CB-X5-OMr" secondAttribute="centerX" id="atK-mQ-hXv"/>
+                                    <constraint firstItem="Rfd-aA-3Nu" firstAttribute="top" secondItem="7CB-X5-OMr" secondAttribute="top" constant="165" id="bYP-S1-Sap"/>
+                                    <constraint firstAttribute="trailing" secondItem="Rfd-aA-3Nu" secondAttribute="trailing" constant="202" id="o4H-8V-fcB"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="bYP-S1-Sap"/>
+                                        <exclude reference="o4H-8V-fcB"/>
+                                    </mask>
+                                </variation>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ucj-95-QwR">
+                                <rect key="frame" x="241" y="513" width="119" height="30"/>
+                                <color key="backgroundColor" red="1" green="0.97741699920262926" blue="0.73591667665950911" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Get New Choices"/>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QMM-Gb-j3q">
+                                <rect key="frame" x="20" y="271" width="560" height="234"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h1K-Ob-80p">
+                                        <rect key="frame" x="230" y="164" width="100" height="50"/>
+                                        <color key="backgroundColor" red="1" green="0.39628632270000003" blue="0.40848055430000002" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="100" id="Y2e-oB-aMQ"/>
+                                            <constraint firstAttribute="height" constant="50" id="ZC1-hU-mxb"/>
+                                        </constraints>
+                                        <state key="normal" title="CHOOSE"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="h1K-Ob-80p" firstAttribute="centerX" secondItem="QMM-Gb-j3q" secondAttribute="centerX" id="d1Q-JJ-cXE"/>
+                                    <constraint firstAttribute="bottom" secondItem="h1K-Ob-80p" secondAttribute="bottom" constant="20" symbolic="YES" id="f7s-O3-iB3"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="7CB-X5-OMr" secondAttribute="trailing" id="1vP-qa-6Qx"/>
+                            <constraint firstItem="Ucj-95-QwR" firstAttribute="top" secondItem="QMM-Gb-j3q" secondAttribute="bottom" constant="8" symbolic="YES" id="4Eg-aQ-YDZ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="QMM-Gb-j3q" secondAttribute="trailing" id="6xC-5M-9M0"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="7CB-X5-OMr" secondAttribute="leading" id="IAq-Rl-rB3"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Ucj-95-QwR" secondAttribute="trailing" constant="202" id="PfI-d7-MCG"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="QMM-Gb-j3q" secondAttribute="leading" id="WUd-dc-DAW"/>
+                            <constraint firstItem="Djb-ko-YwX" firstAttribute="top" secondItem="Ucj-95-QwR" secondAttribute="bottom" constant="8" symbolic="YES" id="XqS-HH-pBV"/>
+                            <constraint firstItem="Rfd-aA-3Nu" firstAttribute="leading" secondItem="QS5-Rx-YEW" secondAttribute="leadingMargin" id="Z04-Re-1lj"/>
+                            <constraint firstItem="Ucj-95-QwR" firstAttribute="leading" secondItem="QS5-Rx-YEW" secondAttribute="leadingMargin" constant="203" id="fGT-t6-Gfw"/>
+                            <constraint firstItem="7CB-X5-OMr" firstAttribute="top" secondItem="L7p-HK-0SC" secondAttribute="bottom" constant="8" symbolic="YES" id="gSZ-zh-MkV"/>
+                            <constraint firstItem="QMM-Gb-j3q" firstAttribute="top" secondItem="7CB-X5-OMr" secondAttribute="bottom" constant="8" symbolic="YES" id="grm-zu-mJa"/>
+                            <constraint firstItem="Ucj-95-QwR" firstAttribute="centerX" secondItem="QS5-Rx-YEW" secondAttribute="centerX" id="kw7-dH-1jI"/>
+                            <constraint firstItem="7CB-X5-OMr" firstAttribute="height" secondItem="QMM-Gb-j3q" secondAttribute="height" id="ovz-lD-qJs"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="Z04-Re-1lj"/>
+                                <exclude reference="PfI-d7-MCG"/>
+                                <exclude reference="fGT-t6-Gfw"/>
+                            </mask>
+                        </variation>
                     </view>
                     <tabBarItem key="tabBarItem" title="Choose" image="second" id="cPa-gy-q4n"/>
                 </viewController>
