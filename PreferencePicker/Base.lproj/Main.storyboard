@@ -382,7 +382,6 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Choose" image="second" id="cPa-gy-q4n"/>
                     <connections>
-                        <outlet property="bottomItemView" destination="rFH-Th-oQH" id="AEp-ei-kcY"/>
                         <outlet property="topItemView" destination="f1e-Rh-HTl" id="IeQ-63-9gW"/>
                     </connections>
                 </viewController>
