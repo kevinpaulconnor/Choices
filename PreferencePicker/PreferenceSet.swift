@@ -13,7 +13,7 @@ import MediaPlayer
 // and modification of PreferenceSet in view controllers
 protocol PreferenceSet {
     var title: String {get set }
-    
+    var preferenceSetType: String { get set }
     func itemCount() -> Int
     func getItemsForComparison(numberToGet: Int) -> [PreferenceSetItem]
     func getItemByIndex(index: Int) -> PreferenceSetItem
@@ -24,8 +24,10 @@ protocol PreferenceSet {
 // and storing user preferences about the items in the set
 class PreferenceSetBase : PreferenceSet {
     var title = String()
-    private var items = [PreferenceSetItem]()
+    var preferenceSetType = String()
     
+    private var items = [PreferenceSetItem]()
+
     init(title: String) {
         self.title = title
     }
@@ -48,9 +50,10 @@ class PreferenceSetBase : PreferenceSet {
 
 // would love to figure out how to classname this programmatically, e.g. PreferenceSetTypeIds.iTunesPlaylist
 class iTunesPlaylistPreferenceSet : PreferenceSetBase {
-
+ 
     init(candidateItems: [MPMediaItem], title: String) {
         super.init(title: title)
+        super.preferenceSetType = PreferenceSetTypeIds.iTunesPlaylist
         
         for item in candidateItems {
             items.append(iTunesPreferenceSetItem(candidateItem: item))
