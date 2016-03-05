@@ -348,20 +348,27 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f1e-Rh-HTl">
                                 <rect key="frame" x="20" y="28" width="560" height="249"/>
                             </containerView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rFH-Th-oQH">
+                                <rect key="frame" x="20" y="323" width="560" height="182"/>
+                            </containerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="HpJ-g7-e5e" firstAttribute="centerY" secondItem="QS5-Rx-YEW" secondAttribute="centerY" id="5E6-oK-gzc"/>
                             <constraint firstAttribute="trailingMargin" secondItem="f1e-Rh-HTl" secondAttribute="trailing" id="Ezs-LC-1WQ"/>
+                            <constraint firstItem="rFH-Th-oQH" firstAttribute="top" secondItem="HpJ-g7-e5e" secondAttribute="bottom" constant="8" id="Fdj-Te-Jf4"/>
                             <constraint firstItem="f1e-Rh-HTl" firstAttribute="top" secondItem="L7p-HK-0SC" secondAttribute="bottom" constant="8" id="GJa-Zk-aUm"/>
+                            <constraint firstItem="Ucj-95-QwR" firstAttribute="top" secondItem="rFH-Th-oQH" secondAttribute="bottom" constant="8" id="NV5-4j-To8"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Ucj-95-QwR" secondAttribute="trailing" constant="202" id="PfI-d7-MCG"/>
                             <constraint firstItem="HpJ-g7-e5e" firstAttribute="top" secondItem="f1e-Rh-HTl" secondAttribute="bottom" constant="8" id="VEu-bb-AoF"/>
                             <constraint firstItem="Djb-ko-YwX" firstAttribute="top" secondItem="Ucj-95-QwR" secondAttribute="bottom" constant="8" symbolic="YES" id="XqS-HH-pBV"/>
                             <constraint firstAttribute="leadingMargin" secondItem="f1e-Rh-HTl" secondAttribute="leading" id="c32-RK-ubZ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="rFH-Th-oQH" secondAttribute="trailing" id="dkl-zM-QEQ"/>
                             <constraint firstItem="HpJ-g7-e5e" firstAttribute="centerX" secondItem="QS5-Rx-YEW" secondAttribute="centerX" id="ecu-Lk-2Fm"/>
                             <constraint firstItem="Ucj-95-QwR" firstAttribute="leading" secondItem="QS5-Rx-YEW" secondAttribute="leadingMargin" constant="203" id="fGT-t6-Gfw"/>
                             <constraint firstItem="Ucj-95-QwR" firstAttribute="centerX" secondItem="QS5-Rx-YEW" secondAttribute="centerX" id="kw7-dH-1jI"/>
                             <constraint firstItem="HpJ-g7-e5e" firstAttribute="leading" secondItem="QS5-Rx-YEW" secondAttribute="leadingMargin" constant="225" id="uf1-Xk-po6"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="rFH-Th-oQH" secondAttribute="leading" id="xNo-bR-KsW"/>
                             <constraint firstItem="HpJ-g7-e5e" firstAttribute="centerY" secondItem="QS5-Rx-YEW" secondAttribute="centerY" id="yDc-Sy-2FS"/>
                         </constraints>
                         <variation key="default">
@@ -375,6 +382,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Choose" image="second" id="cPa-gy-q4n"/>
                     <connections>
+                        <outlet property="bottomItemView" destination="rFH-Th-oQH" id="AEp-ei-kcY"/>
                         <outlet property="topItemView" destination="f1e-Rh-HTl" id="IeQ-63-9gW"/>
                     </connections>
                 </viewController>
