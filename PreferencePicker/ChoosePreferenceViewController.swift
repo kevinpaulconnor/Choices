@@ -14,12 +14,12 @@ class ChoosePreferenceViewController: UIViewController {
     @IBOutlet weak var bottomItemView: UIView!
     let itemsToDisplay = 2
     override func viewDidLoad() {
-
         super.viewDidLoad()
+        let barViewController = self.tabBarController as! PreferencePickerTabBarViewController
+        activeSet = barViewController.activeSet
+        
         self.setContainerView(topItemView)
         self.setContainerView(bottomItemView)
-
-
     }
     
     private struct vcGenerators {
