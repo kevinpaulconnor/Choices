@@ -12,7 +12,7 @@ class ChoosePreferenceViewController: UIViewController {
     @IBOutlet weak var topItemView: UIView!
     @IBOutlet weak var bottomItemView: UIView!
     @IBAction func getNewChoices() {
-        self.setItems()
+        self.resetItems()
     }
 
 
@@ -21,6 +21,8 @@ class ChoosePreferenceViewController: UIViewController {
     
     var activeSet: PreferenceSet?
     var topItem: PreferenceSetItem?
+    var topViewController: ItemChooserViewController?
+    var bottomViewController: ItemChooserViewController?
     var bottomItem: PreferenceSetItem?
     let itemsToDisplay = 2
     
@@ -32,6 +34,15 @@ class ChoosePreferenceViewController: UIViewController {
         self.setItems()
     }
     
+    func resetItems() {
+        topViewController!.view.removeFromSuperview()
+        topViewController!.removeFromParentViewController()
+        bottomViewController!.view.removeFromSuperview()
+        bottomViewController!.removeFromParentViewController()
+        
+        self.setItems()
+    }
+    
     func setItems() {
         // less awkward if a way to return a tuple here.
         // maybe PreferenceSetBase should just expose getTwoItemsForComparison()
@@ -39,8 +50,8 @@ class ChoosePreferenceViewController: UIViewController {
         topItem = psItems![0]
         bottomItem = psItems![1]
         
-        self.setContainerView(topItemView, item: topItem!)
-        self.setContainerView(bottomItemView, item: bottomItem!)
+        topViewController = self.setContainerView(topItemView, item: topItem!)
+        bottomViewController = self.setContainerView(bottomItemView, item: bottomItem!)
     }
     
     private struct vcGenerators {
@@ -49,13 +60,14 @@ class ChoosePreferenceViewController: UIViewController {
         }
     }
     
-    func setContainerView(containerView: UIView, item: PreferenceSetItem) {
+    func setContainerView(containerView: UIView, item: PreferenceSetItem) -> ItemChooserViewController {
         let itemViewController = self.chooserItemControllersByPreferenceSetType() as! ItemChooserViewController
         itemViewController.item = item
         self.addChildViewController(itemViewController)
         itemViewController.view.frame = CGRectMake(0, 0, containerView.frame.size.width, containerView.frame.size.height)
         containerView.addSubview(itemViewController.view)
         itemViewController.didMoveToParentViewController(self)
+        return itemViewController
     }
     
     // preference set type tells the view what kind of view controllers to load
