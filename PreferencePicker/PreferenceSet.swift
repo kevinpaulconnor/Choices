@@ -36,9 +36,13 @@ class PreferenceSetBase : PreferenceSet {
         return items.count
     }
     
+    // for now, just return a random item from the set's items
     func getItemsForComparison(numberToGet: Int) -> [PreferenceSetItem] {
-        
-        return [PreferenceSetItem]()
+        var ret = [PreferenceSetItem]()
+        for _ in 0..<numberToGet {
+            ret.append(self.items[Int(arc4random_uniform(UInt32(self.items.count)))])
+        }
+        return ret
     }
     
     func getItemByIndex(index: Int) -> PreferenceSetItem {
