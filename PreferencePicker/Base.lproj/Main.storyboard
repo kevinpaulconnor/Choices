@@ -391,8 +391,8 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Choose" image="second" id="cPa-gy-q4n"/>
                     <connections>
-                        <outlet property="bottomItemView" destination="rFH-Th-oQH" id="R8q-fG-c4w"/>
-                        <outlet property="topItemView" destination="f1e-Rh-HTl" id="IeQ-63-9gW"/>
+                        <outlet property="bottomItemView" destination="rFH-Th-oQH" id="2ga-uG-Kku"/>
+                        <outlet property="topItemView" destination="f1e-Rh-HTl" id="9B9-Nf-V5W"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
