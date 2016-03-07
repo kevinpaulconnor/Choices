@@ -31,6 +31,8 @@ class ItemChooserViewController: UIViewController {
 
 class iTunesItemChooserViewController : ItemChooserViewController {
     @IBOutlet weak var albumArt: UIImageView!
+    @IBOutlet weak var songTitle: UILabel!
+    @IBOutlet weak var artist: UILabel!
 
     
     var player = MPMusicPlayerController.applicationMusicPlayer()
@@ -43,6 +45,9 @@ class iTunesItemChooserViewController : ItemChooserViewController {
         
         let imageSize = CGSize(width: albumArt.bounds.width, height: albumArt.bounds.width)
         albumArt.image = self.mediaItem!.artwork!.imageWithSize(imageSize)
+        
+        songTitle.text = self.item!.titleForTableDisplay()
+        artist.text = self.item!.subtitleForTableDisplay()
     }
     
     
