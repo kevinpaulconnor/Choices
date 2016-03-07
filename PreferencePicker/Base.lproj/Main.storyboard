@@ -328,10 +328,13 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ucj-95-QwR">
                                 <rect key="frame" x="241" y="513" width="119" height="30"/>
                                 <color key="backgroundColor" red="1" green="0.97741699920262926" blue="0.73591667665950911" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="cD6-Cn-FPL"/>
+                                </constraints>
                                 <state key="normal" title="Get New Choices"/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HpJ-g7-e5e">
-                                <rect key="frame" x="245" y="285" width="110" height="30"/>
+                                <rect key="frame" x="245" y="252" width="110" height="30"/>
                                 <color key="backgroundColor" red="1" green="0.39628632270000003" blue="0.40848055430000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="PnT-Ri-Kze"/>
@@ -346,19 +349,20 @@
                                 </variation>
                             </button>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f1e-Rh-HTl">
-                                <rect key="frame" x="20" y="28" width="560" height="249"/>
+                                <rect key="frame" x="20" y="28" width="560" height="216"/>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rFH-Th-oQH">
-                                <rect key="frame" x="20" y="323" width="560" height="182"/>
+                                <rect key="frame" x="20" y="290" width="560" height="215"/>
                             </containerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="HpJ-g7-e5e" firstAttribute="top" secondItem="f1e-Rh-HTl" secondAttribute="bottom" constant="8" symbolic="YES" id="0Fr-w3-nGe"/>
                             <constraint firstItem="HpJ-g7-e5e" firstAttribute="centerY" secondItem="QS5-Rx-YEW" secondAttribute="centerY" id="5E6-oK-gzc"/>
                             <constraint firstAttribute="trailingMargin" secondItem="f1e-Rh-HTl" secondAttribute="trailing" id="Ezs-LC-1WQ"/>
                             <constraint firstItem="rFH-Th-oQH" firstAttribute="top" secondItem="HpJ-g7-e5e" secondAttribute="bottom" constant="8" id="Fdj-Te-Jf4"/>
-                            <constraint firstItem="f1e-Rh-HTl" firstAttribute="top" secondItem="L7p-HK-0SC" secondAttribute="bottom" constant="8" id="GJa-Zk-aUm"/>
-                            <constraint firstItem="Ucj-95-QwR" firstAttribute="top" secondItem="rFH-Th-oQH" secondAttribute="bottom" constant="8" id="NV5-4j-To8"/>
+                            <constraint firstItem="f1e-Rh-HTl" firstAttribute="top" secondItem="L7p-HK-0SC" secondAttribute="bottom" constant="8" symbolic="YES" id="GJa-Zk-aUm"/>
+                            <constraint firstItem="Ucj-95-QwR" firstAttribute="top" secondItem="rFH-Th-oQH" secondAttribute="bottom" constant="8" symbolic="YES" id="NV5-4j-To8"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Ucj-95-QwR" secondAttribute="trailing" constant="202" id="PfI-d7-MCG"/>
                             <constraint firstItem="HpJ-g7-e5e" firstAttribute="top" secondItem="f1e-Rh-HTl" secondAttribute="bottom" constant="8" id="VEu-bb-AoF"/>
                             <constraint firstItem="Djb-ko-YwX" firstAttribute="top" secondItem="Ucj-95-QwR" secondAttribute="bottom" constant="8" symbolic="YES" id="XqS-HH-pBV"/>
@@ -367,14 +371,19 @@
                             <constraint firstItem="HpJ-g7-e5e" firstAttribute="centerX" secondItem="QS5-Rx-YEW" secondAttribute="centerX" id="ecu-Lk-2Fm"/>
                             <constraint firstItem="Ucj-95-QwR" firstAttribute="leading" secondItem="QS5-Rx-YEW" secondAttribute="leadingMargin" constant="203" id="fGT-t6-Gfw"/>
                             <constraint firstItem="Ucj-95-QwR" firstAttribute="centerX" secondItem="QS5-Rx-YEW" secondAttribute="centerX" id="kw7-dH-1jI"/>
+                            <constraint firstItem="f1e-Rh-HTl" firstAttribute="height" secondItem="rFH-Th-oQH" secondAttribute="height" id="tdv-8q-rtF"/>
                             <constraint firstItem="HpJ-g7-e5e" firstAttribute="leading" secondItem="QS5-Rx-YEW" secondAttribute="leadingMargin" constant="225" id="uf1-Xk-po6"/>
+                            <constraint firstItem="rFH-Th-oQH" firstAttribute="top" secondItem="HpJ-g7-e5e" secondAttribute="bottom" constant="8" symbolic="YES" id="wLH-pk-J5W"/>
                             <constraint firstAttribute="leadingMargin" secondItem="rFH-Th-oQH" secondAttribute="leading" id="xNo-bR-KsW"/>
-                            <constraint firstItem="HpJ-g7-e5e" firstAttribute="centerY" secondItem="QS5-Rx-YEW" secondAttribute="centerY" id="yDc-Sy-2FS"/>
+                            <constraint firstItem="HpJ-g7-e5e" firstAttribute="centerY" secondItem="QS5-Rx-YEW" secondAttribute="centerY" constant="-49" id="yDc-Sy-2FS"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="Fdj-Te-Jf4"/>
                                 <exclude reference="5E6-oK-gzc"/>
+                                <exclude reference="VEu-bb-AoF"/>
                                 <exclude reference="uf1-Xk-po6"/>
+                                <exclude reference="yDc-Sy-2FS"/>
                                 <exclude reference="PfI-d7-MCG"/>
                                 <exclude reference="fGT-t6-Gfw"/>
                             </mask>
@@ -382,6 +391,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Choose" image="second" id="cPa-gy-q4n"/>
                     <connections>
+                        <outlet property="bottomItemView" destination="rFH-Th-oQH" id="R8q-fG-c4w"/>
                         <outlet property="topItemView" destination="f1e-Rh-HTl" id="IeQ-63-9gW"/>
                     </connections>
                 </viewController>
