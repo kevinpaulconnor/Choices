@@ -9,17 +9,27 @@
 import UIKit
 
 class ChoosePreferenceViewController: UIViewController {
-    var activeSet: PreferenceSet?
     @IBOutlet weak var topItemView: UIView!
     @IBOutlet weak var bottomItemView: UIView!
+
+    var activeSet: PreferenceSet?
+    var topItem: PreferenceSetItem?
+    var bottomItem: PreferenceSetItem?
+    
     let itemsToDisplay = 2
     override func viewDidLoad() {
         super.viewDidLoad()
         let barViewController = self.tabBarController as! PreferencePickerTabBarViewController
         activeSet = barViewController.activeSet
         
-        self.setContainerView(topItemView)
-        self.setContainerView(bottomItemView)
+        // less awkward if a way to return a tuple here.
+        // maybe PreferenceSetBase should just expose getTwoItemsForComparison()
+        let psItems = activeSet?.getItemsForComparison(2)
+        topItem = psItems![0]
+        bottomItem = psItems![1]
+        
+        self.setContainerView(topItemView, item: topItem!)
+        self.setContainerView(bottomItemView, item: bottomItem!)
     }
     
     private struct vcGenerators {
@@ -28,10 +38,11 @@ class ChoosePreferenceViewController: UIViewController {
         }
     }
     
-    func setContainerView(containerView: UIView) {
-        let itemViewController = self.chooserItemControllersByPreferenceSetType()
+    func setContainerView(containerView: UIView, item: PreferenceSetItem) {
+        let itemViewController = self.chooserItemControllersByPreferenceSetType() as! ItemChooserViewController
         self.addChildViewController(itemViewController)
         itemViewController.view.frame = CGRectMake(0, 0, containerView.frame.size.width, containerView.frame.size.height)
+        itemViewController.item = item
         containerView.addSubview(itemViewController.view)
         itemViewController.didMoveToParentViewController(self)
     }
