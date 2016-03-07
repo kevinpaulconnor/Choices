@@ -40,9 +40,9 @@ class ChoosePreferenceViewController: UIViewController {
     
     func setContainerView(containerView: UIView, item: PreferenceSetItem) {
         let itemViewController = self.chooserItemControllersByPreferenceSetType() as! ItemChooserViewController
+        itemViewController.item = item
         self.addChildViewController(itemViewController)
         itemViewController.view.frame = CGRectMake(0, 0, containerView.frame.size.width, containerView.frame.size.height)
-        itemViewController.item = item
         containerView.addSubview(itemViewController.view)
         itemViewController.didMoveToParentViewController(self)
     }

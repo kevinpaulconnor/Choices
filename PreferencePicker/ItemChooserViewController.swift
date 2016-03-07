@@ -10,6 +10,8 @@ import UIKit
 import MediaPlayer
 
 class ItemChooserViewController: UIViewController {
+
+    
     var item: PreferenceSetItem?
     var mediaItem: MPMediaItem?
     
@@ -28,6 +30,9 @@ class ItemChooserViewController: UIViewController {
 }
 
 class iTunesItemChooserViewController : ItemChooserViewController {
+    @IBOutlet weak var albumArt: UIImageView!
+
+    
     var player = MPMusicPlayerController.applicationMusicPlayer()
     var itemCollection: MPMediaItemCollection?
     
@@ -36,7 +41,8 @@ class iTunesItemChooserViewController : ItemChooserViewController {
         itemCollection = MPMediaItemCollection(items: [self.mediaItem!])
         player.setQueueWithItemCollection(itemCollection!)
         
-        
+        let imageSize = CGSize(width: albumArt.bounds.width, height: albumArt.bounds.width)
+        albumArt.image = self.mediaItem!.artwork!.imageWithSize(imageSize)
     }
     
     

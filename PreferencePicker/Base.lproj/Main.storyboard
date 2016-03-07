@@ -628,6 +628,9 @@
                             </mask>
                         </variation>
                     </view>
+                    <connections>
+                        <outlet property="albumArt" destination="fx3-i7-w1b" id="8hX-rC-O48"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7No-eO-kg1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
