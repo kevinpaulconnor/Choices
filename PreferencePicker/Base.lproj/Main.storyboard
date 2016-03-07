@@ -325,14 +325,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ucj-95-QwR">
-                                <rect key="frame" x="241" y="513" width="119" height="30"/>
-                                <color key="backgroundColor" red="1" green="0.97741699920262926" blue="0.73591667665950911" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="cD6-Cn-FPL"/>
-                                </constraints>
-                                <state key="normal" title="Get New Choices"/>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HpJ-g7-e5e">
                                 <rect key="frame" x="245" y="252" width="110" height="30"/>
                                 <color key="backgroundColor" red="1" green="0.39628632270000003" blue="0.40848055430000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -354,6 +346,17 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rFH-Th-oQH">
                                 <rect key="frame" x="20" y="290" width="560" height="215"/>
                             </containerView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ucj-95-QwR">
+                                <rect key="frame" x="241" y="513" width="119" height="30"/>
+                                <color key="backgroundColor" red="1" green="0.97741699920262926" blue="0.73591667665950911" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="cD6-Cn-FPL"/>
+                                </constraints>
+                                <state key="normal" title="Get New Choices"/>
+                                <connections>
+                                    <action selector="getNewChoices" destination="8rJ-Kc-sve" eventType="touchUpInside" id="BS4-6D-xaO"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -630,6 +633,8 @@
                     </view>
                     <connections>
                         <outlet property="albumArt" destination="fx3-i7-w1b" id="8hX-rC-O48"/>
+                        <outlet property="artist" destination="6EQ-nD-cZy" id="kYQ-TD-gVs"/>
+                        <outlet property="songTitle" destination="tox-B0-hQA" id="lgp-1d-ZJp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7No-eO-kg1" userLabel="First Responder" sceneMemberID="firstResponder"/>

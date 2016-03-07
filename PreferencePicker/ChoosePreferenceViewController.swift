@@ -11,20 +11,31 @@ import UIKit
 class ChoosePreferenceViewController: UIViewController {
     @IBOutlet weak var topItemView: UIView!
     @IBOutlet weak var bottomItemView: UIView!
+    @IBAction func getNewChoices() {
+        self.setItems()
+    }
 
+
+
+
+    
     var activeSet: PreferenceSet?
     var topItem: PreferenceSetItem?
     var bottomItem: PreferenceSetItem?
-    
     let itemsToDisplay = 2
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let barViewController = self.tabBarController as! PreferencePickerTabBarViewController
         activeSet = barViewController.activeSet
         
+        self.setItems()
+    }
+    
+    func setItems() {
         // less awkward if a way to return a tuple here.
         // maybe PreferenceSetBase should just expose getTwoItemsForComparison()
-        let psItems = activeSet?.getItemsForComparison(2)
+        let psItems = activeSet?.getItemsForComparison(self.itemsToDisplay)
         topItem = psItems![0]
         bottomItem = psItems![1]
         
