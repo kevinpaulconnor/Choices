@@ -418,7 +418,7 @@
                                 <rect key="frame" x="20" y="20" width="560" height="572"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tox-B0-hQA">
-                                        <rect key="frame" x="220" y="20" width="121" height="33"/>
+                                        <rect key="frame" x="20" y="20" width="520" height="33"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="27"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
@@ -546,6 +546,7 @@
                                     <constraint firstItem="oHz-KR-ivp" firstAttribute="leading" secondItem="7CB-X5-OMr" secondAttribute="leading" constant="20" symbolic="YES" id="ZNJ-Mt-BAb"/>
                                     <constraint firstItem="Fzz-qz-pO6" firstAttribute="centerY" secondItem="7CB-X5-OMr" secondAttribute="centerY" id="aMM-zI-Idk"/>
                                     <constraint firstItem="6EQ-nD-cZy" firstAttribute="leading" secondItem="7CB-X5-OMr" secondAttribute="leading" constant="58" id="aQH-VR-zJe"/>
+                                    <constraint firstItem="tox-B0-hQA" firstAttribute="leading" secondItem="7CB-X5-OMr" secondAttribute="leading" constant="20" symbolic="YES" id="bCG-6O-qIm"/>
                                     <constraint firstAttribute="trailing" secondItem="fx3-i7-w1b" secondAttribute="trailing" constant="20" symbolic="YES" id="be4-cq-WxF"/>
                                     <constraint firstAttribute="bottom" secondItem="oHz-KR-ivp" secondAttribute="bottom" constant="20" symbolic="YES" id="c7b-Mr-VLg"/>
                                     <constraint firstItem="fx3-i7-w1b" firstAttribute="leading" secondItem="AXJ-Ua-ysk" secondAttribute="trailing" constant="8" symbolic="YES" id="eMg-cU-Ros"/>
@@ -560,6 +561,7 @@
                                     <constraint firstItem="fx3-i7-w1b" firstAttribute="top" secondItem="7CB-X5-OMr" secondAttribute="top" constant="8" id="oN5-vu-HB5"/>
                                     <constraint firstAttribute="trailing" secondItem="oHz-KR-ivp" secondAttribute="trailing" constant="472" id="p7k-yL-l6c"/>
                                     <constraint firstAttribute="bottom" secondItem="oHz-KR-ivp" secondAttribute="bottom" constant="8" id="qxU-qh-c6J"/>
+                                    <constraint firstAttribute="trailing" secondItem="tox-B0-hQA" secondAttribute="trailing" constant="20" symbolic="YES" id="sSP-pT-ZIM"/>
                                     <constraint firstItem="6EQ-nD-cZy" firstAttribute="top" secondItem="tox-B0-hQA" secondAttribute="bottom" constant="8" symbolic="YES" id="scP-BK-8HU"/>
                                     <constraint firstItem="AXJ-Ua-ysk" firstAttribute="leading" secondItem="0ih-Y5-acN" secondAttribute="trailing" constant="8" symbolic="YES" id="sj4-wk-ic1"/>
                                     <constraint firstItem="AXJ-Ua-ysk" firstAttribute="leading" secondItem="0ih-Y5-acN" secondAttribute="trailing" constant="8" symbolic="YES" id="sxl-tn-jNH"/>
@@ -581,6 +583,12 @@
                                         <exclude reference="aQH-VR-zJe"/>
                                         <exclude reference="lVK-5J-FeM"/>
                                         <exclude reference="scP-BK-8HU"/>
+                                        <exclude reference="XjB-Qr-qHk"/>
+                                        <exclude reference="c7b-Mr-VLg"/>
+                                        <exclude reference="p7k-yL-l6c"/>
+                                        <exclude reference="qxU-qh-c6J"/>
+                                        <exclude reference="GG5-bc-I8j"/>
+                                        <exclude reference="HdJ-aV-jWr"/>
                                         <exclude reference="2Pt-0j-6Uc"/>
                                         <exclude reference="714-ub-O4l"/>
                                         <exclude reference="Aba-aP-vSC"/>
@@ -589,12 +597,6 @@
                                         <exclude reference="UpB-Pe-erG"/>
                                         <exclude reference="jQv-HH-S6T"/>
                                         <exclude reference="sj4-wk-ic1"/>
-                                        <exclude reference="XjB-Qr-qHk"/>
-                                        <exclude reference="c7b-Mr-VLg"/>
-                                        <exclude reference="p7k-yL-l6c"/>
-                                        <exclude reference="qxU-qh-c6J"/>
-                                        <exclude reference="GG5-bc-I8j"/>
-                                        <exclude reference="HdJ-aV-jWr"/>
                                         <exclude reference="3R4-jZ-aud"/>
                                         <exclude reference="AgK-Cm-ibT"/>
                                         <exclude reference="Pp7-BE-agh"/>
