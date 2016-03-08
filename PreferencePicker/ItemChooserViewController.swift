@@ -55,15 +55,21 @@ class iTunesItemChooserViewController : ItemChooserViewController {
     
     func playPause() {
         // have to share applicationMusicPlayer with other ItemChoosers
+        var myItemLoaded = true
         if player!.nowPlayingItem != self.mediaItem {
             itemCollection = MPMediaItemCollection(items: [self.mediaItem!])
             player!.setQueueWithItemCollection(itemCollection!)
+            myItemLoaded = false
         }
         switch player!.playbackState {
         case .Stopped, .Paused:
             player!.play()
         case .Playing:
-            player!.pause()
+            if myItemLoaded {
+                player!.pause()
+            } else {
+                player!.play()
+            }
         default: break
         }
     }

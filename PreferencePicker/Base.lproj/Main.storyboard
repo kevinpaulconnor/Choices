@@ -448,6 +448,9 @@
                                                 <exclude reference="qnN-eL-b9h"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <action selector="playPause:" destination="KRV-Bg-lXP" eventType="touchUpInside" id="UJZ-Pp-4rB"/>
+                                        </connections>
                                     </button>
                                     <view contentMode="scaleToFill" horizontalHuggingPriority="1" verticalHuggingPriority="1" horizontalCompressionResistancePriority="1" verticalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="AXJ-Ua-ysk">
                                         <rect key="frame" x="196" y="474" width="246" height="90"/>
