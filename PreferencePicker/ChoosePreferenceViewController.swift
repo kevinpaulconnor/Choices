@@ -32,7 +32,29 @@ class ChoosePreferenceViewController: UIViewController {
         let barViewController = self.tabBarController as! PreferencePickerTabBarViewController
         activeSet = barViewController.activeSet
         
+        self.setSwipeOnItemViews(topItemView)
+        self.setSwipeOnItemViews(bottomItemView)
+
+        
         self.setItems()
+    }
+    
+    func setSwipeOnItemViews(view: UIView) {
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
+        swipeRight.direction = UISwipeGestureRecognizerDirection.Right
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
+        swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
+        view.addGestureRecognizer(swipeRight)
+        view.addGestureRecognizer(swipeLeft)
+    }
+    
+    
+    func respondToSwipeGesture(gesture: UIGestureRecognizer) {
+        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+            switch swipeGesture.direction {
+            default: self.reset()
+            }
+        }
     }
     
     func reset() {
