@@ -13,7 +13,7 @@ class ChoosePreferenceViewController: UIViewController {
     @IBOutlet weak var topItemView: UIView!
     @IBOutlet weak var bottomItemView: UIView!
     @IBAction func getNewChoices() {
-        var player = MPMusicPlayerController.applicationMusicPlayer()
+        let player = MPMusicPlayerController.applicationMusicPlayer()
         player.stop()
         self.resetItems()
     }
