@@ -8,6 +8,7 @@
 
 import Foundation
 import MediaPlayer
+import CoreData
 
 // PreferenceSet protocol provides APIs for the presentation
 // and modification of PreferenceSet in view controllers
@@ -20,11 +21,20 @@ protocol PreferenceSet {
     
 }
 
+//don't want to reach into data store and load everything,
+// so let's just show what we need about each, when we're loading
+struct minimalSetReference {
+    var title: String
+    var preferenceSetType: PreferenceSetType
+}
+
 // PreferenceSetBase holds common logic for determining
 // and storing user preferences about the items in the set
+// and common PreferenceSet persistence layer
 class PreferenceSetBase : PreferenceSet {
     var title = String()
     var preferenceSetType = String()
+    static let dataController = PreferenceSetDataController() // manages persistence layer
     
     private var items = [PreferenceSetItem]()
 
@@ -48,9 +58,21 @@ class PreferenceSetBase : PreferenceSet {
     func getItemByIndex(index: Int) -> PreferenceSetItem {
         return items[index]
     }
+    
+    static func save(preferenceSet: PreferenceSet) {
+        dataController.save(preferenceSet)
+    }
+    
+    static func load(name: String, type: PreferenceSetType) -> PreferenceSet {
+        return dataController.load(name, type: type)
+    }
+    
+    static func getAllSavedSets() -> [minimalSetReference] {
+        return dataController.getAllSavedSetNames()
+    }
 }
 
-// Preference Sets should conform to PreferenceSet, and subclass PreferenceSetOperator
+// Preference Sets should conform to PreferenceSet, and subclass PreferenceSetBase
 
 // would love to figure out how to classname this programmatically, e.g. PreferenceSetTypeIds.iTunesPlaylist
 class iTunesPlaylistPreferenceSet : PreferenceSetBase {
