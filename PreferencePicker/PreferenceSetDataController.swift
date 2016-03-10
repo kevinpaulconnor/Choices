@@ -48,7 +48,13 @@ class PreferenceSetDataController : NSObject {
     }
     
     func save (preferenceSet: PreferenceSet) {
-        let managedSet = NSEntityDescription.insertNewObjectForEntityForName(preferenceSet.title, inManagedObjectContext: self.managedObjectContext) as! PreferenceSetMO
+        //let entity =  NSEntityDescription.entityForName("PreferenceSet",
+        //    inManagedObjectContext:self.managedObjectContext)
+        var managedSet = NSEntityDescription.insertNewObjectForEntityForName("PreferenceSet", inManagedObjectContext: self.managedObjectContext) as! PreferenceSetMO
+        managedSet.setValue(preferenceSet.title, forKey: "title")
+        managedSet.setValue(preferenceSet.preferenceSetType, forKey: "preferenceSetType")
+        //managedSet.title = preferenceSet.title
+        //managedSet.preferenceSetType = preferenceSet.preferenceSetType
         
         do {
             try self.managedObjectContext.save()
@@ -66,8 +72,9 @@ class PreferenceSetDataController : NSObject {
         return type.createPreferenceSet(MPMediaItemCollection(), title: "Test")
     }
     
-    class PreferenceSetMO: NSManagedObject {
-        @NSManaged var title: String?
-        @NSManaged var preferenceSetType: String?
-    }
+}
+
+class PreferenceSetMO: NSManagedObject {
+    @NSManaged var title: String?
+    @NSManaged var preferenceSetType: String?
 }

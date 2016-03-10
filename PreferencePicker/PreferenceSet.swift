@@ -30,12 +30,11 @@ struct minimalSetReference {
 
 // PreferenceSetBase holds common logic for determining
 // and storing user preferences about the items in the set
-// and common PreferenceSet persistence layer
+// and common PreferenceSet persistence layer accessors
 class PreferenceSetBase : PreferenceSet {
     var title = String()
     var preferenceSetType = String()
-    static let dataController = PreferenceSetDataController() // manages persistence layer
-    
+   
     private var items = [PreferenceSetItem]()
 
     init(title: String) {
@@ -60,15 +59,15 @@ class PreferenceSetBase : PreferenceSet {
     }
     
     static func save(preferenceSet: PreferenceSet) {
-        dataController.save(preferenceSet)
+        AppDelegate.dataController.save(preferenceSet)
     }
     
     static func load(name: String, type: PreferenceSetType) -> PreferenceSet {
-        return dataController.load(name, type: type)
+        return AppDelegate.dataController.load(name, type: type)
     }
     
     static func getAllSavedSets() -> [minimalSetReference] {
-        return dataController.getAllSavedSetNames()
+        return AppDelegate.dataController.getAllSavedSetNames()
     }
 }
 
