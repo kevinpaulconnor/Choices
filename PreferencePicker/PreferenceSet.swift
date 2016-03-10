@@ -34,6 +34,8 @@ struct minimalSetReference {
 class PreferenceSetBase : PreferenceSet {
     var title = String()
     var preferenceSetType = String()
+    static var appDelegate =
+    UIApplication.sharedApplication().delegate as? AppDelegate
    
     private var items = [PreferenceSetItem]()
 
@@ -59,15 +61,15 @@ class PreferenceSetBase : PreferenceSet {
     }
     
     static func save(preferenceSet: PreferenceSet) {
-        AppDelegate.dataController.save(preferenceSet)
+        appDelegate!.dataController!.save(preferenceSet)
     }
     
     static func load(name: String, type: PreferenceSetType) -> PreferenceSet {
-        return AppDelegate.dataController.load(name, type: type)
+        return appDelegate!.dataController!.load(name, type: type)
     }
     
     static func getAllSavedSets() -> [minimalSetReference] {
-        return AppDelegate.dataController.getAllSavedSetNames()
+        return appDelegate!.dataController!.getAllSavedSetNames()
     }
 }
 

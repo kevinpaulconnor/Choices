@@ -43,8 +43,17 @@ class PreferenceSetDataController : NSObject {
     }
     
     func getAllSavedSetNames () -> [minimalSetReference] {
+        let moc = self.managedObjectContext
+        let fetchRequest = NSFetchRequest(entityName: "PreferenceSet")
+        let name = "All Beatles"
+        fetchRequest.predicate = NSPredicate(format: "title == %@", name)
         
-        return [minimalSetReference(title: "Name", preferenceSetType: iTunesPreferenceSetType())]
+        do {
+            let fetchedSets = try moc.executeFetchRequest(fetchRequest) as! [PreferenceSetMO]
+            return [minimalSetReference(title: fetchedSets[0].title!, preferenceSetType: iTunesPreferenceSetType())]
+        } catch {
+            fatalError("Failed to fetch employees: \(error)")
+        }
     }
     
     func save (preferenceSet: PreferenceSet) {

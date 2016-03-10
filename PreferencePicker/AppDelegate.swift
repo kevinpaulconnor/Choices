@@ -13,11 +13,11 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    static let dataController = PreferenceSetDataController() // manages persistence layer
+    var dataController: PreferenceSetDataController? // manages persistence layer
     
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+        self.dataController = PreferenceSetDataController()
         return true
     }
 
