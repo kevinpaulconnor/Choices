@@ -13,8 +13,14 @@ import MediaPlayer
 class PreferenceSetDataController : NSObject {
     var managedObjectContext: NSManagedObjectContext
     
+    // store 
+    var activeSet: PreferenceSetMO?
+    var activeItems: [Int: PreferenceSetItemMO]?
+    
     override init() {
         self.managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
+        //self.activeSet = PreferenceSetMO()
+        //self.activeItems = self.getAllSavedItems()
         super.init()
         
         guard let modelURL = NSBundle.mainBundle().URLForResource("PreferenceSet", withExtension:"momd") else {
@@ -42,28 +48,54 @@ class PreferenceSetDataController : NSObject {
         }
     }
     
-    func getAllSavedSetNames () -> [minimalSetReference] {
+    private func fetcher(entityName: String, predicate: NSPredicate?) -> [AnyObject] {
         let moc = self.managedObjectContext
-        let fetchRequest = NSFetchRequest(entityName: "PreferenceSet")
-        let name = "All Beatles"
-        fetchRequest.predicate = NSPredicate(format: "title == %@", name)
-        
+        let fetchRequest = NSFetchRequest(entityName: entityName)
+        if predicate != nil {
+            fetchRequest.predicate = predicate!
+        }
         do {
-            let fetchedSets = try moc.executeFetchRequest(fetchRequest) as! [PreferenceSetMO]
-            return [minimalSetReference(title: fetchedSets[0].title!, preferenceSetType: iTunesPreferenceSetType())]
+            let fetched = try moc.executeFetchRequest(fetchRequest)
+            return fetched
         } catch {
-            fatalError("Failed to fetch employees: \(error)")
+            fatalError("Failed to fetch \(entityName): \(error)")
         }
     }
     
+    private func getAllSavedSets () -> [PreferenceSetMO] {
+        return self.fetcher("PreferenceSet", predicate: nil) as! [PreferenceSetMO]
+    }
+    
+    private func getAllSavedPSItems() -> [PreferenceSetItemMO] {
+        var existingItems = self.fetcher("PreferenceSetItem", predicate: nil) as! [PreferenceSetItemMO]
+        if existingItems.count == 0 {
+            existingItems = [PreferenceSetItemMO()]
+        }
+        return existingItems
+    }
+    
+    private func fetchPSItem(id: Int64) -> PreferenceSetItemMO? {
+        let itemPredicate = NSPredicate(format: "id is[c] %@", id)
+        return self.fetcher("PreferenceSetItem", predicate: itemPredicate)[0] as? PreferenceSetItemMO
+    }
+    
     func save (preferenceSet: PreferenceSet) {
-        //let entity =  NSEntityDescription.entityForName("PreferenceSet",
-        //    inManagedObjectContext:self.managedObjectContext)
         var managedSet = NSEntityDescription.insertNewObjectForEntityForName("PreferenceSet", inManagedObjectContext: self.managedObjectContext) as! PreferenceSetMO
         managedSet.setValue(preferenceSet.title, forKey: "title")
         managedSet.setValue(preferenceSet.preferenceSetType, forKey: "preferenceSetType")
-        //managedSet.title = preferenceSet.title
-        //managedSet.preferenceSetType = preferenceSet.preferenceSetType
+        
+        // existingItems only for recovery step
+        //let existingItems = self.getAllSavedPSItems()
+        for item in preferenceSet.getAllItems() {
+            let setItem = Int64(item.mediaItem.persistentID)
+            let existingItem = self.fetchPSItem(setItem)
+            if existingItem != nil {
+                // relate existingItem to the PreferenceSetMO just created
+            } else {
+                // try recovery when recovery is implemented
+                // create new PreferenceSetItemMO for this persistent ID
+            }
+        }
         
         do {
             try self.managedObjectContext.save()
@@ -86,4 +118,10 @@ class PreferenceSetDataController : NSObject {
 class PreferenceSetMO: NSManagedObject {
     @NSManaged var title: String?
     @NSManaged var preferenceSetType: String?
+}
+
+class PreferenceSetItemMO: NSManagedObject {
+    @NSManaged var id: NSNumber?
+    @NSManaged var recoveryProp1: String?
+    @NSManaged var recoveryProp2: String?
 }
