@@ -130,6 +130,8 @@ class PreferenceSetMO: NSManagedObject {
     @NSManaged var title: String?
     @NSManaged var preferenceSetType: String?
     
+    // makes me nuts that relationships have to begin with lowercase
+    // but the model enforces that. I blame objective C.
     @NSManaged func addincludedInSetObject(value:PreferenceSetItemMO)
 }
 
