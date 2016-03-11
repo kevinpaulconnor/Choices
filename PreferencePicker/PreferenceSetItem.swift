@@ -9,6 +9,7 @@
 import Foundation
 import MediaPlayer
 
+// will probably need to reorganize this structure for created items
 protocol PreferenceSetItem {
     var mediaItem: MPMediaItem {get set}
     
@@ -19,9 +20,17 @@ protocol PreferenceSetItem {
 
 class iTunesPreferenceSetItem : PreferenceSetItem {
     var mediaItem: MPMediaItem
+    var id: MPMediaEntityPersistentID
+    var title: String
+    var songLength: NSTimeInterval
     
     init(candidateItem: MPMediaItem) {
         self.mediaItem = candidateItem
+        self.id = candidateItem.persistentID
+
+        // store data to try to recover if we lost data after a sync
+        self.title = (self.mediaItem.title ?? "No Title")
+        self.songLength = candidateItem.playbackDuration
     }
     
     func titleForTableDisplay() -> String {

@@ -11,22 +11,25 @@ import MediaPlayer
 import CoreData
 
 // PreferenceSet protocol provides APIs for the presentation
-// and modification of PreferenceSet in view controllers
+// and modification of PreferenceSet in view controllers and
+// persistence layer
 protocol PreferenceSet {
     var title: String {get set }
     var preferenceSetType: String { get set }
     func itemCount() -> Int
     func getItemsForComparison(numberToGet: Int) -> [PreferenceSetItem]
     func getItemByIndex(index: Int) -> PreferenceSetItem
-    
+    func getAllItems() -> [PreferenceSetItem]
 }
 
 //don't want to reach into data store and load everything,
 // so let's just show what we need about each, when we're loading
-struct minimalSetReference {
+// on second thought, this concept doesn't seem to be viable
+// but we'll leave the code around until that proves out...
+/*struct minimalSetReference {
     var title: String
     var preferenceSetType: PreferenceSetType
-}
+}*/
 
 // PreferenceSetBase holds common logic for determining
 // and storing user preferences about the items in the set
@@ -60,16 +63,20 @@ class PreferenceSetBase : PreferenceSet {
         return items[index]
     }
     
+    func getAllItems() -> [PreferenceSetItem] {
+        return items
+    }
+    
     static func save(preferenceSet: PreferenceSet) {
-        appDelegate!.dataController!.save(preferenceSet)
+        appDelegate!.dataController!.createSet(preferenceSet)
     }
     
     static func load(name: String, type: PreferenceSetType) -> PreferenceSet {
         return appDelegate!.dataController!.load(name, type: type)
     }
     
-    static func getAllSavedSets() -> [minimalSetReference] {
-        return appDelegate!.dataController!.getAllSavedSetNames()
+    static func getAllSavedSets() -> [PreferenceSetMO] {
+        return appDelegate!.dataController!.getAllSavedSets()
     }
 }
 

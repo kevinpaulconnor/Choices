@@ -3,13 +3,13 @@
     <entity name="PreferenceSet" representedClassName=".PreferenceSetMO" syncable="YES">
         <attribute name="preferenceSetType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="item" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PreferenceSetItem" inverseName="set" inverseEntity="PreferenceSetItem" syncable="YES"/>
+        <relationship name="includedInSet" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PreferenceSetItem" inverseName="isMemberOf" inverseEntity="PreferenceSetItem" syncable="YES"/>
     </entity>
     <entity name="PreferenceSetItem" representedClassName=".PreferenceSetItemMO" syncable="YES">
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="recoveryProp1" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="recoveryProp2" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="set" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PreferenceSet" inverseName="item" inverseEntity="PreferenceSet" syncable="YES"/>
+        <relationship name="isMemberOf" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PreferenceSet" inverseName="includedInSet" inverseEntity="PreferenceSet" syncable="YES"/>
     </entity>
     <elements>
         <element name="PreferenceSet" positionX="-308" positionY="-12" width="128" height="88"/>

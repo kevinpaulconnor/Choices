@@ -62,7 +62,7 @@ class PreferenceSetDataController : NSObject {
         }
     }
     
-    private func getAllSavedSets () -> [PreferenceSetMO] {
+    func getAllSavedSets () -> [PreferenceSetMO] {
         return self.fetcher("PreferenceSet", predicate: nil) as! [PreferenceSetMO]
     }
     
@@ -75,28 +75,39 @@ class PreferenceSetDataController : NSObject {
     }
     
     private func fetchPSItem(id: Int64) -> PreferenceSetItemMO? {
-        let itemPredicate = NSPredicate(format: "id is[c] %@", id)
-        return self.fetcher("PreferenceSetItem", predicate: itemPredicate)[0] as? PreferenceSetItemMO
+        let itemPredicate = NSPredicate(format: "id == \(id)")
+        // checking only [0] probably isn't really going to work always
+        // since uniqueness isn't enforced. but when it doesn't work it will indicate
+        // a bigger problem
+        let item = self.fetcher("PreferenceSetItem", predicate: itemPredicate) as? [PreferenceSetItemMO]
+        
+        if item != nil && item!.count > 0 {
+            return item![0]
+        }
+        return nil
+        //return item ?? item[0] : nil
+        
     }
     
-    func save (preferenceSet: PreferenceSet) {
-        var managedSet = NSEntityDescription.insertNewObjectForEntityForName("PreferenceSet", inManagedObjectContext: self.managedObjectContext) as! PreferenceSetMO
+    func createSet (preferenceSet: PreferenceSet) {
+        let managedSet = NSEntityDescription.insertNewObjectForEntityForName("PreferenceSet", inManagedObjectContext: self.managedObjectContext) as! PreferenceSetMO
         managedSet.setValue(preferenceSet.title, forKey: "title")
         managedSet.setValue(preferenceSet.preferenceSetType, forKey: "preferenceSetType")
         
-        // existingItems only for recovery step
-        //let existingItems = self.getAllSavedPSItems()
         for item in preferenceSet.getAllItems() {
-            let setItem = Int64(item.mediaItem.persistentID)
-            let existingItem = self.fetchPSItem(setItem)
-            if existingItem != nil {
-                // relate existingItem to the PreferenceSetMO just created
-            } else {
-                // try recovery when recovery is implemented
-                // create new PreferenceSetItemMO for this persistent ID
+            let setItemId = Int64(item.mediaItem.persistentID)
+            var managedItem = self.fetchPSItem(setItemId)
+            if managedItem == nil {
+                // try recovery stuff here when recovery is implemented
+                managedItem = NSEntityDescription.insertNewObjectForEntityForName("PreferenceSetItem", inManagedObjectContext: self.managedObjectContext) as? PreferenceSetItemMO
             }
+            managedSet.addincludedInSetObject(managedItem!)
         }
         
+        self.activeSet = managedSet
+    }
+    
+    func save () {
         do {
             try self.managedObjectContext.save()
         } catch {
@@ -118,6 +129,8 @@ class PreferenceSetDataController : NSObject {
 class PreferenceSetMO: NSManagedObject {
     @NSManaged var title: String?
     @NSManaged var preferenceSetType: String?
+    
+    @NSManaged func addincludedInSetObject(value:PreferenceSetItemMO)
 }
 
 class PreferenceSetItemMO: NSManagedObject {

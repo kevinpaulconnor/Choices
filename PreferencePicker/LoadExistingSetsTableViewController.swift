@@ -9,7 +9,7 @@
 import UIKit
 
 class LoadExistingSetsTableViewController: UITableViewController {
-    var savedSets: [minimalSetReference]?
+    var savedSets: [PreferenceSetMO]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,11 +44,11 @@ class LoadExistingSetsTableViewController: UITableViewController {
     }
 
     private func candidateSetTitleForDisplay(indexPath: NSIndexPath) -> String {
-        return savedSets![indexPath.row].title
+        return savedSets![indexPath.row].title!
     }
     
     private func candidateSetTypeForDisplay(indexPath: NSIndexPath) -> String {
-        return savedSets![indexPath.row].preferenceSetType.description
+        return savedSets![indexPath.row].preferenceSetType!
     }
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("ChooseSavedSetCell", forIndexPath: indexPath)
