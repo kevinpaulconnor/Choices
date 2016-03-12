@@ -9,12 +9,18 @@
 import UIKit
 
 class LoadExistingSetsTableViewController: UITableViewController {
+    // it feels kludgy that i'm interacting with both PreferenceSetBase
+    // and PreferenceSetMO here. Should I just drive the whole thing
+    // from PreferenceSetMO? That seems wrong too.
     var savedSets: [PreferenceSetMO]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         savedSets = PreferenceSetBase.getAllSavedSets()
+        var items = savedSets![0].preferenceSetItem!.allObjects as! [PreferenceSetItemMO]
+        //let testItems = PreferenceSetBase.getAllSavedItemsForSet(savedSets![0])
+        print("\(items)")
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 

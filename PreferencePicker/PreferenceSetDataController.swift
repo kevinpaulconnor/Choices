@@ -85,8 +85,6 @@ class PreferenceSetDataController : NSObject {
             return item![0]
         }
         return nil
-        //return item ?? item[0] : nil
-        
     }
     
     func createSet (preferenceSet: PreferenceSet) {
@@ -101,7 +99,8 @@ class PreferenceSetDataController : NSObject {
                 // try recovery stuff here when recovery is implemented
                 managedItem = NSEntityDescription.insertNewObjectForEntityForName("PreferenceSetItem", inManagedObjectContext: self.managedObjectContext) as? PreferenceSetItemMO
             }
-            managedSet.addincludedInSetObject(managedItem!)
+            managedSet.addpreferenceSetItemObject(managedItem!)
+            managedItem!.addpreferenceSetObject(managedSet)
         }
         
         self.activeSet = managedSet
@@ -129,14 +128,18 @@ class PreferenceSetDataController : NSObject {
 class PreferenceSetMO: NSManagedObject {
     @NSManaged var title: String?
     @NSManaged var preferenceSetType: String?
+    @NSManaged var preferenceSetItem: NSSet?
     
     // makes me nuts that relationships have to begin with lowercase
     // but the model enforces that. I blame objective C.
-    @NSManaged func addincludedInSetObject(value:PreferenceSetItemMO)
+    @NSManaged func addpreferenceSetItemObject(value:PreferenceSetItemMO)
 }
 
 class PreferenceSetItemMO: NSManagedObject {
     @NSManaged var id: NSNumber?
+    @NSManaged var preferenceSet: NSSet?
+    
+    @NSManaged func addpreferenceSetObject(value: PreferenceSetMO)
     @NSManaged var recoveryProp1: String?
     @NSManaged var recoveryProp2: String?
 }
