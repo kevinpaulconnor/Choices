@@ -16,7 +16,7 @@ class DisplayPreferenceSetTypesTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // might want to investigate PSTM as a struct and/or not having to instantiate here
-        types = PreferenceSetTypeManager().allPreferenceSetTypes()
+        types = PreferenceSetTypeManager.allPreferenceSetTypes()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -93,8 +93,8 @@ class DisplayPreferenceSetTypesTableViewController: UITableViewController {
         if ( segue.identifier == "ChooseImportType") {
             if let indexPath = tableView.indexPathForCell(sender as! UITableViewCell) {
                 let preferenceSetVC = segue.destinationViewController as! DisplayCandidatePreferenceSetsTableViewController
-                preferenceSetVC.title = types[indexPath.row].description
-                preferenceSetVC.preferenceSetType = types[indexPath.row]
+                preferenceSetVC.title = types![indexPath.row].description
+                preferenceSetVC.preferenceSetType = types![indexPath.row]
             }
         }
     }
