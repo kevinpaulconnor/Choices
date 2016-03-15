@@ -317,6 +317,9 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="jqc-4f-l4J" kind="unwind" unwindAction="loadedSet:" id="h0T-K6-LVC"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -326,6 +329,7 @@
                     </tableView>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rcv-XZ-M5r" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="jqc-4f-l4J" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2263" y="-634"/>
         </scene>
