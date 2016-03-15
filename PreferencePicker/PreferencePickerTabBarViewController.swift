@@ -33,10 +33,10 @@ class PreferencePickerTabBarViewController: UITabBarController, UITabBarControll
     // create active set, move to ActiveSet tab
     @IBAction func loadedSet(segue: UIStoryboardSegue) {
         if let managedSet = self.candidateMO {
-            var managedItems = managedSet.preferenceSetItem!.allObjects as! [PreferenceSetItemMO]
-            let candidateSet = PreferenceSetBase.buildMediaItemCollectionFromIds(managedItems)
+            let managedItems = managedSet.preferenceSetItem!.allObjects as! [PreferenceSetItemMO]
+            let candidateSet = PreferenceSetBase.buildMediaItemArrayFromMOs(managedItems)
             let type = PreferenceSetTypeManager.getSetType(managedSet.preferenceSetType!)
-            self.activeSet = type.createPreferenceSet(candidateSet, title: managedSet.title)
+            self.activeSet = type.createPreferenceSet(candidateSet, title: managedSet.title!)
             self.candidateMO = nil
             self.goToActiveSetView()
         }
