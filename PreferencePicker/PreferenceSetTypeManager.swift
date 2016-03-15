@@ -11,23 +11,27 @@ import Foundation
 import MediaPlayer
 
 class PreferenceSetTypeManager {
-    private let types = [PreferenceSetType](
-        arrayLiteral: iTunesPreferenceSetType()
-    )
+    private let types = [PreferenceSetTypeIds.iTunesPlaylist: iTunesPreferenceSetType()]
     
     func allPreferenceSetTypes() -> [PreferenceSetType] {
-        return types
+        var typeArray = [PreferenceSetType]()
+        for type in types.values {
+            typeArray.append(type)
+        }
+        return typeArray
     }
     
-    //func getSetType(psId: PreferenceSetTypeIds) -> PreferenceSetType {
-    //    return types[psId.hashValue]
-    //}
+    func getSetType(psId: String) -> PreferenceSetType {
+       return types[psId]!
+    }
     
 }
 
 struct PreferenceSetTypeIds {
     static let iTunesPlaylist = "iTunesPlayList"
 }
+
+
 
 protocol PreferenceSetType {
     static var importable: Bool { get }
@@ -38,8 +42,7 @@ protocol PreferenceSetType {
     func getAvailableSetsForImport() -> [MPMediaItemCollection]
     func displayNameForCandidateSet(candidateSet: MPMediaItemCollection) -> String
     func nameForItemsOfThisType(count: Int) -> String
-    func createPreferenceSet(candidateSet: MPMediaItemCollection, title: String) -> PreferenceSet
-    
+    func createPreferenceSet(candidateSet: MPMediaItemCollection, title: String) -> PreferenceSet  
 }
 
 class iTunesPreferenceSetType: PreferenceSetType {
