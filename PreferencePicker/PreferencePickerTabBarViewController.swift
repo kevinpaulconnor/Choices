@@ -11,7 +11,9 @@ import UIKit
 class PreferencePickerTabBarViewController: UITabBarController, UITabBarControllerDelegate {
     
     var activeSet: PreferenceSet?
-
+    //not crazy about this. always want it to be nil, except when I'm
+    //in the act of loading
+    var candidateMO: PreferenceSetMO?
     private struct TabIndex {
         static let Load = 0
         static let Second = 1
@@ -24,11 +26,20 @@ class PreferencePickerTabBarViewController: UITabBarController, UITabBarControll
         self.activeSet = importController.importSet()
  
         self.viewControllers![TabIndex.Load] = storyboard!.instantiateViewControllerWithIdentifier("LoadNavigationController")
-        let navController = self.viewControllers![TabIndex.ActiveSet] as! UINavigationController
-        let ActiveSetVC = navController.topViewController as! DisplayActiveSetTableViewController
-        ActiveSetVC.activeSet = self.activeSet
-        ActiveSetVC.title = self.activeSet!.title
-        self.selectedIndex = TabIndex.ActiveSet
+        self.goToActiveSetView()
+    }
+    
+    // after loading a previously saved set, associate MediaItems with active set,
+    // create active set, move to ActiveSet tab
+    @IBAction func loadedSet(segue: UIStoryboardSegue) {
+        if let managedSet = self.candidateMO {
+            var managedItems = managedSet.preferenceSetItem!.allObjects as! [PreferenceSetItemMO]
+            let candidateSet = PreferenceSetBase.buildMediaItemCollectionFromIds(managedItems)
+            let type = PreferenceSetTypeManager.getSetType(managedSet.preferenceSetType!)
+            self.activeSet = type.createPreferenceSet(candidateSet, title: managedSet.title)
+            self.candidateMO = nil
+            self.goToActiveSetView()
+        }
     }
     
     override func viewDidLoad() {
@@ -41,6 +52,14 @@ class PreferencePickerTabBarViewController: UITabBarController, UITabBarControll
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    private func goToActiveSetView() {
+        let navController = self.viewControllers![TabIndex.ActiveSet] as! UINavigationController
+        let ActiveSetVC = navController.topViewController as! DisplayActiveSetTableViewController
+        ActiveSetVC.activeSet = self.activeSet
+        ActiveSetVC.title = self.activeSet!.title
+        self.selectedIndex = TabIndex.ActiveSet
     }
     
     func tabBarController(tabBarController: UITabBarController,
