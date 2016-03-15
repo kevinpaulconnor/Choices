@@ -30,7 +30,7 @@ class ImportSetViewController: UIViewController {
     }
     
     func importSet() -> PreferenceSet {
-        let newSet = preferenceSetType!.createPreferenceSet(candidateSet!, title: candidateSetTitle!)
+        let newSet = preferenceSetType!.createPreferenceSet(candidateSet!.items, title: candidateSetTitle!)
         PreferenceSetBase.save(newSet)
         return newSet
     }

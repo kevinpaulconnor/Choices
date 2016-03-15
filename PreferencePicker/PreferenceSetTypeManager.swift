@@ -11,9 +11,9 @@ import Foundation
 import MediaPlayer
 
 class PreferenceSetTypeManager {
-    private let types = [PreferenceSetTypeIds.iTunesPlaylist: iTunesPreferenceSetType()]
+    static let types = [PreferenceSetTypeIds.iTunesPlaylist: iTunesPreferenceSetType()]
     
-    func allPreferenceSetTypes() -> [PreferenceSetType] {
+    static func allPreferenceSetTypes() -> [PreferenceSetType] {
         var typeArray = [PreferenceSetType]()
         for type in types.values {
             typeArray.append(type)
@@ -21,7 +21,7 @@ class PreferenceSetTypeManager {
         return typeArray
     }
     
-    func getSetType(psId: String) -> PreferenceSetType {
+    static func getSetType(psId: String) -> PreferenceSetType {
        return types[psId]!
     }
     
@@ -42,7 +42,7 @@ protocol PreferenceSetType {
     func getAvailableSetsForImport() -> [MPMediaItemCollection]
     func displayNameForCandidateSet(candidateSet: MPMediaItemCollection) -> String
     func nameForItemsOfThisType(count: Int) -> String
-    func createPreferenceSet(candidateSet: MPMediaItemCollection, title: String) -> PreferenceSet  
+    func createPreferenceSet(candidateSet: [MPMediaItem], title: String) -> PreferenceSet
 }
 
 class iTunesPreferenceSetType: PreferenceSetType {
@@ -67,8 +67,8 @@ class iTunesPreferenceSetType: PreferenceSetType {
         return (count > 1 ? "songs" : "song")
     }
     
-    func createPreferenceSet(candidateSet: MPMediaItemCollection, title: String) -> PreferenceSet {
-        return iTunesPlaylistPreferenceSet(candidateItems: candidateSet.items, title: title)
+    func createPreferenceSet(candidateSet: [MPMediaItem], title: String) -> PreferenceSet {
+        return iTunesPlaylistPreferenceSet(candidateItems: candidateSet, title: title)
     }
     
 }
