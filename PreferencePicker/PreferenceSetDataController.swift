@@ -98,6 +98,7 @@ class PreferenceSetDataController : NSObject {
             if managedItem == nil {
                 // try recovery stuff here when recovery is implemented
                 managedItem = NSEntityDescription.insertNewObjectForEntityForName("PreferenceSetItem", inManagedObjectContext: self.managedObjectContext) as? PreferenceSetItemMO
+                managedItem!.setValue(NSNumber(unsignedLongLong: item.mediaItem.persistentID), forKey: "id")
             }
             managedSet.addpreferenceSetItemObject(managedItem!)
             managedItem!.addpreferenceSetObject(managedSet)
@@ -120,7 +121,7 @@ class PreferenceSetDataController : NSObject {
     
     func load(name: String, type: PreferenceSetType) -> PreferenceSet {
 
-        return type.createPreferenceSet(MPMediaItemCollection(), title: "Test")
+        return type.createPreferenceSet([MPMediaItem()], title: "Test")
     }
     
 }
