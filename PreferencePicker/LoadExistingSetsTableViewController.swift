@@ -18,9 +18,6 @@ class LoadExistingSetsTableViewController: UITableViewController {
         super.viewDidLoad()
         
         savedSets = PreferenceSetBase.getAllSavedSets()
-        var items = savedSets![0].preferenceSetItem!.allObjects as! [PreferenceSetItemMO]
-        //let testItems = PreferenceSetBase.getAllSavedItemsForSet(savedSets![0])
-        print("\(items)")
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -104,7 +101,7 @@ class LoadExistingSetsTableViewController: UITableViewController {
     // MARK: - Navigation
 
    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if ( segue.identifier == "loadedSet") {
+        if ( segue.identifier == "chosenExistingSetToActivate") {
             if let indexPath = tableView.indexPathForCell(sender as! UITableViewCell) {
                 let tabBarVC = segue.destinationViewController as! PreferencePickerTabBarViewController
                 tabBarVC.candidateMO = savedSets![indexPath.row]

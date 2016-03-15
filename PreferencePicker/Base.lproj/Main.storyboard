@@ -318,7 +318,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="jqc-4f-l4J" kind="unwind" unwindAction="loadedSet:" id="h0T-K6-LVC"/>
+                                    <segue destination="jqc-4f-l4J" kind="unwind" identifier="chosenExistingSetToActivate" unwindAction="loadedSet:" id="h0T-K6-LVC"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
