@@ -101,14 +101,15 @@ class LoadExistingSetsTableViewController: UITableViewController {
     }
     */
 
-    /*
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+   override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if ( segue.identifier == "loadedSet") {
+            if let indexPath = tableView.indexPathForCell(sender as! UITableViewCell) {
+                let tabBarVC = segue.destinationViewController as! PreferencePickerTabBarViewController
+                tabBarVC.candidateMO = savedSets![indexPath.row]
+            }
+        }
     }
-    */
 
 }
