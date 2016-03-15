@@ -67,6 +67,21 @@ class PreferenceSetBase : PreferenceSet {
         return items
     }
     
+    //Decided to manage all persistence layer api
+    //through PreferenceSetBase
+    
+    static func buildMediaItemArrayFromMOs(managedItems: [PreferenceSetItemMO]) -> [MPMediaItem] {
+        let mediaItemArray = MPMediaQuery.songsQuery().items!
+        var outputArray = [MPMediaItem]()
+        for mediaItem in mediaItemArray {
+            let castedId = NSNumber(unsignedLongLong: mediaItem.persistentID)
+            if managedItems.contains({$0.id! == castedId}) {
+                outputArray.append(mediaItem)
+            }
+        }
+        return outputArray
+    }
+    
     static func save(preferenceSet: PreferenceSet) {
         appDelegate!.dataController!.createSet(preferenceSet)
     }
