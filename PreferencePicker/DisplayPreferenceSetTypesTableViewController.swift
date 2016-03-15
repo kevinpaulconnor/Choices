@@ -9,7 +9,9 @@
 import UIKit
 
 class DisplayPreferenceSetTypesTableViewController: UITableViewController {
-    var types = [PreferenceSetType]()
+    // with the wisdom of some weeks working on this,
+    // might be better to rework Type Manager as a singleton with static methods
+    var types:[PreferenceSetType]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +36,7 @@ class DisplayPreferenceSetTypesTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return types.count
+        return types!.count
     }
 
     private struct Storyboard {
@@ -44,7 +46,7 @@ class DisplayPreferenceSetTypesTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(Storyboard.CellReuseIdentifier, forIndexPath: indexPath)
         
-        cell.textLabel?.text = types[indexPath.row].description
+        cell.textLabel?.text = types![indexPath.row].description
 
         return cell
     }
