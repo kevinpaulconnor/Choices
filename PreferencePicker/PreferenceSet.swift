@@ -39,7 +39,7 @@ class PreferenceSetBase : PreferenceSet {
     var preferenceSetType = String()
     static var appDelegate =
     UIApplication.sharedApplication().delegate as? AppDelegate
-   
+    var scoreManager = ELOManager()
     private var items = [PreferenceSetItem]()
 
     init(title: String) {
@@ -83,7 +83,7 @@ class PreferenceSetBase : PreferenceSet {
     }
     
     static func save(preferenceSet: PreferenceSet) {
-        appDelegate!.dataController!.createSet(preferenceSet)
+        appDelegate!.dataController!.createSetMO(preferenceSet)
     }
     
     static func load(name: String, type: PreferenceSetType) -> PreferenceSet {
