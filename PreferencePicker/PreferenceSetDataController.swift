@@ -100,8 +100,16 @@ class PreferenceSetDataController : NSObject {
                 managedItem = NSEntityDescription.insertNewObjectForEntityForName("PreferenceSetItem", inManagedObjectContext: self.managedObjectContext) as? PreferenceSetItemMO
                 managedItem!.setValue(NSNumber(unsignedLongLong: item.mediaItem.persistentID), forKey: "id")
             }
+            
             managedSet.addpreferenceSetItemObject(managedItem!)
             managedItem!.addpreferenceSetObject(managedSet)
+            
+            let managedScore = NSEntityDescription.insertNewObjectForEntityForName("PreferenceScore", inManagedObjectContext: self.managedObjectContext) as? PreferenceScoreMO
+            managedScore!.addpreferenceSetItemObject(managedItem!)
+            managedScore!.addscoreForSetObject(managedSet)
+            
+            managedItem!.addpreferenceScoreObject(managedScore!)
+            managedSet.addpreferenceScoreObject(managedScore!)
         }
         
         self.activeSet = managedSet
@@ -134,6 +142,8 @@ class PreferenceSetMO: NSManagedObject {
     // makes me nuts that relationships have to begin with lowercase
     // but the model enforces that. I blame objective C.
     @NSManaged func addpreferenceSetItemObject(value:PreferenceSetItemMO)
+    @NSManaged func addpreferenceScoreObject(value: PreferenceScoreMO)
+    @NSManaged func addcomparisonObject(value: ComparisonMO)
 }
 
 class PreferenceSetItemMO: NSManagedObject {
@@ -141,6 +151,8 @@ class PreferenceSetItemMO: NSManagedObject {
     @NSManaged var preferenceSet: NSSet?
     
     @NSManaged func addpreferenceSetObject(value: PreferenceSetMO)
+    @NSManaged func addpreferenceScoreObject(value: PreferenceScoreMO)
+    @NSManaged func addcomparisonObject(value: ComparisonMO)
     @NSManaged var recoveryProp1: String?
     @NSManaged var recoveryProp2: String?
 }
