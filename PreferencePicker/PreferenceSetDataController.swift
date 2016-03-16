@@ -87,7 +87,7 @@ class PreferenceSetDataController : NSObject {
         return nil
     }
     
-    func createSet (preferenceSet: PreferenceSet) {
+    func createSetMO (preferenceSet: PreferenceSet) {
         let managedSet = NSEntityDescription.insertNewObjectForEntityForName("PreferenceSet", inManagedObjectContext: self.managedObjectContext) as! PreferenceSetMO
         managedSet.setValue(preferenceSet.title, forKey: "title")
         managedSet.setValue(preferenceSet.preferenceSetType, forKey: "preferenceSetType")
@@ -143,4 +143,20 @@ class PreferenceSetItemMO: NSManagedObject {
     @NSManaged func addpreferenceSetObject(value: PreferenceSetMO)
     @NSManaged var recoveryProp1: String?
     @NSManaged var recoveryProp2: String?
+}
+
+class PreferenceScoreMO: NSManagedObject {
+    @NSManaged var score: NSNumber?
+
+    // but the model enforces that. I blame objective C.
+    @NSManaged func addpreferenceSetItemObject(value:PreferenceSetItemMO)
+    @NSManaged func addscoreForSetObject(value:PreferenceSetMO)
+}
+
+class ComparisonMO: NSManagedObject {
+    @NSManaged var result: NSNumber?
+    
+    @NSManaged func addpreferenceSetObject(value: PreferenceSetMO)
+    @NSManaged func addpreferenceSetItemObject(value:PreferenceSetItemMO)
+
 }
