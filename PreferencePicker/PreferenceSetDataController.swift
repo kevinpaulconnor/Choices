@@ -103,13 +103,14 @@ class PreferenceSetDataController : NSObject {
             
             managedSet.addpreferenceSetItemObject(managedItem!)
             managedItem!.addpreferenceSetObject(managedSet)
-            
+        
             let managedScore = NSEntityDescription.insertNewObjectForEntityForName("PreferenceScore", inManagedObjectContext: self.managedObjectContext) as? PreferenceScoreMO
-            managedScore!.addpreferenceSetItemObject(managedItem!)
-            managedScore!.addscoreForSetObject(managedSet)
+            managedScore!.setValue(NSNumber(integer: preferenceSet.scoreManager.defaultScore), forKey: "score")
             
             managedItem!.addpreferenceScoreObject(managedScore!)
             managedSet.addpreferenceScoreObject(managedScore!)
+            managedScore!.setValue(managedItem!, forKey:"preferenceSetItem")
+            managedScore!.setValue(managedSet, forKey:"preferenceSet")
         }
         
         self.activeSet = managedSet
@@ -148,21 +149,19 @@ class PreferenceSetMO: NSManagedObject {
 
 class PreferenceSetItemMO: NSManagedObject {
     @NSManaged var id: NSNumber?
-    @NSManaged var preferenceSet: NSSet?
+    @NSManaged var recoveryProp1: String?
+    @NSManaged var recoveryProp2: String?
     
     @NSManaged func addpreferenceSetObject(value: PreferenceSetMO)
     @NSManaged func addpreferenceScoreObject(value: PreferenceScoreMO)
     @NSManaged func addcomparisonObject(value: ComparisonMO)
-    @NSManaged var recoveryProp1: String?
-    @NSManaged var recoveryProp2: String?
+
 }
 
 class PreferenceScoreMO: NSManagedObject {
     @NSManaged var score: NSNumber?
-
-    // but the model enforces that. I blame objective C.
-    @NSManaged func addpreferenceSetItemObject(value:PreferenceSetItemMO)
-    @NSManaged func addscoreForSetObject(value:PreferenceSetMO)
+    @NSManaged var preferenceSetItem: PreferenceSetItemMO?
+    @NSManaged var preferenceSet: PreferenceSetMO?
 }
 
 class ComparisonMO: NSManagedObject {

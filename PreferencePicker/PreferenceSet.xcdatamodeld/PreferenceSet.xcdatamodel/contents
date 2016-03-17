@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15D21" minimumToolsVersion="Xcode 7.0">
-    <entity name="Comparison" syncable="YES">
+    <entity name="Comparison" representedClassName=".ComparisonMO" syncable="YES">
         <attribute name="result" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <relationship name="preferenceSet" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PreferenceSet" inverseName="comparison" inverseEntity="PreferenceSet" syncable="YES"/>
         <relationship name="preferenceSetItem" optional="YES" toMany="YES" maxCount="2" deletionRule="Nullify" destinationEntity="PreferenceSetItem" inverseName="comparison" inverseEntity="PreferenceSetItem" syncable="YES"/>
     </entity>
-    <entity name="PreferenceScore" syncable="YES">
-        <attribute name="score" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    <entity name="PreferenceScore" representedClassName=".PreferenceScoreMO" syncable="YES">
+        <attribute name="score" optional="YES" attributeType="Integer 64" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="preferenceSet" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PreferenceSet" inverseName="preferenceScore" inverseEntity="PreferenceSet" syncable="YES"/>
         <relationship name="preferenceSetItem" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PreferenceSetItem" inverseName="preferenceScore" inverseEntity="PreferenceSetItem" syncable="YES"/>
-        <relationship name="scoreForSet" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PreferenceSet" inverseName="preferenceScore" inverseEntity="PreferenceSet" syncable="YES"/>
     </entity>
     <entity name="PreferenceSet" representedClassName=".PreferenceSetMO" syncable="YES">
         <attribute name="preferenceSetType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="comparison" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Comparison" inverseName="preferenceSet" inverseEntity="Comparison" syncable="YES"/>
-        <relationship name="preferenceScore" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PreferenceScore" inverseName="scoreForSet" inverseEntity="PreferenceScore" syncable="YES"/>
+        <relationship name="preferenceScore" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PreferenceScore" inverseName="preferenceSet" inverseEntity="PreferenceScore" syncable="YES"/>
         <relationship name="preferenceSetItem" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PreferenceSetItem" inverseName="preferenceSet" inverseEntity="PreferenceSetItem" syncable="YES"/>
     </entity>
     <entity name="PreferenceSetItem" representedClassName=".PreferenceSetItemMO" syncable="YES">

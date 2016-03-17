@@ -355,8 +355,8 @@
                                 <state key="normal" title="About the Same"/>
                                 <variation key="default">
                                     <mask key="constraints">
-                                        <exclude reference="iTS-OX-wum"/>
                                         <exclude reference="PnT-Ri-Kze"/>
+                                        <exclude reference="iTS-OX-wum"/>
                                     </mask>
                                 </variation>
                             </button>
@@ -594,11 +594,11 @@
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="8eg-Lf-QNc"/>
-                                        <exclude reference="OyZ-Yh-aRv"/>
                                         <exclude reference="3yF-uz-Tai"/>
                                         <exclude reference="HYD-ww-6xl"/>
                                         <exclude reference="tHF-o7-OLM"/>
                                         <exclude reference="v4m-mU-83e"/>
+                                        <exclude reference="OyZ-Yh-aRv"/>
                                         <exclude reference="UV3-7u-aYw"/>
                                         <exclude reference="aQH-VR-zJe"/>
                                         <exclude reference="lVK-5J-FeM"/>
