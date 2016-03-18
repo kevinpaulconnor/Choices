@@ -18,8 +18,6 @@ class ChoosePreferenceViewController: UIViewController {
 
 
 
-
-    
     var activeSet: PreferenceSet?
     var topItem: PreferenceSetItem?
     var topViewController: ItemChooserViewController?
@@ -31,29 +29,29 @@ class ChoosePreferenceViewController: UIViewController {
         super.viewDidLoad()
         let barViewController = self.tabBarController as! PreferencePickerTabBarViewController
         activeSet = barViewController.activeSet
-        
+
+        self.setItems()
         self.setSwipeOnItemViews(topItemView)
         self.setSwipeOnItemViews(bottomItemView)
-
-        
-        self.setItems()
     }
     
     func setSwipeOnItemViews(view: UIView) {
         let swipeRight = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
         swipeRight.direction = UISwipeGestureRecognizerDirection.Right
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
-        swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
         view.addGestureRecognizer(swipeRight)
-        view.addGestureRecognizer(swipeLeft)
     }
     
     
     func respondToSwipeGesture(gesture: UIGestureRecognizer) {
         if let swipeGesture = gesture as? UISwipeGestureRecognizer {
-            switch swipeGesture.direction {
-            default: self.reset()
+            var winningItem = topItem!.mediaItem.persistentID
+            if gesture.view!.tag == bottomItemView.tag {
+                winningItem = bottomItem!.mediaItem.persistentID
             }
+            let id1 = topItem!.mediaItem.persistentID
+            let id2 = bottomItem!.mediaItem.persistentID
+            activeSet!.registerComparison(id1, id2: id2, result: winningItem)
+            self.resetItems()
         }
     }
     
@@ -79,8 +77,8 @@ class ChoosePreferenceViewController: UIViewController {
         topItem = psItems![0]
         bottomItem = psItems![1]
         
-        topViewController = self.setContainerView(topItemView, item: topItem!)
-        bottomViewController = self.setContainerView(bottomItemView, item: bottomItem!)
+        topViewController = self.setContainerView(topItemView, tag: 1, item: topItem!)
+        bottomViewController = self.setContainerView(bottomItemView, tag: 2, item: bottomItem!)
     }
     
     private struct vcGenerators {
@@ -89,11 +87,12 @@ class ChoosePreferenceViewController: UIViewController {
         }
     }
     
-    func setContainerView(containerView: UIView, item: PreferenceSetItem) -> ItemChooserViewController {
+    func setContainerView(containerView: UIView, tag: Int, item: PreferenceSetItem) -> ItemChooserViewController {
         let itemViewController = self.chooserItemControllersByPreferenceSetType() as! ItemChooserViewController
         itemViewController.item = item
         self.addChildViewController(itemViewController)
         itemViewController.view.frame = CGRectMake(0, 0, containerView.frame.size.width, containerView.frame.size.height)
+        containerView.tag = tag
         containerView.addSubview(itemViewController.view)
         itemViewController.didMoveToParentViewController(self)
         return itemViewController
