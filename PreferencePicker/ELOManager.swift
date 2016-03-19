@@ -18,9 +18,19 @@ class ELOManager {
     var allTimeComparisons = [NSDate: Comparison]()
     var freshComparisons = [NSDate: Comparison]()
     var recommendedUpcomingComparisons = [(UInt64, UInt64)]()
-    var sortedPreferenceScores = [UInt64: PreferenceScore]()
+    
+    //I wonder whether there's a better way to do this than two structures?
+    var keyedPreferenceScores = [UInt64: PreferenceScore]()
+    var preferenceScores = [PreferenceScore]()
+    var minimumComparisonsForSet = 0
     
     private func updateRatings() {
+
+    }
+    
+    private func recommendComparisons() {
+        // filter for the PSs with the least comparisons
+        var minimumComparisonPreferenceScores = preferenceScores.filter({$0.totalComparisons == minimumComparisonsForSet})
         
     }
 
@@ -34,6 +44,9 @@ class ELOManager {
     
     func getIdsForComparison() -> [UInt64] {
         let idTuple = recommendedUpcomingComparisons.removeFirst()
+        //for _ in 0..<numberToGet {
+        //    ret.append(self.items[Int(arc4random_uniform(UInt32(self.items.count)))])
+        //}
         return [idTuple.0, idTuple.1]
     }
     
@@ -49,11 +62,17 @@ class ELOManager {
     // on import, or restoring from persistence
     func initializeComparisons() {
     
+        recommendComparisons()
+    }
+    
+    func getScoreForItemId(id: UInt64) -> Double {
+        
+        return Double()
     }
     
 }
 
-struct Comparison {
+class Comparison {
     var id1: UInt64
     var id2: UInt64
     var timestamp: NSDate
@@ -68,9 +87,12 @@ struct Comparison {
     }
 }
 
-struct PreferenceScore {
-    var id: UInt64
-    var score: Double
+class PreferenceScore {
+    var id: UInt64?
+    var score: Double?
     var comparisonsSinceScoreUpdate = 0
+    var totalComparisons = 0
     var comparisons = [NSDate: Comparison]()
+    
+    
 }
