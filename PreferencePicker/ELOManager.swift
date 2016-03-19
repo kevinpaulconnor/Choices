@@ -15,32 +15,35 @@ class ELOManager {
     let thousandthsMultiplier = 0.7 // each thousandth of a point of difference in actual results
                                     // above or below .5 adjust rating by .7 rating points
                                     // up or down
-    var comparisons = [NSDate: Comparison]()
+    var allTimeComparisons = [NSDate: Comparison]()
+    var freshComparisons = [NSDate: Comparison]()
     var recommendedUpcomingComparisons = [(UInt64, UInt64)]()
-    var sortedPreferenceScores = [PreferenceScore]()
+    var sortedPreferenceScores = [UInt64: PreferenceScore]()
     
-    func updateRatings() {
+    private func updateRatings() {
         
     }
 
+    /* figure out whether it's time to recalculate scores,
+    set upcoming comparisons
+    
+    */
+    private func updateDecision() -> Bool {
+        return false
+    }
+    
     func createAndAddComparison(id1: UInt64, id2: UInt64, result: UInt64) {
         let comparison = Comparison(id1: id1, id2: id2, result: result)
-        comparisons[comparison.timestamp] = comparison
+        freshComparisons[comparison.timestamp] = comparison
+        print("\(freshComparisons)")
         if self.updateDecision() {
             
         }
     }
     
+    // on import, or restoring from persistence
     func initializeComparisons() {
     
-    }
-    
-    /* figure out whether it's time to recalculate scores,
-        set upcoming comparisons
-    
-    */
-    private func updateDecision() -> Bool {
-        return false
     }
     
 }
