@@ -51,7 +51,8 @@ class ChoosePreferenceViewController: UIViewController {
             let id1 = topItem!.mediaItem.persistentID
             let id2 = bottomItem!.mediaItem.persistentID
             activeSet!.registerComparison(id1, id2: id2, result: winningItem)
-            self.resetItems()
+            // should the music stop if it's playing on a swipe?
+            self.reset()
         }
     }
     
