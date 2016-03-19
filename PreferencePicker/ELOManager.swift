@@ -8,7 +8,7 @@
 
 import Foundation
 
-//ELOManager handles ELO calculations for
+//ELOManager handles ELO calculations for Preference Sets
 
 class ELOManager {
     let defaultScore = 2000          //Created PreferenceItems start with a score of 2000
@@ -30,6 +30,11 @@ class ELOManager {
     */
     private func updateDecision() -> Bool {
         return false
+    }
+    
+    func getIdsForComparison() -> [UInt64] {
+        let idTuple = recommendedUpcomingComparisons.removeFirst()
+        return [idTuple.0, idTuple.1]
     }
     
     func createAndAddComparison(id1: UInt64, id2: UInt64, result: UInt64) {
