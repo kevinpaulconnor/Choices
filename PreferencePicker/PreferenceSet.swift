@@ -45,7 +45,8 @@ class PreferenceSetBase : PreferenceSet {
     UIApplication.sharedApplication().delegate as? AppDelegate
     var scoreManager = ELOManager()
     private var items = [PreferenceSetItem]()
-
+    private var keyedItems = [UInt64 : PreferenceSetItem]()
+    
     init(title: String) {
         self.title = title
     }
@@ -57,6 +58,7 @@ class PreferenceSetBase : PreferenceSet {
     // for now, just return a random item from the set's items
     func getItemsForComparison(numberToGet: Int) -> [PreferenceSetItem] {
         var ret = [PreferenceSetItem]()
+        //let idsForComparison = ELOManager.getItemsForComparison(numberToGet)
         for _ in 0..<numberToGet {
             ret.append(self.items[Int(arc4random_uniform(UInt32(self.items.count)))])
         }
@@ -113,7 +115,9 @@ class iTunesPlaylistPreferenceSet : PreferenceSetBase {
         super.preferenceSetType = PreferenceSetTypeIds.iTunesPlaylist
         
         for item in candidateItems {
-            items.append(iTunesPreferenceSetItem(candidateItem: item))
+            let newiTunesItem = iTunesPreferenceSetItem(candidateItem: item)
+            items.append(newiTunesItem)
+            keyedItems[item.persistentID] = newiTunesItem
         }
     }
 }
