@@ -20,20 +20,11 @@ protocol PreferenceSet {
     //might want more flexibility here eventually by implementing scoreManager protocol
     var scoreManager: ELOManager { get set }
     func itemCount() -> Int
-    func getItemsForComparison(numberToGet: Int) -> [PreferenceSetItem]
+    func getItemsForComparison() -> [PreferenceSetItem]
     func getItemByIndex(index: Int) -> PreferenceSetItem
     func getAllItems() -> [PreferenceSetItem]
     func registerComparison(id1: UInt64, id2: UInt64, result: UInt64)
 }
-
-//don't want to reach into data store and load everything,
-// so let's just show what we need about each, when we're loading
-// on second thought, this concept doesn't seem to be viable
-// but we'll leave the code around until that proves out...
-/*struct minimalSetReference {
-    var title: String
-    var preferenceSetType: PreferenceSetType
-}*/
 
 // PreferenceSetBase holds common logic for determining
 // and storing user preferences about the items in the set
@@ -54,15 +45,10 @@ class PreferenceSetBase : PreferenceSet {
     func itemCount() -> Int {
         return items.count
     }
-    
-    // for now, just return a random item from the set's items
-    func getItemsForComparison(numberToGet: Int) -> [PreferenceSetItem] {
-        var ret = [PreferenceSetItem]()
-        //let idsForComparison = ELOManager.getItemsForComparison(numberToGet)
-        for _ in 0..<numberToGet {
-            ret.append(self.items[Int(arc4random_uniform(UInt32(self.items.count)))])
-        }
-        return ret
+
+    func getItemsForComparison() -> [PreferenceSetItem] {
+        let ids = scoreManager.getIdsForComparison()
+        return [keyedItems[ids[0]]!, keyedItems[ids[1]]!]
     }
     
     func getItemByIndex(index: Int) -> PreferenceSetItem {
