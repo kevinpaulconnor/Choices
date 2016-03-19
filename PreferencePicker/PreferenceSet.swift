@@ -16,10 +16,14 @@ import CoreData
 protocol PreferenceSet {
     var title: String {get set }
     var preferenceSetType: String { get set }
+    
+    //might want more flexibility here eventually by implementing scoreManager protocol
+    var scoreManager: ELOManager { get set }
     func itemCount() -> Int
     func getItemsForComparison(numberToGet: Int) -> [PreferenceSetItem]
     func getItemByIndex(index: Int) -> PreferenceSetItem
     func getAllItems() -> [PreferenceSetItem]
+    func registerComparison(id1: UInt64, id2: UInt64, result: UInt64)
 }
 
 //don't want to reach into data store and load everything,
@@ -65,6 +69,10 @@ class PreferenceSetBase : PreferenceSet {
     
     func getAllItems() -> [PreferenceSetItem] {
         return items
+    }
+    
+    func registerComparison(id1: UInt64, id2: UInt64, result: UInt64) {
+        self.scoreManager.createAndAddComparison(id1, id2: id2, result: result)
     }
     
     //Decided to manage all persistence layer api
