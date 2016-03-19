@@ -27,7 +27,6 @@ class ChoosePreferenceViewController: UIViewController {
     var topViewController: ItemChooserViewController?
     var bottomViewController: ItemChooserViewController?
     var bottomItem: PreferenceSetItem?
-    let itemsToDisplay = 2
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,7 +82,7 @@ class ChoosePreferenceViewController: UIViewController {
     func setItems() {
         // less awkward if a way to return a tuple here.
         // maybe PreferenceSetBase should just expose getTwoItemsForComparison()
-        let psItems = activeSet?.getItemsForComparison(self.itemsToDisplay)
+        let psItems = activeSet?.getItemsForComparison()
         topItem = psItems![0]
         bottomItem = psItems![1]
         
