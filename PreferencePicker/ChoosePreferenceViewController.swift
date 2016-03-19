@@ -12,6 +12,10 @@ import MediaPlayer
 class ChoosePreferenceViewController: UIViewController {
     @IBOutlet weak var topItemView: UIView!
     @IBOutlet weak var bottomItemView: UIView!
+    @IBAction func aboutTheSame(sender: UIButton) {
+        sendComparison(0)
+        self.reset()
+    }
     @IBAction func getNewChoices() {
         self.reset()
     }
@@ -44,16 +48,21 @@ class ChoosePreferenceViewController: UIViewController {
     
     func respondToSwipeGesture(gesture: UIGestureRecognizer) {
         if let swipeGesture = gesture as? UISwipeGestureRecognizer {
-            var winningItem = topItem!.mediaItem.persistentID
+            var id = topItem!.mediaItem.persistentID
             if gesture.view!.tag == bottomItemView.tag {
-                winningItem = bottomItem!.mediaItem.persistentID
+                id = bottomItem!.mediaItem.persistentID
             }
-            let id1 = topItem!.mediaItem.persistentID
-            let id2 = bottomItem!.mediaItem.persistentID
-            activeSet!.registerComparison(id1, id2: id2, result: winningItem)
+            sendComparison(id)
             // should the music stop if it's playing on a swipe?
             self.reset()
         }
+    }
+    
+    // hate 0 for draw as magic number, to-do find a good spot to un-magic it
+    func sendComparison(winningItemId: UInt64) {
+        let id1 = topItem!.mediaItem.persistentID
+        let id2 = bottomItem!.mediaItem.persistentID
+        activeSet!.registerComparison(id1, id2: id2, result: winningItemId)
     }
     
     func reset() {

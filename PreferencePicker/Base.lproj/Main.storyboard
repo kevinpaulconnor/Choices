@@ -359,6 +359,9 @@
                                         <exclude reference="iTS-OX-wum"/>
                                     </mask>
                                 </variation>
+                                <connections>
+                                    <action selector="aboutTheSame:" destination="8rJ-Kc-sve" eventType="touchUpInside" id="ALF-Wk-dk7"/>
+                                </connections>
                             </button>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f1e-Rh-HTl">
                                 <rect key="frame" x="20" y="28" width="560" height="216"/>
