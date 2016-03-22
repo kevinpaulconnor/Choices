@@ -73,14 +73,13 @@ class ELOManager {
         }
     }
     
-    private func createOrUpdatePreferenceScore(id: UInt64, comparison: Comparison) {
+    private func createOrUpdatePreferenceScore(id: UInt64, comparison: Comparison, opponentScore: Double) {
         var score = keyedPreferenceScores[id]
         if score == nil {
             score = addScore(id)
             
         }
-        score!.comparisonsSinceScoreUpdate++
-        score!.
+        score!.updateLatestComparisonInfo(comparison, opponentScore)
     }
     
     func getIdsForComparison() -> [UInt64] {
@@ -92,8 +91,8 @@ class ELOManager {
         updateBeforeRating = true
         let comparison = Comparison(id1: id1, id2: id2, result: result)
         latestComparisonInfo.freshComparisons.append(comparison)
-        createOrUpdatePreferenceScore(id1, comparison: comparison)
-        createOrUpdatePreferenceScore(id2, comparison: comparison)
+        createOrUpdatePreferenceScore(id1, comparison: comparison, opponentScore: getScoreForItemId(id2))
+        createOrUpdatePreferenceScore(id2, comparison: comparison, opponentScore: getScoreForItemId(id1))
         
         print("\(latestComparisonInfo.freshComparisons)")
         if updateDecision() {
@@ -108,15 +107,14 @@ class ELOManager {
     }
     
     func getScoreForItemId(id: UInt64) -> Double {
-        
-        return Double()
+        return keyedPreferenceScores[id]!.score!
     }
     
 }
 
 struct freshComparisonInfo {
     var freshComparisons = [Comparison]()
-    var ratingOfFreshOpponents = [Double]()
+    var scoresForFreshOpponents = [Double]()
     var comparisonsSinceScoreUpdate = 0
 }
 
@@ -142,13 +140,13 @@ class PreferenceScore {
     var allTimeComparisons = [NSDate: Comparison]()
     var latestComparisonInfo = freshComparisonInfo()
     
-    func updateLatestComparisonInfo(comparison: Comparison) {
+    func updateLatestComparisonInfo(comparison: Comparison, opponentScore: Double) {
         latestComparisonInfo.comparisonsSinceScoreUpdate++
         latestComparisonInfo.freshComparisons.append(comparison)
+        latestComparisonInfo.scoresForFreshOpponents.append(opponentScore)
     }
     
     func refreshComparisonInfo() {
         latestComparisonInfo = freshComparisonInfo()
     }
-
 }
