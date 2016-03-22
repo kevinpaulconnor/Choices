@@ -13,9 +13,7 @@ import MediaPlayer
 
 class ELOManager {
     let defaultScore = Double(2000)          //Created PreferenceItems start with a score of 2000
-    let thousandthsMultiplier = 0.7 // each thousandth of a point of difference in actual results
-                                    // above or below .5 adjust rating by .7 rating points
-                                    // up or down
+
     var allTimeComparisons = [NSDate: Comparison]()
     var recommendedUpcomingComparisons = [(UInt64, UInt64)]()
     
@@ -28,6 +26,8 @@ class ELOManager {
     // based on # in set, or minimumComparisons, or another factor
     var comparisonConstant = 5
     var minimumComparisonsForSet = 0
+    var minimumComparisonIds = Set<UInt64>()
+    
     var updateBeforeRating = false
     var latestComparisonInfo = managerFreshComparisonInfo()
     
@@ -42,9 +42,11 @@ class ELOManager {
     }
     
     private func updateRatings() {
-        var kValue = Double(eloKValueForSet())
+        let kValue = Double(eloKValueForSet())
+    
+        // calculate for individual PreferenceScores, but do not save yet
         for id in latestComparisonInfo.freshIds {
-            var score = keyedPreferenceScores[id]!
+            let score = keyedPreferenceScores[id]!
             let opponentScores = score.latestComparisonInfo.scoresForFreshOpponents
             let averageOpponentRating = opponentScores.reduce(0) { $0 + $1 } / Double(opponentScores.count)
             let numerator = (score.latestComparisonInfo.points * score.score!)
@@ -52,16 +54,44 @@ class ELOManager {
             let ratingRatio = numerator / denominator
             //print("id: \(id), opponentScores: \(opponentScores), averageOpponentRating: \(averageOpponentRating), numerator: \(numerator), denominator: \(denominator), ratingRatio: \(ratingRatio)")
             latestComparisonInfo.freshScores[id] = score.score! + (kValue * (0.5 - ratingRatio))
+            score.saveAndRefreshComparisonInfo()
+            if minimumComparisonIds.contains(id) && score.totalComparisons > minimumComparisonsForSet {
+                minimumComparisonIds.remove(id)
+            }
         }
         
-        let sortedScores = latestComparisonInfo.freshScores.sort({ $0.1 > $1.1 })
-        
-        for score in sortedScores {
-            print("\(score)")
+        /* when finished with all PreferenceScores, save permanently
+            and sort preferenceScore array for easy presentation
+            seems fragile with id.0 etc.
+        */
+        for id in latestComparisonInfo.freshScores {
+            keyedPreferenceScores[id.0]!.score = id.1
         }
+        preferenceScores = keyedPreferenceScores.values.sort({ $0.score > $1.score })
+        
+        refreshAfterUpdate()
+    }
 
+    private func refreshAfterUpdate() {
+        checkMinimumComparisons()
     }
     
+    private func checkMinimumComparisons() {
+        if minimumComparisonIds.isEmpty {
+            var newMinimum = 0
+            for score in preferenceScores {
+                if score.totalComparisons > newMinimum {
+                    newMinimum = score.totalComparisons
+                    minimumComparisonIds = Set<UInt64>()
+                    minimumComparisonIds.insert(score.id!)
+                } else if score.totalComparisons == newMinimum {
+                    minimumComparisonIds.insert(score.id!)
+                }
+            }
+        }
+    }
+    
+    // determine constant for value of each comparison. Bigger when we have less information
     private func eloKValueForSet() -> Int {
         switch minimumComparisonsForSet {
         case 50..<Int.max:
@@ -92,7 +122,6 @@ class ELOManager {
             }
             recommendedUpcomingComparisons.append((firstItem.id!, secondItem.id!))
         }
-        //print("recUpComp: \(recommendedUpcomingComparisons)")
         
     }
 
@@ -101,11 +130,12 @@ class ELOManager {
     
     */
     private func updateDecision() -> Bool {
-        //if latestComparisonInfo.freshComparisons.count > allTimeComparisons.count {
+        if latestComparisonInfo.freshComparisons.count > allTimeComparisons.count {
+            print("updating")
             return true
-        //} else {
-        //    return false
-        //}
+        } else {
+            return false
+        }
     }
     
     private func createOrUpdatePreferenceScore(id: UInt64, comparison: Comparison, opponentScore: Double, result: UInt64) {
@@ -185,9 +215,8 @@ class PreferenceScore {
         self.score = score
     }
     
-    
     func updateLatestComparisonInfo(comparison: Comparison, opponentScore: Double, result: UInt64) {
-        latestComparisonInfo.comparisonsSinceScoreUpdate++
+        latestComparisonInfo.comparisonsSinceScoreUpdate += 1
         latestComparisonInfo.freshComparisons.append(comparison)
         latestComparisonInfo.scoresForFreshOpponents.append(opponentScore)
         if result == self.id {
@@ -197,7 +226,11 @@ class PreferenceScore {
         }
     }
     
-    func refreshComparisonInfo() {
+    func saveAndRefreshComparisonInfo() {
+        totalComparisons += latestComparisonInfo.comparisonsSinceScoreUpdate
+        for comparison in latestComparisonInfo.freshComparisons {
+            allTimeComparisons[comparison.timestamp] = comparison
+        }
         latestComparisonInfo = scoreFreshComparisonInfo()
     }
 }
