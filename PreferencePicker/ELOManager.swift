@@ -28,7 +28,15 @@ class ELOManager {
     var comparisonConstant = 5
     var minimumComparisonsForSet = 0
     var updateBeforeRating = false
-    var latestComparisonInfo = freshComparisonInfo()
+    var latestComparisonInfo = managerFreshComparisonInfo()
+    
+    struct managerFreshComparisonInfo {
+        var freshComparisons = [Comparison]()
+    }
+    
+    private func refreshManagerFreshComparisonInfo() {
+        latestComparisonInfo = managerFreshComparisonInfo()
+    }
     
     private func updateRatings() {
         
@@ -89,7 +97,7 @@ class ELOManager {
             score = addScore(id)
             
         }
-        score!.updateLatestComparisonInfo(comparison, opponentScore)
+        score!.updateLatestComparisonInfo(comparison, opponentScore: opponentScore)
     }
     
     func getIdsForComparison() -> [UInt64] {
@@ -122,7 +130,7 @@ class ELOManager {
     
 }
 
-struct freshComparisonInfo {
+struct scoreFreshComparisonInfo {
     var freshComparisons = [Comparison]()
     var scoresForFreshOpponents = [Double]()
     var comparisonsSinceScoreUpdate = 0
@@ -148,7 +156,7 @@ class PreferenceScore {
     var score: Double?
     var totalComparisons = 0
     var allTimeComparisons = [NSDate: Comparison]()
-    var latestComparisonInfo = freshComparisonInfo()
+    var latestComparisonInfo = scoreFreshComparisonInfo()
     
     func updateLatestComparisonInfo(comparison: Comparison, opponentScore: Double) {
         latestComparisonInfo.comparisonsSinceScoreUpdate++
@@ -157,6 +165,6 @@ class PreferenceScore {
     }
     
     func refreshComparisonInfo() {
-        latestComparisonInfo = freshComparisonInfo()
+        latestComparisonInfo = scoreFreshComparisonInfo()
     }
 }
