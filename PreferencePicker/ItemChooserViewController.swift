@@ -47,8 +47,9 @@ class iTunesItemChooserViewController : ItemChooserViewController {
 
         
         let imageSize = CGSize(width: albumArt.bounds.width, height: albumArt.bounds.width)
-        albumArt.image = self.mediaItem!.artwork!.imageWithSize(imageSize)
-        
+        if let artwork = self.mediaItem!.artwork {
+            albumArt.image = artwork.imageWithSize(imageSize)
+        }
         songTitle.text = self.item!.titleForTableDisplay()
         artist.text = self.item!.subtitleForTableDisplay()
     }
