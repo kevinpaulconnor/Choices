@@ -16,7 +16,7 @@ class ELOManager {
                                     // above or below .5 adjust rating by .7 rating points
                                     // up or down
     var allTimeComparisons = [NSDate: Comparison]()
-    var freshComparisons = [NSDate: Comparison]()
+    var freshComparisons = [Comparison]()
     var recommendedUpcomingComparisons = [(UInt64, UInt64)]()
     
     //I wonder whether there's a better way to do this than two structures?
@@ -28,6 +28,7 @@ class ELOManager {
     // based on # in set, or minimumComparisons, or another factor
     var comparisonConstant = 5
     var minimumComparisonsForSet = 0
+    var updateBeforeRating = false
     
     private func updateRatings() {
 
@@ -39,7 +40,7 @@ class ELOManager {
         // filter for the PSs with the least comparisons
         var minimumComparisonPreferenceScores = preferenceScores.filter({$0.totalComparisons == (minimumComparisonsForSet + comparisonConstant)})
         while recommendedUpcomingComparisons.count <= comparisonsToStore {
-            var firstItem = minimumComparisonPreferenceScores[Int(arc4random_uniform(UInt32(minimumComparisonPreferenceScores.count)))]
+            let firstItem = minimumComparisonPreferenceScores[Int(arc4random_uniform(UInt32(minimumComparisonPreferenceScores.count)))]
             var secondItem = firstItem
             while firstItem.id == secondItem.id {
                 secondItem = minimumComparisonPreferenceScores[Int(arc4random_uniform(UInt32(minimumComparisonPreferenceScores.count)))]
@@ -57,17 +58,30 @@ class ELOManager {
         return false
     }
     
+    private func createOrUpdatePreferenceScore(id: UInt64, comparison: Comparison) {
+        var score = keyedPreferenceScores[id]
+        if score == nil {
+            score = PreferenceScore()
+        }
+        score!.comparisonsSinceScoreUpdate++
+        score!.freshComparisons.append(comparison)
+    }
+    
     func getIdsForComparison() -> [UInt64] {
         let idTuple = recommendedUpcomingComparisons.removeFirst()
         return [idTuple.0, idTuple.1]
     }
     
     func createAndAddComparison(id1: UInt64, id2: UInt64, result: UInt64) {
+        updateBeforeRating = true
         let comparison = Comparison(id1: id1, id2: id2, result: result)
-        freshComparisons[comparison.timestamp] = comparison
+        freshComparisons.append(comparison)
+        createOrUpdatePreferenceScore(id1, comparison: comparison)
+        createOrUpdatePreferenceScore(id2, comparison: comparison)
+        
         print("\(freshComparisons)")
-        if self.updateDecision() {
-            
+        if updateDecision() {
+            updateRatings()
         }
     }
     
@@ -104,7 +118,6 @@ class PreferenceScore {
     var score: Double?
     var comparisonsSinceScoreUpdate = 0
     var totalComparisons = 0
-    var comparisons = [NSDate: Comparison]()
-    
-    
+    var freshComparisons = [Comparison]()
+    var allTimeComparisons = [NSDate: Comparison]()
 }
