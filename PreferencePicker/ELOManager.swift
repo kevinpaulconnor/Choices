@@ -72,7 +72,7 @@ class ELOManager {
         let comparisonsToStore = 40
 
         // filter for the PSs with the least comparisons
-        var minimumComparisonPreferenceScores = preferenceScores.filter({$0.totalComparisons == (minimumComparisonsForSet + comparisonConstant)})
+        var minimumComparisonPreferenceScores = preferenceScores.filter({$0.totalComparisons <= (minimumComparisonsForSet + comparisonConstant)})
         while recommendedUpcomingComparisons.count <= comparisonsToStore {
             let firstItem = minimumComparisonPreferenceScores[Int(arc4random_uniform(UInt32(minimumComparisonPreferenceScores.count-1)))]
             var secondItem = firstItem
