@@ -22,6 +22,11 @@ class ELOManager {
     //I wonder whether there's a better way to do this than two structures?
     var keyedPreferenceScores = [UInt64: PreferenceScore]()
     var preferenceScores = [PreferenceScore]()
+
+    // make upcoming comparisons from set including minimumComparisons for set
+    // plus comparison constant. Can improve by floating comparisonConstant
+    // based on # in set, or minimumComparisons, or another factor
+    var comparisonConstant = 5
     var minimumComparisonsForSet = 0
     
     private func updateRatings() {
@@ -29,8 +34,18 @@ class ELOManager {
     }
     
     private func recommendComparisons() {
+        let comparisonsToStore = 40
+
         // filter for the PSs with the least comparisons
-        var minimumComparisonPreferenceScores = preferenceScores.filter({$0.totalComparisons == minimumComparisonsForSet})
+        var minimumComparisonPreferenceScores = preferenceScores.filter({$0.totalComparisons == (minimumComparisonsForSet + comparisonConstant)})
+        while recommendedUpcomingComparisons.count <= comparisonsToStore {
+            var firstItem = minimumComparisonPreferenceScores[Int(arc4random_uniform(UInt32(minimumComparisonPreferenceScores.count)))]
+            var secondItem = firstItem
+            while firstItem.id == secondItem.id {
+                secondItem = minimumComparisonPreferenceScores[Int(arc4random_uniform(UInt32(minimumComparisonPreferenceScores.count)))]
+            }
+            recommendedUpcomingComparisons.append((firstItem.id!, secondItem.id!))
+        }
         
     }
 
@@ -44,9 +59,6 @@ class ELOManager {
     
     func getIdsForComparison() -> [UInt64] {
         let idTuple = recommendedUpcomingComparisons.removeFirst()
-        //for _ in 0..<numberToGet {
-        //    ret.append(self.items[Int(arc4random_uniform(UInt32(self.items.count)))])
-        //}
         return [idTuple.0, idTuple.1]
     }
     
