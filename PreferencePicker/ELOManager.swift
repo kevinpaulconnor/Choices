@@ -16,7 +16,6 @@ class ELOManager {
                                     // above or below .5 adjust rating by .7 rating points
                                     // up or down
     var allTimeComparisons = [NSDate: Comparison]()
-    var freshComparisons = [Comparison]()
     var recommendedUpcomingComparisons = [(UInt64, UInt64)]()
     
     //I wonder whether there's a better way to do this than two structures?
@@ -29,9 +28,21 @@ class ELOManager {
     var comparisonConstant = 5
     var minimumComparisonsForSet = 0
     var updateBeforeRating = false
+    var latestComparisonInfo = freshComparisonInfo()
     
     private func updateRatings() {
+        
+        for comparison in freshComparisons {
+            
+        }
 
+    }
+    
+    private func addScore(id: UInt64) -> PreferenceScore {
+        let score = PreferenceScore()
+        keyedPreferenceScores[id] = score
+        preferenceScores.append(score)
+        return score
     }
     
     private func recommendComparisons() {
@@ -55,16 +66,21 @@ class ELOManager {
     
     */
     private func updateDecision() -> Bool {
-        return false
+        if latestComparisonInfo.freshComparisons.count > allTimeComparisons.count {
+            return true
+        } else {
+            return false
+        }
     }
     
     private func createOrUpdatePreferenceScore(id: UInt64, comparison: Comparison) {
         var score = keyedPreferenceScores[id]
         if score == nil {
-            score = PreferenceScore()
+            score = addScore(id)
+            
         }
         score!.comparisonsSinceScoreUpdate++
-        score!.freshComparisons.append(comparison)
+        score!.
     }
     
     func getIdsForComparison() -> [UInt64] {
@@ -75,11 +91,11 @@ class ELOManager {
     func createAndAddComparison(id1: UInt64, id2: UInt64, result: UInt64) {
         updateBeforeRating = true
         let comparison = Comparison(id1: id1, id2: id2, result: result)
-        freshComparisons.append(comparison)
+        latestComparisonInfo.freshComparisons.append(comparison)
         createOrUpdatePreferenceScore(id1, comparison: comparison)
         createOrUpdatePreferenceScore(id2, comparison: comparison)
         
-        print("\(freshComparisons)")
+        print("\(latestComparisonInfo.freshComparisons)")
         if updateDecision() {
             updateRatings()
         }
@@ -96,6 +112,12 @@ class ELOManager {
         return Double()
     }
     
+}
+
+struct freshComparisonInfo {
+    var freshComparisons = [Comparison]()
+    var ratingOfFreshOpponents = [Double]()
+    var comparisonsSinceScoreUpdate = 0
 }
 
 class Comparison {
@@ -116,8 +138,17 @@ class Comparison {
 class PreferenceScore {
     var id: UInt64?
     var score: Double?
-    var comparisonsSinceScoreUpdate = 0
     var totalComparisons = 0
-    var freshComparisons = [Comparison]()
     var allTimeComparisons = [NSDate: Comparison]()
+    var latestComparisonInfo = freshComparisonInfo()
+    
+    func updateLatestComparisonInfo(comparison: Comparison) {
+        latestComparisonInfo.comparisonsSinceScoreUpdate++
+        latestComparisonInfo.freshComparisons.append(comparison)
+    }
+    
+    func refreshComparisonInfo() {
+        latestComparisonInfo = freshComparisonInfo()
+    }
+
 }
