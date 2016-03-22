@@ -105,7 +105,7 @@ class PreferenceSetDataController : NSObject {
             managedItem!.addpreferenceSetObject(managedSet)
         
             let managedScore = NSEntityDescription.insertNewObjectForEntityForName("PreferenceScore", inManagedObjectContext: self.managedObjectContext) as? PreferenceScoreMO
-            managedScore!.setValue(NSNumber(integer: preferenceSet.scoreManager.defaultScore), forKey: "score")
+            managedScore!.setValue(NSNumber(double: preferenceSet.scoreManager.defaultScore), forKey: "score")
             
             managedItem!.addpreferenceScoreObject(managedScore!)
             managedSet.addpreferenceScoreObject(managedScore!)

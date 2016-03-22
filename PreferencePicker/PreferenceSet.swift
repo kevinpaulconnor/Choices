@@ -105,5 +105,7 @@ class iTunesPlaylistPreferenceSet : PreferenceSetBase {
             items.append(newiTunesItem)
             keyedItems[item.persistentID] = newiTunesItem
         }
+        
+        self.scoreManager.initializeComparisons(candidateItems)
     }
 }
