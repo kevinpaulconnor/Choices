@@ -38,6 +38,16 @@ class ELOManager {
 
     }
     
+    private func eloKValueForSet() -> Int {
+        switch minimumComparisonsForSet {
+        case 50..<Int.max:
+            return 32
+        case 0..<32:
+            return 50
+        default: return 50 - (minimumComparisonsForSet - 32)
+        }
+    }
+    
     private func addScore(id: UInt64) -> PreferenceScore {
         let score = PreferenceScore()
         keyedPreferenceScores[id] = score
