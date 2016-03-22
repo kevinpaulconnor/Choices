@@ -69,11 +69,15 @@ class ELOManager {
         }
         preferenceScores = keyedPreferenceScores.values.sort({ $0.score > $1.score })
         
-        refreshAfterUpdate()
+        saveAndRefreshAfterUpdate()
     }
 
-    private func refreshAfterUpdate() {
+    private func saveAndRefreshAfterUpdate() {
+        for comparison in latestComparisonInfo.freshComparisons {
+            allTimeComparisons[comparison.timestamp] = comparison
+        }
         checkMinimumComparisons()
+        recommendComparisons()
     }
     
     private func checkMinimumComparisons() {
