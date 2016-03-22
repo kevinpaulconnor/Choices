@@ -32,8 +32,9 @@ class ELOManager {
     var latestComparisonInfo = managerFreshComparisonInfo()
     
     struct managerFreshComparisonInfo {
+        var freshScores = [UInt64 : Double]()
         var freshComparisons = [Comparison]()
-        var freshIds = [UInt64]()
+        var freshIds = Set<UInt64>()
     }
     
     private func refreshManagerFreshComparisonInfo() {
@@ -41,12 +42,22 @@ class ELOManager {
     }
     
     private func updateRatings() {
-        var newScores = [UInt64 : Double]()
+        var kValue = Double(eloKValueForSet())
         for id in latestComparisonInfo.freshIds {
             var score = keyedPreferenceScores[id]!
             let opponentScores = score.latestComparisonInfo.scoresForFreshOpponents
             let averageOpponentRating = opponentScores.reduce(0) { $0 + $1 } / Double(opponentScores.count)
-            let ratingRatio = score.score! / averageOpponentRating
+            let numerator = (score.latestComparisonInfo.points * score.score!)
+            let denominator = (averageOpponentRating * Double(opponentScores.count))
+            let ratingRatio = numerator / denominator
+            //print("id: \(id), opponentScores: \(opponentScores), averageOpponentRating: \(averageOpponentRating), numerator: \(numerator), denominator: \(denominator), ratingRatio: \(ratingRatio)")
+            latestComparisonInfo.freshScores[id] = score.score! + (kValue * (0.5 - ratingRatio))
+        }
+        
+        let sortedScores = latestComparisonInfo.freshScores.sort({ $0.1 > $1.1 })
+        
+        for score in sortedScores {
+            print("\(score)")
         }
 
     }
@@ -81,7 +92,7 @@ class ELOManager {
             }
             recommendedUpcomingComparisons.append((firstItem.id!, secondItem.id!))
         }
-        print("recUpComp: \(recommendedUpcomingComparisons)")
+        //print("recUpComp: \(recommendedUpcomingComparisons)")
         
     }
 
@@ -115,10 +126,12 @@ class ELOManager {
         updateBeforeRating = true
         let comparison = Comparison(id1: id1, id2: id2, result: result)
         latestComparisonInfo.freshComparisons.append(comparison)
+        latestComparisonInfo.freshIds.insert(id1)
+        latestComparisonInfo.freshIds.insert(id2)
         createOrUpdatePreferenceScore(id1, comparison: comparison, opponentScore: getScoreForItemId(id2), result: result)
         createOrUpdatePreferenceScore(id2, comparison: comparison, opponentScore: getScoreForItemId(id1), result: result)
         
-        print("\(latestComparisonInfo.freshComparisons)")
+        //print("\(latestComparisonInfo.freshComparisons)")
         if updateDecision() {
             updateRatings()
         }
