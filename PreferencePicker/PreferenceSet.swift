@@ -26,6 +26,7 @@ protocol PreferenceSet {
     func registerComparison(id1: UInt64, id2: UInt64, result: UInt64)
     func updateRatings()
     func returnSortedPreferenceScores() -> [(UInt64, Double)]
+    func getItemById(id: UInt64) -> PreferenceSetItem?
 }
 
 // PreferenceSetBase holds common logic for determining
@@ -55,6 +56,10 @@ class PreferenceSetBase : PreferenceSet {
     
     func getItemByIndex(index: Int) -> PreferenceSetItem {
         return items[index]
+    }
+    
+    func getItemById(id: UInt64) -> PreferenceSetItem? {
+        return keyedItems[id]
     }
     
     func getAllItems() -> [PreferenceSetItem] {
