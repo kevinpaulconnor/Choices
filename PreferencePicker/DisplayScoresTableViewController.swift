@@ -15,14 +15,7 @@ class DisplayScoresTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        //preferenceScores = activeSet!.returnSortedPreferenceScores()
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        preferenceScores = activeSet!.returnSortedPreferenceScores()
     }
 
     override func didReceiveMemoryWarning() {
@@ -35,20 +28,19 @@ class DisplayScoresTableViewController: UITableViewController {
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0 //preferenceScores!.count
+        return preferenceScores!.count
     }
-
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
-
-        // Configure the cell...
+        let cell = tableView.dequeueReusableCellWithIdentifier(Storyboard.CellReuseIdentifier, forIndexPath: indexPath)
+        let scoreTuple = preferenceScores![indexPath.row]
+        let item = activeSet!.getItemById(scoreTuple.0)
+        cell.textLabel?.text = item!.titleForTableDisplay()
+        cell.detailTextLabel?.text = String(format: "%.0f", scoreTuple.1)
 
         return cell
     }
