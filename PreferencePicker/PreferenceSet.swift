@@ -24,6 +24,8 @@ protocol PreferenceSet {
     func getItemByIndex(index: Int) -> PreferenceSetItem
     func getAllItems() -> [PreferenceSetItem]
     func registerComparison(id1: UInt64, id2: UInt64, result: UInt64)
+    func updateRatings()
+    func returnSortedPreferenceScores() -> [(UInt64, Double)]
 }
 
 // PreferenceSetBase holds common logic for determining
@@ -61,6 +63,14 @@ class PreferenceSetBase : PreferenceSet {
     
     func registerComparison(id1: UInt64, id2: UInt64, result: UInt64) {
         self.scoreManager.createAndAddComparison(id1, id2: id2, result: result)
+    }
+    
+    func updateRatings() {
+        self.scoreManager.update()
+    }
+    
+    func returnSortedPreferenceScores() -> [(UInt64, Double)] {
+        return self.scoreManager.getUpdatedSortedPreferenceScores()
     }
     
     //Decided to manage all persistence layer api

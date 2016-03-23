@@ -183,6 +183,19 @@ class ELOManager {
         return keyedPreferenceScores[id]!.score!
     }
     
+    func update() {
+        //might need to do other stuff here in the public api
+        updateRatings()
+    }
+    
+    func getUpdatedSortedPreferenceScores() -> [(UInt64, Double)]{
+        var ret = [(UInt64, Double)]()
+        for score in preferenceScores {
+            ret.append((score.id!, score.score!))
+        }
+        return ret
+    }
+    
 }
 
 struct scoreFreshComparisonInfo {
