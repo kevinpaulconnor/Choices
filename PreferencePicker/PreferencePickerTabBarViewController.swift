@@ -18,6 +18,7 @@ class PreferencePickerTabBarViewController: UITabBarController, UITabBarControll
         static let Load = 0
         static let Second = 1
         static let ActiveSet = 2
+        static let ViewScores = 3
     }
     
     // after importing a set, set ActiveSet to active tab, and reset TabIndex.Load
@@ -67,7 +68,7 @@ class PreferencePickerTabBarViewController: UITabBarController, UITabBarControll
         var allow = true
             // do not allow ActiveSet view to load if there is no active set
             if let restId = viewController.restorationIdentifier {
-                if activeSet == nil && (restId == "ActiveSet" || restId == "ChoosePreference") {
+                if activeSet == nil && (restId == "ActiveSet" || restId == "ChoosePreference" || restId == "DisplayScores") {
                         allow = false
                         func alertHandler(action: UIAlertAction) -> Void {
                             self.selectedIndex = TabIndex.Load
@@ -85,19 +86,16 @@ class PreferencePickerTabBarViewController: UITabBarController, UITabBarControll
                         
                         presentViewController(alert, animated: true, completion: nil)
                 }
+                // propogate activeSet to DisplayScores view
+                if activeSet != nil && restId == "DisplayScores" {
+                    let displayScoresVC = viewController as! DisplayScoresTableViewController
+                    displayScoresVC.activeSet = self.activeSet
+                }
+                // if we're not going to the ratings view, ensure that our ratings are up to date
+                if restId != "ActiveSet" {
+                    activeSet!.updateRatings()
+                }
             }
         return allow
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
