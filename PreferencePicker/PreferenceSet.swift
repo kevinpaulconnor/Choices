@@ -93,12 +93,16 @@ class PreferenceSetBase : PreferenceSet {
         return outputArray
     }
     
-    static func save(preferenceSet: PreferenceSet) {
+    static func create(preferenceSet: PreferenceSet) {
         appDelegate!.dataController!.createSetMO(preferenceSet)
     }
     
     static func load(name: String, type: PreferenceSetType) -> PreferenceSet {
         return appDelegate!.dataController!.load(name, type: type)
+    }
+    
+    static func update() {
+        
     }
     
     static func getAllSavedSets() -> [PreferenceSetMO] {
