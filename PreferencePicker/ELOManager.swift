@@ -58,7 +58,7 @@ class ELOManager {
             let denominator = (averageOpponentRating * Double(opponentScores.count))
             let ratingRatio = numerator / denominator
             //print("id: \(id), opponentScores: \(opponentScores), averageOpponentRating: \(averageOpponentRating), numerator: \(numerator), denominator: \(denominator), ratingRatio: \(ratingRatio)")
-            latestComparisonInfo.freshScores[id] = score.score! + (kValue * (0.5 + ratingRatio))
+            latestComparisonInfo.freshScores[id] = score.score! - (kValue * (0.5 - ratingRatio))
             score.saveAndRefreshComparisonInfo()
             if minimumComparisonIds.contains(id) && score.totalComparisons > minimumComparisonsForSet {
                 minimumComparisonIds.remove(id)
