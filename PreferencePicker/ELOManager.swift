@@ -130,7 +130,7 @@ class ELOManager {
     
     private func recommendComparisons() {
         print("recommending comparisons")
-        let comparisonsToStore = 40
+        let comparisonsToStore = preferenceScores.count / 2
 
         // filter for the PSs with the least comparisons
         var minimumComparisonPreferenceScores = preferenceScores.filter({$0.totalComparisons <= (minimumComparisonsForSet + comparisonConstant)})
