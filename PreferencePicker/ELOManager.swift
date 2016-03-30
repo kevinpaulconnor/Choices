@@ -31,17 +31,22 @@ class ELOManager {
     var updateBeforeRating = false
     var latestComparisonInfo = managerFreshComparisonInfo()
     
+    // store new set-wide comparisons until they are incorporated into scores
     struct managerFreshComparisonInfo {
         var freshScores = [UInt64 : Double]()
         var freshComparisons = [Comparison]()
         var freshIds = Set<UInt64>()
     }
     
+    // reset set-wide comparisons
     private func refreshManagerFreshComparisonInfo() {
         latestComparisonInfo = managerFreshComparisonInfo()
     }
     
+    
+    // turn fresh comparisons into scores
     private func updateRatings() {
+        print("updating rankings")
         let kValue = Double(eloKValueForSet())
     
         // calculate for individual PreferenceScores, but do not save yet
@@ -53,7 +58,7 @@ class ELOManager {
             let denominator = (averageOpponentRating * Double(opponentScores.count))
             let ratingRatio = numerator / denominator
             //print("id: \(id), opponentScores: \(opponentScores), averageOpponentRating: \(averageOpponentRating), numerator: \(numerator), denominator: \(denominator), ratingRatio: \(ratingRatio)")
-            latestComparisonInfo.freshScores[id] = score.score! + (kValue * (0.5 - ratingRatio))
+            latestComparisonInfo.freshScores[id] = score.score! + (kValue * (0.5 + ratingRatio))
             score.saveAndRefreshComparisonInfo()
             if minimumComparisonIds.contains(id) && score.totalComparisons > minimumComparisonsForSet {
                 minimumComparisonIds.remove(id)
@@ -68,23 +73,31 @@ class ELOManager {
             keyedPreferenceScores[id.0]!.score = id.1
         }
         preferenceScores = keyedPreferenceScores.values.sort({ $0.score > $1.score })
-        
+        for pscore in preferenceScores {
+            print ("\(pscore.score)")
+        }
+        //print("\(preferenceScores)")
+
         saveAndRefreshAfterUpdate()
     }
 
+    //
     private func saveAndRefreshAfterUpdate() {
         for comparison in latestComparisonInfo.freshComparisons {
             allTimeComparisons[comparison.timestamp] = comparison
         }
+        print("total all time comparisons: \(allTimeComparisons.count)")
+        refreshManagerFreshComparisonInfo()
         checkMinimumComparisons()
         recommendComparisons()
+
     }
     
     private func checkMinimumComparisons() {
         if minimumComparisonIds.isEmpty {
-            var newMinimum = 0
+            var newMinimum = Int.max
             for score in preferenceScores {
-                if score.totalComparisons > newMinimum {
+                if score.totalComparisons < newMinimum {
                     newMinimum = score.totalComparisons
                     minimumComparisonIds = Set<UInt64>()
                     minimumComparisonIds.insert(score.id!)
@@ -92,6 +105,8 @@ class ELOManager {
                     minimumComparisonIds.insert(score.id!)
                 }
             }
+            minimumComparisonsForSet = newMinimum
+            print("new set minimum is: \(minimumComparisonsForSet)")
         }
     }
     
@@ -114,15 +129,16 @@ class ELOManager {
     }
     
     private func recommendComparisons() {
+        print("recommending comparisons")
         let comparisonsToStore = 40
 
         // filter for the PSs with the least comparisons
         var minimumComparisonPreferenceScores = preferenceScores.filter({$0.totalComparisons <= (minimumComparisonsForSet + comparisonConstant)})
         while recommendedUpcomingComparisons.count <= comparisonsToStore {
-            let firstItem = minimumComparisonPreferenceScores[Int(arc4random_uniform(UInt32(minimumComparisonPreferenceScores.count-1)))]
+            let firstItem = minimumComparisonPreferenceScores[Int(arc4random_uniform(UInt32(minimumComparisonPreferenceScores.count)))]
             var secondItem = firstItem
             while firstItem.id == secondItem.id {
-                secondItem = minimumComparisonPreferenceScores[Int(arc4random_uniform(UInt32(minimumComparisonPreferenceScores.count-1)))]
+                secondItem = minimumComparisonPreferenceScores[Int(arc4random_uniform(UInt32(minimumComparisonPreferenceScores.count)))]
             }
             recommendedUpcomingComparisons.append((firstItem.id!, secondItem.id!))
         }
@@ -153,6 +169,9 @@ class ELOManager {
     
     func getIdsForComparison() -> [UInt64] {
         let idTuple = recommendedUpcomingComparisons.removeFirst()
+        if recommendedUpcomingComparisons.isEmpty {
+            recommendComparisons()
+        }
         return [idTuple.0, idTuple.1]
     }
     
@@ -164,7 +183,7 @@ class ELOManager {
         latestComparisonInfo.freshIds.insert(id2)
         createOrUpdatePreferenceScore(id1, comparison: comparison, opponentScore: getScoreForItemId(id2), result: result)
         createOrUpdatePreferenceScore(id2, comparison: comparison, opponentScore: getScoreForItemId(id1), result: result)
-        
+        print("fresh comparison added, total fresh: \(latestComparisonInfo.freshComparisons.count)")
         //print("\(latestComparisonInfo.freshComparisons)")
         if updateDecision() {
             updateRatings()
