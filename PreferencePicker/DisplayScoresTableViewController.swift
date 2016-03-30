@@ -9,13 +9,21 @@
 import UIKit
 
 class DisplayScoresTableViewController: UITableViewController {
+    @IBOutlet var table: UITableView!
     var activeSet: PreferenceSet?
     var preferenceScores: [(UInt64, Double)]?
     
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        preferenceScores = activeSet!.returnSortedPreferenceScores()
+        self.table.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         preferenceScores = activeSet!.returnSortedPreferenceScores()
+        //title = self.activeSet!.title
     }
 
     override func didReceiveMemoryWarning() {
