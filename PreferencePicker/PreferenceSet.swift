@@ -79,7 +79,8 @@ class PreferenceSetBase : PreferenceSet {
     }
     
     //Decided to manage all persistence layer api
-    //through PreferenceSetBase
+    //through PreferenceSetBase. That will make it easier to
+    //swap persistence layers
     
     static func buildMediaItemArrayFromMOs(managedItems: [PreferenceSetItemMO]) -> [MPMediaItem] {
         let mediaItemArray = MPMediaQuery.songsQuery().items!
@@ -101,8 +102,8 @@ class PreferenceSetBase : PreferenceSet {
         return appDelegate!.dataController!.load(name, type: type)
     }
     
-    static func update() {
-        
+    static func update(preferenceSet: PreferenceSet) {
+        appDelegate!.dataController!.updateSetMO(preferenceSet)
     }
     
     static func getAllSavedSets() -> [PreferenceSetMO] {

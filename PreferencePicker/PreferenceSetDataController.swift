@@ -115,6 +115,28 @@ class PreferenceSetDataController : NSObject {
         
         self.activeSet = managedSet
     }
+ 
+    
+    func updateSetMO(preferenceSet: PreferenceSet) {
+        if activeSet != nil {
+            if activeSet!.title == preferenceSet.title {
+            
+                
+                
+                
+                
+                
+                
+                
+                
+            } else {
+                //throw some kind of error
+            }
+        } else {
+            // throw some kind of error
+        }
+    }
+    
     
     func save () {
         do {
@@ -122,10 +144,6 @@ class PreferenceSetDataController : NSObject {
         } catch {
             fatalError("Failure to save context: \(error)")
         }
-    }
-    
-    func update(preferenceSet: PreferenceSet) {
-        
     }
     
     func load(name: String, type: PreferenceSetType) -> PreferenceSet {
@@ -166,6 +184,7 @@ class PreferenceScoreMO: NSManagedObject {
 
 class ComparisonMO: NSManagedObject {
     @NSManaged var result: NSNumber?
+    @NSManaged var timestamp: NSDate?
     
     @NSManaged func addpreferenceSetObject(value: PreferenceSetMO)
     @NSManaged func addpreferenceSetItemObject(value:PreferenceSetItemMO)
