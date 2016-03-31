@@ -84,13 +84,13 @@ class PreferenceSetDataController : NSObject {
         let itemPredicate = NSPredicate(format: "id == \(id)")
         let item = self.fetcher("PreferenceSetItem", predicate: itemPredicate, sortDescriptor: nil, fetchLimit: 1) as? [PreferenceSetItemMO]
         
-        if item != nil {
+        if item != nil && item!.count > 0 {
             return item![0]
         }
         return nil
     }
     
-    private func fetchLatestSavedComparison() -> ComparisonMO? {
+    private func fetchNewestSavedComparison() -> ComparisonMO? {
         let comparisonPredicate = NSPredicate(format: "%K == %@", "preferenceSet.title", activeSet!.title!)
         let latestDateSortDescriptor = NSSortDescriptor(key: "date", ascending: false)
         let comparison = self.fetcher("Comparison", predicate: comparisonPredicate, sortDescriptor: latestDateSortDescriptor, fetchLimit: 1) as? [ComparisonMO]
@@ -135,9 +135,12 @@ class PreferenceSetDataController : NSObject {
             if activeSet!.title == preferenceSet.title {
                 
             // add all new comparisons and relate to activeSet and activeSetItemMOs
-            let newestSavedComparison = fetchComparison()
+            let newestSavedComparison = fetchNewestSavedComparison()
             for comparison in preferenceSet.getAllComparisons() {
+                // oof for timeIntervalSince1970. But at least it's human-readable in the if block.
+                if newestSavedComparison == nil || comparison.0.timeIntervalSince1970 > newestSavedComparison!.timestamp!.timeIntervalSince1970 {
                     
+                }
             }
                 
                 
