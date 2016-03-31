@@ -70,6 +70,14 @@ class PreferenceSetBase : PreferenceSet {
         self.scoreManager.createAndAddComparison(id1, id2: id2, result: result)
     }
     
+    func getAllComparisons() -> [NSDate: Comparison] {
+        return self.scoreManager.getAllComparisons()
+    }
+    
+    func getAllPreferenceScores() -> [UInt64: PreferenceScore] {
+        return self.scoreManager.getAllPreferenceScores()
+    }
+    
     func updateRatings() {
         self.scoreManager.update()
     }
