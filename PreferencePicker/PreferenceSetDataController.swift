@@ -48,11 +48,17 @@ class PreferenceSetDataController : NSObject {
         }
     }
     
-    private func fetcher(entityName: String, predicate: NSPredicate?) -> [AnyObject] {
+    private func fetcher(entityName: String, predicate: NSPredicate?, sortDescriptor: NSSortDescriptor?, fetchLimit: Int?) -> [AnyObject] {
         let moc = self.managedObjectContext
         let fetchRequest = NSFetchRequest(entityName: entityName)
         if predicate != nil {
             fetchRequest.predicate = predicate!
+        }
+        if sortDescriptor != nil {
+            fetchRequest.sortDescriptors = [sortDescriptor!]
+        }
+        if fetchLimit != nil {
+            fetchRequest.fetchLimit = fetchLimit!
         }
         do {
             let fetched = try moc.executeFetchRequest(fetchRequest)
@@ -63,11 +69,11 @@ class PreferenceSetDataController : NSObject {
     }
     
     func getAllSavedSets () -> [PreferenceSetMO] {
-        return self.fetcher("PreferenceSet", predicate: nil) as! [PreferenceSetMO]
+        return self.fetcher("PreferenceSet", predicate: nil, sortDescriptor: nil, fetchLimit: nil) as! [PreferenceSetMO]
     }
     
     private func getAllSavedPSItems() -> [PreferenceSetItemMO] {
-        var existingItems = self.fetcher("PreferenceSetItem", predicate: nil) as! [PreferenceSetItemMO]
+        var existingItems = self.fetcher("PreferenceSetItem", predicate: nil, sortDescriptor: nil, fetchLimit: nil) as! [PreferenceSetItemMO]
         if existingItems.count == 0 {
             existingItems = [PreferenceSetItemMO()]
         }
@@ -76,13 +82,20 @@ class PreferenceSetDataController : NSObject {
     
     private func fetchPSItem(id: Int64) -> PreferenceSetItemMO? {
         let itemPredicate = NSPredicate(format: "id == \(id)")
-        // checking only [0] probably isn't really going to work always
-        // since uniqueness isn't enforced. but when it doesn't work it will indicate
-        // a bigger problem
-        let item = self.fetcher("PreferenceSetItem", predicate: itemPredicate) as? [PreferenceSetItemMO]
+        let item = self.fetcher("PreferenceSetItem", predicate: itemPredicate, sortDescriptor: nil, fetchLimit: 1) as? [PreferenceSetItemMO]
         
-        if item != nil && item!.count > 0 {
+        if item != nil {
             return item![0]
+        }
+        return nil
+    }
+    
+    private func fetchLatestSavedComparison() -> ComparisonMO? {
+        let comparisonPredicate = NSPredicate(format: "%K == %@", "preferenceSet.title", activeSet!.title!)
+        let latestDateSortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+        let comparison = self.fetcher("Comparison", predicate: comparisonPredicate, sortDescriptor: latestDateSortDescriptor, fetchLimit: 1) as? [ComparisonMO]
+        if comparison != nil {
+            return comparison![0]
         }
         return nil
     }
@@ -120,7 +133,12 @@ class PreferenceSetDataController : NSObject {
     func updateSetMO(preferenceSet: PreferenceSet) {
         if activeSet != nil {
             if activeSet!.title == preferenceSet.title {
-            
+                
+            // add all new comparisons and relate to activeSet and activeSetItemMOs
+            let newestSavedComparison = fetchComparison()
+            for comparison in preferenceSet.getAllComparisons() {
+                    
+            }
                 
                 
                 
@@ -128,8 +146,7 @@ class PreferenceSetDataController : NSObject {
                 
                 
                 
-                
-            } else {
+        } else {
                 //throw some kind of error
             }
         } else {
