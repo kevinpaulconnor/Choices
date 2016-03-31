@@ -27,6 +27,8 @@ protocol PreferenceSet {
     func updateRatings()
     func returnSortedPreferenceScores() -> [(UInt64, Double)]
     func getItemById(id: UInt64) -> PreferenceSetItem?
+    func getAllComparisons() -> [NSDate: Comparison]
+    func getAllPreferenceScores() -> [UInt64: PreferenceScore]
 }
 
 // PreferenceSetBase holds common logic for determining
