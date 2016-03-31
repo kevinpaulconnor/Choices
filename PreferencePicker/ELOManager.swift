@@ -167,6 +167,10 @@ class ELOManager {
         score!.updateLatestComparisonInfo(comparison, opponentScore: opponentScore, result: result)
     }
     
+    private func getScoreForItemId(id: UInt64) -> Double {
+        return keyedPreferenceScores[id]!.score!
+    }
+    
     func getIdsForComparison() -> [UInt64] {
         let idTuple = recommendedUpcomingComparisons.removeFirst()
         if recommendedUpcomingComparisons.isEmpty {
@@ -190,7 +194,7 @@ class ELOManager {
         }
     }
     
-    // on import, or restoring from persistence
+    // on import
     func initializeComparisons(candidateItems: [MPMediaItem]) {
         for item in candidateItems {
             addScore(item.persistentID, score: defaultScore)
@@ -198,8 +202,9 @@ class ELOManager {
         recommendComparisons()
     }
     
-    func getScoreForItemId(id: UInt64) -> Double {
-        return keyedPreferenceScores[id]!.score!
+    // from persistence layer
+    func restoreComparisons() {
+        
     }
     
     func update() {
