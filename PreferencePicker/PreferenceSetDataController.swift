@@ -80,12 +80,25 @@ class PreferenceSetDataController : NSObject {
         return existingItems
     }
     
+    // might be able to simplify fetchPSItem and fetchPSScore to run on common code
     private func fetchPSItem(id: UInt64) -> PreferenceSetItemMO? {
         let itemPredicate = NSPredicate(format: "id == \(id)")
         let item = self.fetcher("PreferenceSetItem", predicate: itemPredicate, sortDescriptor: nil, fetchLimit: 1) as? [PreferenceSetItemMO]
         
         if item != nil && item!.count > 0 {
             return item![0]
+        }
+        return nil
+    }
+    
+    private func fetchPSScore(id: UInt64) -> PreferenceScoreMO? {
+        // scores are relative to preferenceSet
+        let scorePredicate = NSPredicate(format: "%K==%@ AND %K == %@", "preferenceSet.title", activeSet!.title!, "preferenceSetItem.id", id)
+        //NSPredicate(format: "%K == %@ AND %K == %@", argumentArray:["key1", "value1", "key2", "value2"])
+        let score = self.fetcher("PreferenceScore", predicate: scorePredicate, sortDescriptor: nil, fetchLimit: 1) as? [PreferenceScoreMO]
+        
+        if score != nil && score!.count > 0 {
+            return score![0]
         }
         return nil
     }
