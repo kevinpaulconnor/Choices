@@ -203,9 +203,13 @@ class ELOManager {
     }
     
     // from persistence layer
-    func restoreComparisons() {
-        
-    }
+    //func restoreComparisons(candidateItems: [MPMediaItem], ) {
+        //for item in candidateItems {
+        //    addScore(item.persistentID, score: defaultScore)
+        //}
+        //let comparison = Comparison(id1: id1, id2: id2, result: result)
+      //  recommendComparisons()
+    //}
     
     func update() {
         //might need to do other stuff here in the public api
@@ -257,11 +261,11 @@ class Comparison {
     // 0 indicates draw, otherwise the persistent id of the winning item
     var result: UInt64
     
-    init(id1: UInt64, id2: UInt64, result: UInt64) {
+    init(id1: UInt64, id2: UInt64, result: UInt64, timestamp: NSDate?) {
         self.id1 = id1
         self.id2 = id2
         self.result = result
-        self.timestamp = NSDate()
+        self.timestamp = timestamp ?? NSDate()
     }
 }
 
@@ -275,6 +279,11 @@ class PreferenceScore {
     init (id: UInt64, score: Double) {
         self.id = id
         self.score = score
+    }
+    
+    func updateAllTimeComparisons(comparison: Comparison) {
+        totalComparisons = totalComparisons + 1
+        allTimeComparisons[comparison.timestamp] = comparison
     }
     
     func updateLatestComparisonInfo(comparison: Comparison, opponentScore: Double, result: UInt64) {
