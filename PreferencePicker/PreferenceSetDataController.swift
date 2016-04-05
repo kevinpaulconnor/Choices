@@ -183,7 +183,6 @@ class PreferenceSetDataController : NSObject {
         }
     }
     
-    
     func save () {
         do {
             try self.managedObjectContext.save()
@@ -191,12 +190,6 @@ class PreferenceSetDataController : NSObject {
             fatalError("Failure to save context: \(error)")
         }
     }
-    
-    func load(name: String, type: PreferenceSetType) -> PreferenceSet {
-
-        return type.createPreferenceSet([MPMediaItem()], title: "Test")
-    }
-    
 }
 
 class PreferenceSetMO: NSManagedObject {

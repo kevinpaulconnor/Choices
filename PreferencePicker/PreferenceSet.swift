@@ -115,10 +115,6 @@ class PreferenceSetBase : PreferenceSet {
         appDelegate!.dataController!.createSetMO(preferenceSet)
     }
     
-    static func load(name: String, type: PreferenceSetType) -> PreferenceSet {
-        return appDelegate!.dataController!.load(name, type: type)
-    }
-    
     static func update(preferenceSet: PreferenceSet) {
         appDelegate!.dataController!.updateSetMO(preferenceSet)
     }
