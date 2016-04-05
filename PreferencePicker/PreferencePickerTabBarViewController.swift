@@ -92,7 +92,7 @@ class PreferencePickerTabBarViewController: UITabBarController, UITabBarControll
                     displayScoresVC.activeSet = self.activeSet
                 }
                 // if we're not going to the ratings view, ensure that our ratings are up to date
-                if restId != "ActiveSet" {
+                if activeSet != nil && restId != "ActiveSet" {
                     activeSet!.updateRatings()
                 }
             }

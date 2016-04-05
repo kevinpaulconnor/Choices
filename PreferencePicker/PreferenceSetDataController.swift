@@ -105,9 +105,9 @@ class PreferenceSetDataController : NSObject {
     
     private func fetchNewestSavedComparison() -> ComparisonMO? {
         let comparisonPredicate = NSPredicate(format: "%K == %@", "preferenceSet.title", activeSet!.title!)
-        let latestDateSortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+        let latestDateSortDescriptor = NSSortDescriptor(key: "timestamp", ascending: false)
         let comparison = self.fetcher("Comparison", predicate: comparisonPredicate, sortDescriptor: latestDateSortDescriptor, fetchLimit: 1) as? [ComparisonMO]
-        if comparison != nil {
+        if comparison != nil && comparison!.count > 0 {
             return comparison![0]
         }
         return nil
@@ -149,29 +149,31 @@ class PreferenceSetDataController : NSObject {
                 // add all new comparisons and relate to activeSet and activeSetItemMOs
                 // might want to put this in its own fxn
                 let newestSavedComparison = fetchNewestSavedComparison()
-                for comparison in preferenceSet.getAllComparisons() {
-                    // oof for timeIntervalSince1970. But at least it's human-readable in the if block.
-                    if newestSavedComparison == nil || comparison.0.timeIntervalSince1970 > newestSavedComparison!.timestamp!.timeIntervalSince1970 {
-                        let managedComparison = NSEntityDescription.insertNewObjectForEntityForName("Comparison", inManagedObjectContext: self.managedObjectContext) as! ComparisonMO
-                        managedComparison.setValue(comparison.0, forKey: "timestamp")
-                        managedComparison.setValue(comparison.1, forKey: "result")
-                        
-                        managedComparison.addpreferenceSetObject(activeSet!)
-                        activeSet!.addcomparisonObject(managedComparison)
-                        
-                        let managedItem1 = fetchPSItem(comparison.1.id1)
-                        let managedItem2 = fetchPSItem(comparison.1.id2)
-                        managedComparison.addpreferenceSetItemObject(managedItem1!)
-                        managedComparison.addpreferenceSetItemObject(managedItem2!)
-                        managedItem1!.addcomparisonObject(managedComparison)
-                        managedItem2!.addcomparisonObject(managedComparison)
+                if newestSavedComparison != nil {
+                    for comparison in preferenceSet.getAllComparisons() {
+                        // oof for timeIntervalSince1970. But at least it's human-readable in the if block.
+                        if comparison.0.timeIntervalSince1970 > newestSavedComparison!.timestamp!.timeIntervalSince1970 {
+                            let managedComparison = NSEntityDescription.insertNewObjectForEntityForName("Comparison", inManagedObjectContext: self.managedObjectContext) as! ComparisonMO
+                            managedComparison.setValue(comparison.0, forKey: "timestamp")
+                            managedComparison.setValue(comparison.1, forKey: "result")
+                            
+                            managedComparison.addpreferenceSetObject(activeSet!)
+                            activeSet!.addcomparisonObject(managedComparison)
+                            
+                            let managedItem1 = fetchPSItem(comparison.1.id1)
+                            let managedItem2 = fetchPSItem(comparison.1.id2)
+                            managedComparison.addpreferenceSetItemObject(managedItem1!)
+                            managedComparison.addpreferenceSetItemObject(managedItem2!)
+                            managedItem1!.addcomparisonObject(managedComparison)
+                            managedItem2!.addcomparisonObject(managedComparison)
+                        }
                     }
-                }
-                
-                // fetch preferenceScores from preference set and update with latest score
-                for score in preferenceSet.getAllPreferenceScores() {
-                    let scoreMO = fetchPSScore(score.0)
-                    scoreMO!.setValue(NSNumber(double: score.1.score!), forKey:"score")
+                    
+                    // fetch preferenceScores from preference set and update with latest score
+                    for score in preferenceSet.getAllPreferenceScores() {
+                        let scoreMO = fetchPSScore(score.0)
+                        scoreMO!.setValue(NSNumber(double: score.1.score!), forKey:"score")
+                    }
                 }
             } else {
                 //throw some kind of error
