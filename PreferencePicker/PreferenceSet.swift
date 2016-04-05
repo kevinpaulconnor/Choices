@@ -87,6 +87,8 @@ class PreferenceSetBase : PreferenceSet {
     
     func updateRatings() {
         self.scoreManager.update()
+        //might not want to update model every time...
+        PreferenceSetBase.update(self)
     }
     
     func returnSortedPreferenceScores() -> [(UInt64, Double)] {
