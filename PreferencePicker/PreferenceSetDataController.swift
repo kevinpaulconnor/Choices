@@ -146,38 +146,34 @@ class PreferenceSetDataController : NSObject {
     func updateSetMO(preferenceSet: PreferenceSet) {
         if activeSet != nil {
             if activeSet!.title == preferenceSet.title {
-                
-            // add all new comparisons and relate to activeSet and activeSetItemMOs
-            // might want to put this in its own fxn
-            let newestSavedComparison = fetchNewestSavedComparison()
-            for comparison in preferenceSet.getAllComparisons() {
-                // oof for timeIntervalSince1970. But at least it's human-readable in the if block.
-                if newestSavedComparison == nil || comparison.0.timeIntervalSince1970 > newestSavedComparison!.timestamp!.timeIntervalSince1970 {
-                    let managedComparison = NSEntityDescription.insertNewObjectForEntityForName("Comparison", inManagedObjectContext: self.managedObjectContext) as! ComparisonMO
-                    managedComparison.setValue(comparison.0, forKey: "timestamp")
-                    managedComparison.setValue(comparison.1, forKey: "result")
-                    
-                    managedComparison.addpreferenceSetObject(activeSet!)
-                    activeSet!.addcomparisonObject(managedComparison)
-                    
-                    let managedItem1 = fetchPSItem(comparison.1.id1)
-                    let managedItem2 = fetchPSItem(comparison.1.id2)
-                    managedComparison.addpreferenceSetItemObject(managedItem1!)
-                    managedComparison.addpreferenceSetItemObject(managedItem2!)
-                    managedItem1!.addcomparisonObject(managedComparison)
-                    managedItem2!.addcomparisonObject(managedComparison)
+                // add all new comparisons and relate to activeSet and activeSetItemMOs
+                // might want to put this in its own fxn
+                let newestSavedComparison = fetchNewestSavedComparison()
+                for comparison in preferenceSet.getAllComparisons() {
+                    // oof for timeIntervalSince1970. But at least it's human-readable in the if block.
+                    if newestSavedComparison == nil || comparison.0.timeIntervalSince1970 > newestSavedComparison!.timestamp!.timeIntervalSince1970 {
+                        let managedComparison = NSEntityDescription.insertNewObjectForEntityForName("Comparison", inManagedObjectContext: self.managedObjectContext) as! ComparisonMO
+                        managedComparison.setValue(comparison.0, forKey: "timestamp")
+                        managedComparison.setValue(comparison.1, forKey: "result")
+                        
+                        managedComparison.addpreferenceSetObject(activeSet!)
+                        activeSet!.addcomparisonObject(managedComparison)
+                        
+                        let managedItem1 = fetchPSItem(comparison.1.id1)
+                        let managedItem2 = fetchPSItem(comparison.1.id2)
+                        managedComparison.addpreferenceSetItemObject(managedItem1!)
+                        managedComparison.addpreferenceSetItemObject(managedItem2!)
+                        managedItem1!.addcomparisonObject(managedComparison)
+                        managedItem2!.addcomparisonObject(managedComparison)
+                    }
                 }
-            }
-            
-            
                 
-                
-                
-                
-                
-                
-                
-        } else {
+                // fetch preferenceScores from preference set and update with latest score
+                for score in preferenceSet.getAllPreferenceScores() {
+                    let scoreMO = fetchPSScore(score.0)
+                    scoreMO!.setValue(NSNumber(double: score.1.score!), forKey:"score")
+                }
+            } else {
                 //throw some kind of error
             }
         } else {
@@ -205,6 +201,7 @@ class PreferenceSetMO: NSManagedObject {
     @NSManaged var title: String?
     @NSManaged var preferenceSetType: String?
     @NSManaged var preferenceSetItem: NSSet?
+    @NSManaged var preferenceScore: NSSet?
     
     // makes me nuts that relationships have to begin with lowercase
     // but the model enforces that. I blame objective C.
