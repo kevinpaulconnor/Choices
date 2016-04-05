@@ -80,7 +80,7 @@ class PreferenceSetDataController : NSObject {
         return existingItems
     }
     
-    private func fetchPSItem(id: Int64) -> PreferenceSetItemMO? {
+    private func fetchPSItem(id: UInt64) -> PreferenceSetItemMO? {
         let itemPredicate = NSPredicate(format: "id == \(id)")
         let item = self.fetcher("PreferenceSetItem", predicate: itemPredicate, sortDescriptor: nil, fetchLimit: 1) as? [PreferenceSetItemMO]
         
@@ -106,8 +106,8 @@ class PreferenceSetDataController : NSObject {
         managedSet.setValue(preferenceSet.preferenceSetType, forKey: "preferenceSetType")
         
         for item in preferenceSet.getAllItems() {
-            let setItemId = Int64(item.mediaItem.persistentID)
-            var managedItem = self.fetchPSItem(setItemId)
+            item.mediaItem.persistentID
+            var managedItem = self.fetchPSItem(item.mediaItem.persistentID)
             if managedItem == nil {
                 // try recovery stuff here when recovery is implemented
                 managedItem = NSEntityDescription.insertNewObjectForEntityForName("PreferenceSetItem", inManagedObjectContext: self.managedObjectContext) as? PreferenceSetItemMO
@@ -135,13 +135,28 @@ class PreferenceSetDataController : NSObject {
             if activeSet!.title == preferenceSet.title {
                 
             // add all new comparisons and relate to activeSet and activeSetItemMOs
+            // might want to put this in its own fxn
             let newestSavedComparison = fetchNewestSavedComparison()
             for comparison in preferenceSet.getAllComparisons() {
                 // oof for timeIntervalSince1970. But at least it's human-readable in the if block.
                 if newestSavedComparison == nil || comparison.0.timeIntervalSince1970 > newestSavedComparison!.timestamp!.timeIntervalSince1970 {
+                    let managedComparison = NSEntityDescription.insertNewObjectForEntityForName("Comparison", inManagedObjectContext: self.managedObjectContext) as! ComparisonMO
+                    managedComparison.setValue(comparison.0, forKey: "timestamp")
+                    managedComparison.setValue(comparison.1, forKey: "result")
                     
+                    managedComparison.addpreferenceSetObject(activeSet!)
+                    activeSet!.addcomparisonObject(managedComparison)
+                    
+                    let managedItem1 = fetchPSItem(comparison.1.id1)
+                    let managedItem2 = fetchPSItem(comparison.1.id2)
+                    managedComparison.addpreferenceSetItemObject(managedItem1!)
+                    managedComparison.addpreferenceSetItemObject(managedItem2!)
+                    managedItem1!.addcomparisonObject(managedComparison)
+                    managedItem2!.addcomparisonObject(managedComparison)
                 }
             }
+            
+            
                 
                 
                 
