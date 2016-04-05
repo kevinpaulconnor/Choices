@@ -27,6 +27,7 @@ protocol PreferenceSet {
     func updateRatings()
     func returnSortedPreferenceScores() -> [(UInt64, Double)]
     func getItemById(id: UInt64) -> PreferenceSetItem?
+    func getPreferenceScoreById(id: UInt64) -> PreferenceScore?
     func getAllComparisons() -> [NSDate: Comparison]
     func getAllPreferenceScores() -> [UInt64: PreferenceScore]
 }
@@ -78,6 +79,10 @@ class PreferenceSetBase : PreferenceSet {
     
     func getAllPreferenceScores() -> [UInt64: PreferenceScore] {
         return self.scoreManager.getAllPreferenceScores()
+    }
+    
+    func getPreferenceScoreById(id: UInt64) -> PreferenceScore? {
+        return self.scoreManager.getPreferenceScoreById(id)
     }
     
     func updateRatings() {

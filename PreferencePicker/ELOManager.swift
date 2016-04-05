@@ -234,6 +234,13 @@ class ELOManager {
         return keyedPreferenceScores
     }
     
+    func getPreferenceScoreById(id: UInt64) -> PreferenceScore? {
+        if latestComparisonInfo.freshComparisons.count > 0 {
+            updateRatings()
+        }
+        return keyedPreferenceScores[id]
+    }
+    
 }
 
 struct scoreFreshComparisonInfo {
