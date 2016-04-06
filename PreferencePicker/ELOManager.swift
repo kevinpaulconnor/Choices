@@ -181,7 +181,7 @@ class ELOManager {
     
     func createAndAddComparison(id1: UInt64, id2: UInt64, result: UInt64) {
         updateBeforeRating = true
-        let comparison = Comparison(id1: id1, id2: id2, result: result)
+        let comparison = Comparison(id1: id1, id2: id2, result: result, timestamp: nil)
         latestComparisonInfo.freshComparisons.append(comparison)
         latestComparisonInfo.freshIds.insert(id1)
         latestComparisonInfo.freshIds.insert(id2)

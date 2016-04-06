@@ -223,6 +223,7 @@ class PreferenceScoreMO: NSManagedObject {
 class ComparisonMO: NSManagedObject {
     @NSManaged var result: NSNumber?
     @NSManaged var timestamp: NSDate?
+    @NSManaged var preferenceSetItem: NSSet?
     
     @NSManaged func addpreferenceSetObject(value: PreferenceSetMO)
     @NSManaged func addpreferenceSetItemObject(value:PreferenceSetItemMO)

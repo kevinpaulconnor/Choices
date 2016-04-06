@@ -32,12 +32,15 @@ class PreferencePickerTabBarViewController: UITabBarController, UITabBarControll
     
     // after loading a previously saved set, associate MediaItems with active set,
     // create active set, move to ActiveSet tab
+    // this work should probably be managed at the PreferenceSet or PreferenceSetBase level
     @IBAction func loadedSet(segue: UIStoryboardSegue) {
         if let managedSet = self.candidateMO {
             let managedItems = managedSet.preferenceSetItem!.allObjects as! [PreferenceSetItemMO]
+            let managedComparisons = managedSet.comparison!.allObjects as! [ComparisonMO]
+            let candidateComparisons = PreferenceSetBase.buildComparisonArrayFromMOs(managedComparisons)
             let candidateSet = PreferenceSetBase.buildMediaItemArrayFromMOs(managedItems)
             let type = PreferenceSetTypeManager.getSetType(managedSet.preferenceSetType!)
-            self.activeSet = type.createPreferenceSet(candidateSet, title: managedSet.title!)
+            self.activeSet = type.importPreferenceSet(candidateSet, title: managedSet.title!)
             self.candidateMO = nil
             self.goToActiveSetView()
         }

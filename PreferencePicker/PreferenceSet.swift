@@ -87,8 +87,9 @@ class PreferenceSetBase : PreferenceSet {
     
     func updateRatings() {
         self.scoreManager.update()
-        //might not want to update model every time...
+        //might need to update model here...
         PreferenceSetBase.update(self)
+
     }
     
     func returnSortedPreferenceScores() -> [(UInt64, Double)] {
@@ -99,6 +100,7 @@ class PreferenceSetBase : PreferenceSet {
     //through PreferenceSetBase. That will make it easier to
     //swap persistence layers
     
+    // not crazy about how these build* methods wound up...
     static func buildMediaItemArrayFromMOs(managedItems: [PreferenceSetItemMO]) -> [MPMediaItem] {
         let mediaItemArray = MPMediaQuery.songsQuery().items!
         var outputArray = [MPMediaItem]()
@@ -109,6 +111,20 @@ class PreferenceSetBase : PreferenceSet {
             }
         }
         return outputArray
+    }
+    
+    static func buildComparisonArrayFromMOs(managedComparisons: [ComparisonMO]) -> [Comparison] {
+        var comparisons = [Comparison]()
+        for managedComparison in managedComparisons {
+            let items = managedComparison.preferenceSetItem!.allObjects as! [PreferenceSetItemMO]
+            comparisons.append(Comparison(id1: items[0].id!.unsignedLongLongValue, id2: items[1].id!.unsignedLongLongValue, result: managedComparison.result!.unsignedLongLongValue, timestamp: managedComparison.timestamp!))
+        }
+        print("\(comparisons)")
+        return comparisons
+    }
+    
+    static func buildScoreArrayFromMOs() {
+        
     }
     
     static func create(preferenceSet: PreferenceSet) {
@@ -129,7 +145,7 @@ class PreferenceSetBase : PreferenceSet {
 // would love to figure out how to classname this programmatically, e.g. PreferenceSetTypeIds.iTunesPlaylist
 class iTunesPlaylistPreferenceSet : PreferenceSetBase {
  
-    init(candidateItems: [MPMediaItem], title: String) {
+    init(candidateItems: [MPMediaItem], title: String, restore: Bool) {
         super.init(title: title)
         super.preferenceSetType = PreferenceSetTypeIds.iTunesPlaylist
         
@@ -139,6 +155,11 @@ class iTunesPlaylistPreferenceSet : PreferenceSetBase {
             keyedItems[item.persistentID] = newiTunesItem
         }
         
-        self.scoreManager.initializeComparisons(candidateItems)
+        if restore {
+            //let managedComparisons = PreferenceSetBase.appDelegate!.dataController!.getComparisonMOsForSet()
+            //let comparisons = PreferenceSetBase.buildComparisonArrayFromMOs(managedComparisons)
+        } else {
+            self.scoreManager.initializeComparisons(candidateItems)
+        }
     }
 }
