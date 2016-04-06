@@ -124,7 +124,6 @@ class PreferenceSetBase : PreferenceSet {
             let items = managedComparison.preferenceSetItem!.allObjects as! [PreferenceSetItemMO]
             comparisons.append(Comparison(id1: items[0].id!.unsignedLongLongValue, id2: items[1].id!.unsignedLongLongValue, result: managedComparison.result!.unsignedLongLongValue, timestamp: managedComparison.timestamp!))
         }
-        print("\(comparisons)")
         return comparisons
     }
     
@@ -134,6 +133,10 @@ class PreferenceSetBase : PreferenceSet {
             output[managedScore.preferenceSetItem!.id!.unsignedLongLongValue] = managedScore.score!.doubleValue
         }
         return output
+    }
+    
+    static func updateActiveSetForModel(setMO: PreferenceSetMO) {
+        appDelegate!.dataController!.updateActiveSetMO(setMO)
     }
     
     static func create(preferenceSet: PreferenceSet) {

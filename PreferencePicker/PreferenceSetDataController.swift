@@ -142,6 +142,9 @@ class PreferenceSetDataController : NSObject {
         self.activeSet = managedSet
     }
  
+    func updateActiveSetMO(set: PreferenceSetMO) {
+        self.activeSet = set
+    }
     
     func updateSetMO(preferenceSet: PreferenceSet) {
         print("updatingset")

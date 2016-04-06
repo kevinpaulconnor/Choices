@@ -45,7 +45,7 @@ class PreferencePickerTabBarViewController: UITabBarController, UITabBarControll
             let type = PreferenceSetTypeManager.getSetType(managedSet.preferenceSetType!)
             self.activeSet = type.createPreferenceSet(candidateSet, title: managedSet.title!)
             activeSet!.restoreScoreManagerScores(candidateComparisons, candidateScores: candidateScores)
-            self.candidateMO = nil
+            PreferenceSetBase.updateActiveSetForModel(candidateMO!)
             self.goToActiveSetView()
         }
     }
