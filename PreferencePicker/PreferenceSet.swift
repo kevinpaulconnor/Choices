@@ -123,8 +123,14 @@ class PreferenceSetBase : PreferenceSet {
         return comparisons
     }
     
-    static func buildScoreArrayFromMOs() {
+    static func buildScoreArrayFromMOs(managedScores: [PreferenceScoreMO]) -> [(UInt64, Double)] {
+        var outputArray = [(UInt64, Double)]()
+        for managedScore in managedScores {
+            outputArray.append((managedScore.preferenceSetItem!.id!.unsignedLongLongValue, managedScore.score!.doubleValue))
+        }
         
+        
+        return outputArray
     }
     
     static func create(preferenceSet: PreferenceSet) {
