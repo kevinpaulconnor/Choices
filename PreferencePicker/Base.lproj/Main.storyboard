@@ -740,7 +740,7 @@
             <objects>
                 <tableViewController restorationIdentifier="DisplayScores" title="Scores" id="SNj-wJ-KxF" customClass="DisplayScoresTableViewController" customModule="PreferencePicker" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="uMR-2l-DGc">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -774,7 +774,11 @@
                             <outlet property="delegate" destination="SNj-wJ-KxF" id="4Z1-LU-cWN"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" title="Rankings" image="first" id="9bM-Wx-3tv"/>
+                    <connections>
+                        <outlet property="table" destination="uMR-2l-DGc" id="0Uj-9N-cOO"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kRP-Bb-7Jd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
