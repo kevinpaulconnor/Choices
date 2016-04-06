@@ -27,10 +27,8 @@ class ELOManager {
     var comparisonConstant = 5
     var minimumComparisonsForSet = 0
     var minimumComparisonIds = Set<UInt64>()
-    
-    var updateBeforeRating = false
-    var latestComparisonInfo = managerFreshComparisonInfo()
-    
+
+    var latestComparisonInfo = managerFreshComparisonInfo()    
     // store new set-wide comparisons until they are incorporated into scores
     struct managerFreshComparisonInfo {
         var freshScores = [UInt64 : Double]()
@@ -171,6 +169,10 @@ class ELOManager {
         return keyedPreferenceScores[id]!.score!
     }
     
+    private func resetComparisons() {
+        recommendedUpcomingComparisons = [(UInt64, UInt64)]()
+    }
+
     func getIdsForComparison() -> [UInt64] {
         let idTuple = recommendedUpcomingComparisons.removeFirst()
         if recommendedUpcomingComparisons.isEmpty {
@@ -180,7 +182,6 @@ class ELOManager {
     }
     
     func createAndAddComparison(id1: UInt64, id2: UInt64, result: UInt64) {
-        updateBeforeRating = true
         let comparison = Comparison(id1: id1, id2: id2, result: result, timestamp: nil)
         latestComparisonInfo.freshComparisons.append(comparison)
         latestComparisonInfo.freshIds.insert(id1)
@@ -194,7 +195,7 @@ class ELOManager {
         }
     }
     
-    // on import
+    // on import and from persistence layer
     func initializeComparisons(candidateItems: [MPMediaItem]) {
         for item in candidateItems {
             addScore(item.persistentID, score: defaultScore)
@@ -202,14 +203,23 @@ class ELOManager {
         recommendComparisons()
     }
     
-    // from persistence layer
-    //func restoreComparisons(candidateItems: [MPMediaItem], ) {
-        //for item in candidateItems {
-        //    addScore(item.persistentID, score: defaultScore)
-        //}
-        //let comparison = Comparison(id1: id1, id2: id2, result: result)
-      //  recommendComparisons()
-    //}
+    // from persistence layer only
+    func restoreComparisons(candidateComparisons: [Comparison], candidateScores: [UInt64: Double]) {
+        for comparison in candidateComparisons {
+            keyedPreferenceScores[comparison.id1]!.allTimeComparisons[comparison.timestamp] = comparison
+            keyedPreferenceScores[comparison.id2]!.allTimeComparisons[comparison.timestamp] = comparison
+            allTimeComparisons[comparison.timestamp] = comparison
+        }
+        
+        for score in preferenceScores {
+            score.score = candidateScores[score.id!]
+            score.totalComparisons = score.allTimeComparisons.count
+        }
+
+        resetComparisons()
+        checkMinimumComparisons()
+        recommendComparisons()
+    }
     
     func update() {
         //might need to do other stuff here in the public api
@@ -279,11 +289,6 @@ class PreferenceScore {
     init (id: UInt64, score: Double) {
         self.id = id
         self.score = score
-    }
-    
-    func updateAllTimeComparisons(comparison: Comparison) {
-        totalComparisons = totalComparisons + 1
-        allTimeComparisons[comparison.timestamp] = comparison
     }
     
     func updateLatestComparisonInfo(comparison: Comparison, opponentScore: Double, result: UInt64) {
