@@ -43,7 +43,8 @@ class PreferencePickerTabBarViewController: UITabBarController, UITabBarControll
             let candidateSet = PreferenceSetBase.buildMediaItemArrayFromMOs(managedItems)
             let candidateScores = PreferenceSetBase.buildScoreArrayFromMOs(managedScores)
             let type = PreferenceSetTypeManager.getSetType(managedSet.preferenceSetType!)
-            self.activeSet = type.importPreferenceSet(candidateSet, title: managedSet.title!)
+            self.activeSet = type.createPreferenceSet(candidateSet, title: managedSet.title!)
+            activeSet!.restoreScoreManagerScores(candidateComparisons, candidateScores: candidateScores)
             self.candidateMO = nil
             self.goToActiveSetView()
         }
