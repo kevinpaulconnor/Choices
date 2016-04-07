@@ -9,7 +9,7 @@
         <!--Load Set-->
         <scene sceneID="hNz-n2-bh7">
             <objects>
-                <viewController storyboardIdentifier="LoadNewExistingSet" title="Load Set" id="9pv-A4-QxB" customClass="SetLoaderViewController" customModule="PreferencePicker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController restorationIdentifier="LoadNewExistingSet" title="Load Set" id="9pv-A4-QxB" customClass="SetLoaderViewController" customModule="PreferencePicker" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Ia1-K6-d13"/>
                         <viewControllerLayoutGuide type="bottom" id="4ug-Mw-9AY"/>
@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XFc-1h-zMd">
-                                <rect key="frame" x="20" y="119" width="560" height="41"/>
+                                <rect key="frame" x="20" y="155" width="560" height="41"/>
                                 <color key="backgroundColor" red="0.44979607944201427" green="0.97464087990635062" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Load an Existing Set"/>
@@ -28,7 +28,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aJe-i2-0Vz">
-                                <rect key="frame" x="20" y="168" width="560" height="40"/>
+                                <rect key="frame" x="20" y="204" width="560" height="40"/>
                                 <color key="backgroundColor" red="0.44979607944201427" green="0.97464087990635062" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="24"/>
                                 <state key="normal" title="Load a New Set"/>
@@ -36,8 +36,22 @@
                                     <segue destination="aJV-kX-tSv" kind="show" id="wt3-lS-HsW"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Set: (fill if we've got one)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wxp-Ql-cbo">
-                                <rect key="frame" x="20" y="72" width="560" height="39"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wxp-Ql-cbo">
+                                <rect key="frame" x="20" y="72" width="560" height="28"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Current Set">
+                                        <attributes>
+                                            <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="24" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                            <integer key="NSUnderline" value="1"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(no set loaded)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MUY-rs-cF4">
+                                <rect key="frame" x="20" y="108" width="560" height="39"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="32"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -48,15 +62,27 @@
                             <constraint firstItem="XFc-1h-zMd" firstAttribute="top" secondItem="wxp-Ql-cbo" secondAttribute="bottom" constant="8" symbolic="YES" id="3FJ-h4-LyW"/>
                             <constraint firstItem="wxp-Ql-cbo" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" id="64w-WY-hSH"/>
                             <constraint firstItem="wxp-Ql-cbo" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="8" symbolic="YES" id="D2a-MA-SHg"/>
+                            <constraint firstItem="XFc-1h-zMd" firstAttribute="top" secondItem="MUY-rs-cF4" secondAttribute="bottom" constant="8" symbolic="YES" id="E07-cP-Jpg"/>
                             <constraint firstItem="aJe-i2-0Vz" firstAttribute="top" secondItem="XFc-1h-zMd" secondAttribute="bottom" constant="8" symbolic="YES" id="HAm-6d-C6W"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="MUY-rs-cF4" secondAttribute="trailing" id="Ht5-o2-ZbM"/>
+                            <constraint firstItem="MUY-rs-cF4" firstAttribute="top" secondItem="wxp-Ql-cbo" secondAttribute="bottom" constant="8" symbolic="YES" id="LUJ-8A-sg0"/>
                             <constraint firstAttribute="trailingMargin" secondItem="wxp-Ql-cbo" secondAttribute="trailing" id="XfI-fr-1hH"/>
                             <constraint firstAttribute="trailingMargin" secondItem="XFc-1h-zMd" secondAttribute="trailing" id="djq-j2-VMx"/>
                             <constraint firstItem="aJe-i2-0Vz" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" id="nTc-WE-4tP"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="MUY-rs-cF4" secondAttribute="leading" id="s4t-RK-EPC"/>
                             <constraint firstAttribute="trailingMargin" secondItem="aJe-i2-0Vz" secondAttribute="trailing" id="wfO-9m-NCP"/>
                             <constraint firstItem="XFc-1h-zMd" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" id="xds-xJ-HC6"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="3FJ-h4-LyW"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="TQz-hD-DnI"/>
+                    <connections>
+                        <outlet property="currentSetLabel" destination="MUY-rs-cF4" id="ufP-ud-h5H"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
             </objects>
@@ -718,7 +744,7 @@
         <!--Load-->
         <scene sceneID="Yy8-bk-MLR">
             <objects>
-                <navigationController storyboardIdentifier="LoadNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="mGS-vd-IcI" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="LoadNavigationController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="mGS-vd-IcI" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Load" image="first" id="acW-dT-cKf"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="4j0-M5-bsu">

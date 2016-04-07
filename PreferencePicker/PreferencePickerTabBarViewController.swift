@@ -70,6 +70,12 @@ class PreferencePickerTabBarViewController: UITabBarController, UITabBarControll
         self.selectedIndex = TabIndex.ActiveSet
     }
     
+    private func setupLoadSetView() {
+        let navController = self.viewControllers![TabIndex.Load] as! UINavigationController
+        let SetLoaderVC = navController.topViewController as! SetLoaderViewController
+        SetLoaderVC.activeSet = self.activeSet
+    }
+    
     func tabBarController(tabBarController: UITabBarController,
         shouldSelectViewController viewController: UIViewController) -> Bool {
         var allow = true
@@ -97,6 +103,11 @@ class PreferencePickerTabBarViewController: UITabBarController, UITabBarControll
                 if activeSet != nil && restId == "DisplayScores" {
                     let displayScoresVC = viewController as! DisplayScoresTableViewController
                     displayScoresVC.activeSet = self.activeSet
+                }
+                // propogate activeSet to LoadSet view
+                // there's got to be a better way to combine this with DisplayScores
+                if activeSet != nil && restId == "LoadNavigationController" {
+                    setupLoadSetView()
                 }
                 // if we're not going to the ratings view, ensure that our ratings are up to date
                 if activeSet != nil && restId != "ActiveSet" {
