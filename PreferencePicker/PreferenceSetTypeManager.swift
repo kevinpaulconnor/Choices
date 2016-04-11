@@ -85,7 +85,14 @@ class iTunesPreferenceSetType: PreferenceSetType {
     }
     
     func createPreferenceSet(candidateSet: PreferenceSetItemCollection, title: String) -> PreferenceSet {
-        return iTunesPlaylistPreferenceSet(candidateItems: candidateSet.mpmic!.items, title: title)
+        var items: [MPMediaItem]
+        if candidateSet.mpmic != nil {
+            items = candidateSet.mpmic!.items
+        } else {
+            items = candidateSet.mpmi!
+        }
+        
+        return iTunesPlaylistPreferenceSet(candidateItems: items, title: title)
     }
     
     func createPreferenceItemCollectionFromMOs(managedSet: [PreferenceSetItemMO]) -> PreferenceSetItemCollection {
