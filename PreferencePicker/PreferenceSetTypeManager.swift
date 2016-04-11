@@ -29,6 +29,7 @@ class PreferenceSetTypeManager {
 
 struct PreferenceSetTypeIds {
     static let iTunesPlaylist = "iTunesPlayList"
+    static let photoMoment = "photoMoment"
 }
 
 // pass-through container that enables PreferenceSetType
@@ -62,11 +63,9 @@ class iTunesPreferenceSetType: PreferenceSetType {
     var id = PreferenceSetTypeIds.iTunesPlaylist
     
     func getAvailableSetsForImport() -> [PreferenceSetItemCollection] {
-        // var albumPredicate: MPMediaPropertyPredicate =
-        //MPMediaPropertyPredicate(value: MPMediaType.Music, forProperty: MPMediaItemPropertyMediaType)
-        var output = [PreferenceSetItemCollection]()
+      let output: [PreferenceSetItemCollection]
         for collection in MPMediaQuery.playlistsQuery().collections! {
-            var gc = PreferenceSetItemCollection()
+            let gc = PreferenceSetItemCollection()
             gc.mpmic = collection
         }
         return output
@@ -108,4 +107,37 @@ class iTunesPreferenceSetType: PreferenceSetType {
             return collection
     }
     
+}
+
+class photoPreferenceSetType: PreferenceSetType {
+    static var importable = true
+    static var creatable = false
+    var description = "Photo Moments"
+    var id = PreferenceSetTypeIds.photoMoment
+    
+    func getAvailableSetsForImport() -> [PreferenceSetItemCollection] {
+        let output = [PreferenceSetItemCollection]()
+        
+        return output
+    }
+    
+    func displayNameForCandidateSet(candidateSet: PreferenceSetItemCollection) -> String {
+        return "Photo Set Name"
+    }
+    
+    func count(candidateSet: PreferenceSetItemCollection) -> Int {
+        return 0
+    }
+    
+    func nameForItemsOfThisType(count: Int) -> String {
+        return (count > 1 ? "photos" : "photo")
+    }
+    
+    func createPreferenceSet(candidateSet: PreferenceSetItemCollection, title: String) -> PreferenceSet {
+        return iTunesPlaylistPreferenceSet(candidateItems: [MPMediaItem](), title: "title")
+    }
+    
+    func createPreferenceItemCollectionFromMOs(managedSet: [PreferenceSetItemMO]) -> PreferenceSetItemCollection {
+        return PreferenceSetItemCollection()
+    }
 }
