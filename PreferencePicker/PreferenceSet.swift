@@ -105,19 +105,7 @@ class PreferenceSetBase : PreferenceSet {
     //through PreferenceSetBase. That will make it easier to
     //swap persistence layers
     
-    // not crazy about how these build* methods wound up...
-    static func buildMediaItemArrayFromMOs(managedItems: [PreferenceSetItemMO]) -> [MPMediaItem] {
-        let mediaItemArray = MPMediaQuery.songsQuery().items!
-        var outputArray = [MPMediaItem]()
-        for mediaItem in mediaItemArray {
-            let castedId = NSNumber(unsignedLongLong: mediaItem.persistentID)
-            if managedItems.contains({$0.id! == castedId}) {
-                outputArray.append(mediaItem)
-            }
-        }
-        return outputArray
-    }
-    
+    // not crazy about how these build* methods wound up...    
     static func buildComparisonArrayFromMOs(managedComparisons: [ComparisonMO]) -> [Comparison] {
         var comparisons = [Comparison]()
         for managedComparison in managedComparisons {

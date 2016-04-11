@@ -10,7 +10,7 @@ import UIKit
 import MediaPlayer
 
 class DisplayCandidatePreferenceSetsTableViewController: UITableViewController {
-    var candidateSets = [MPMediaItemCollection]()
+    var candidateSets = [PreferenceSetItemCollection]()
     var preferenceSetType: PreferenceSetType?
     
     override func viewDidLoad() {
@@ -49,7 +49,7 @@ class DisplayCandidatePreferenceSetsTableViewController: UITableViewController {
     }
     
     private func candidateSetItemCountForDisplay(indexPath: NSIndexPath) -> String {
-        let count = candidateSets[indexPath.row].count
+        let count = preferenceSetType!.count(candidateSets[indexPath.row])
         return "\(count) \(preferenceSetType!.nameForItemsOfThisType(count))"
     }
     

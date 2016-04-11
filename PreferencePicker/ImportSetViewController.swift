@@ -15,7 +15,7 @@ class ImportSetViewController: UIViewController {
     @IBOutlet weak var candidateSetItemCountDisplay: UILabel!
     var candidateSetTitle: String?
     var candidateSetItemCount: String?
-    var candidateSet: MPMediaItemCollection?
+    var candidateSet: PreferenceSetItemCollection?
     var preferenceSetType: PreferenceSetType?
 
     override func viewDidLoad() {
@@ -30,7 +30,7 @@ class ImportSetViewController: UIViewController {
     }
     
     func importSet() -> PreferenceSet {
-        let newSet = preferenceSetType!.createPreferenceSet(candidateSet!.items, title: candidateSetTitle!)
+        let newSet = preferenceSetType!.createPreferenceSet(candidateSet!, title: candidateSetTitle!)
         PreferenceSetBase.create(newSet)
         return newSet
     }
