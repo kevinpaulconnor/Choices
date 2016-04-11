@@ -63,10 +63,11 @@ class iTunesPreferenceSetType: PreferenceSetType {
     var id = PreferenceSetTypeIds.iTunesPlaylist
     
     func getAvailableSetsForImport() -> [PreferenceSetItemCollection] {
-      let output: [PreferenceSetItemCollection]
+      var output = [PreferenceSetItemCollection]()
         for collection in MPMediaQuery.playlistsQuery().collections! {
             let gc = PreferenceSetItemCollection()
             gc.mpmic = collection
+            output.append(gc)
         }
         return output
     }
