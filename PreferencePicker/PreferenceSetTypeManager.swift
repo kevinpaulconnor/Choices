@@ -9,6 +9,7 @@
 
 import Foundation
 import MediaPlayer
+import Photos
 
 class PreferenceSetTypeManager {
     static let types = [PreferenceSetTypeIds.iTunesPlaylist: iTunesPreferenceSetType()]
@@ -40,6 +41,7 @@ struct PreferenceSetTypeIds {
 class PreferenceSetItemCollection {
     var mpmic: MPMediaItemCollection?
     var mpmi: [MPMediaItem]?
+    var phcl: PHAssetCollection?
 }
 
 protocol PreferenceSetType {
@@ -117,8 +119,21 @@ class photoPreferenceSetType: PreferenceSetType {
     var id = PreferenceSetTypeIds.photoMoment
     
     func getAvailableSetsForImport() -> [PreferenceSetItemCollection] {
-        let output = [PreferenceSetItemCollection]()
+        var output = [PreferenceSetItemCollection]()
         
+        // this is not the world's finest api, Apple
+        let request = PHCollectionList.fetchMomentListsWithSubtype(PHCollectionListSubtype.MomentListCluster, options: nil)
+        request.enumerateObjectsUsingBlock{(object: AnyObject!,
+            count: Int,
+            stop: UnsafeMutablePointer<ObjCBool>) in
+            
+            if object is PHAssetCollection {
+                let collection = object as! PHAssetCollection
+                let gc = PreferenceSetItemCollection()
+                gc.phcl = collection
+                output.append(gc)
+            }
+        }
         return output
     }
     
