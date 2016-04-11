@@ -12,18 +12,21 @@ import MediaPlayer
 import Photos
 
 class PreferenceSetTypeManager {
-    static let types = [PreferenceSetTypeIds.iTunesPlaylist: iTunesPreferenceSetType()]
+    static let types = [
+        PreferenceSetTypeIds.iTunesPlaylist: iTunesPreferenceSetType(),
+        PreferenceSetTypeIds.photoMoment: photoPreferenceSetType()
+    ]
     
     static func allPreferenceSetTypes() -> [PreferenceSetType] {
         var typeArray = [PreferenceSetType]()
-        for type in types.values {
-            typeArray.append(type)
+        for type in types {
+            typeArray.append(type.value as! PreferenceSetType)
         }
         return typeArray
     }
     
     static func getSetType(psId: String) -> PreferenceSetType {
-       return types[psId]!
+       return types[psId] as! PreferenceSetType
     }
     
 }
