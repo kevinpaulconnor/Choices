@@ -48,16 +48,17 @@ class DisplayCandidatePreferenceSetsTableViewController: UITableViewController {
         return preferenceSetType!.displayNameForCandidateSet(candidateSets[indexPath.row])
     }
     
-    private func candidateSetItemCountForDisplay(indexPath: NSIndexPath) -> String {
-        let count = preferenceSetType!.count(candidateSets[indexPath.row])
-        return "\(count) \(preferenceSetType!.nameForItemsOfThisType(count))"
+    private func candidateSetItemDetailForDisplay(indexPath: NSIndexPath) -> String {
+        return preferenceSetType!.itemDetailForDisplay(candidateSets[indexPath.row])
+        //let count = preferenceSetType!.count(candidateSets[indexPath.row])
+        //return "\(count) \(preferenceSetType!.nameForItemsOfThisType(count))"
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(Storyboard.CellReuseIdentifier, forIndexPath: indexPath)
         
         cell.textLabel?.text = self.candidateSetTitleForDisplay(indexPath)
-        cell.detailTextLabel?.text = self.candidateSetItemCountForDisplay(indexPath)
+        cell.detailTextLabel?.text = self.candidateSetItemDetailForDisplay(indexPath)
         return cell
     }
     
@@ -104,7 +105,7 @@ class DisplayCandidatePreferenceSetsTableViewController: UITableViewController {
             if let indexPath = tableView.indexPathForCell(sender as! UITableViewCell) {
                 let importController = segue.destinationViewController as! ImportSetViewController
                 importController.candidateSetTitle = self.candidateSetTitleForDisplay(indexPath)
-                importController.candidateSetItemCount = self.candidateSetItemCountForDisplay(indexPath)
+                importController.candidateSetItemCount = self.candidateSetItemDetailForDisplay(indexPath)
                 importController.candidateSet = self.candidateSets[indexPath.row]
                 importController.preferenceSetType = self.preferenceSetType
             }

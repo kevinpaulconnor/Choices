@@ -44,7 +44,7 @@ struct PreferenceSetTypeIds {
 class PreferenceSetItemCollection {
     var mpmic: MPMediaItemCollection?
     var mpmi: [MPMediaItem]?
-    var phcl: PHAssetCollection?
+    var phcl: PHCollectionList?
 }
 
 protocol PreferenceSetType {
@@ -55,7 +55,7 @@ protocol PreferenceSetType {
     
     func getAvailableSetsForImport() -> [PreferenceSetItemCollection]
     func displayNameForCandidateSet(candidateSet: PreferenceSetItemCollection) -> String
-    func count(candidateSet:PreferenceSetItemCollection) -> Int
+    func itemDetailForDisplay(candidateSet:PreferenceSetItemCollection) -> String
     func nameForItemsOfThisType(count: Int) -> String
     func createPreferenceSet(candidateSet: PreferenceSetItemCollection, title: String) -> PreferenceSet
     func createPreferenceItemCollectionFromMOs(managedSet: [PreferenceSetItemMO]) -> PreferenceSetItemCollection
@@ -81,8 +81,9 @@ class iTunesPreferenceSetType: PreferenceSetType {
         let playlist = candidateSet.mpmic as! MPMediaPlaylist
         return playlist.name!
     }
-    func count(candidateSet: PreferenceSetItemCollection) -> Int {
-        return candidateSet.mpmic!.count
+    func itemDetailForDisplay(candidateSet: PreferenceSetItemCollection) -> String {
+        let count = candidateSet.mpmic!.count
+        return "\(count) \(self.nameForItemsOfThisType(count))"
     }
 
     func nameForItemsOfThisType(count: Int) -> String {
@@ -126,26 +127,28 @@ class photoPreferenceSetType: PreferenceSetType {
         
         // this is not the world's finest api, Apple
         let request = PHCollectionList.fetchMomentListsWithSubtype(PHCollectionListSubtype.MomentListCluster, options: nil)
+        print("\(request.count)")
         request.enumerateObjectsUsingBlock{(object: AnyObject!,
             count: Int,
             stop: UnsafeMutablePointer<ObjCBool>) in
-            
-            if object is PHAssetCollection {
-                let collection = object as! PHAssetCollection
+            //print("\(object.typeIdentifier)")
+            //if object is PHAssetCollection {
+                let collection = object as! PHCollectionList
+                print("\(collection.localizedTitle)")
                 let gc = PreferenceSetItemCollection()
                 gc.phcl = collection
                 output.append(gc)
-            }
+            //}
         }
         return output
     }
     
     func displayNameForCandidateSet(candidateSet: PreferenceSetItemCollection) -> String {
-        return "Photo Set Name"
+        return candidateSet.phcl!.localizedTitle ?? "(No Title Available)"
     }
     
-    func count(candidateSet: PreferenceSetItemCollection) -> Int {
-        return 0
+    func itemDetailForDisplay(candidateSet: PreferenceSetItemCollection) -> String {
+        return "Dates"
     }
     
     func nameForItemsOfThisType(count: Int) -> String {
