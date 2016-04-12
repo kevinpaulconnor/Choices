@@ -131,14 +131,11 @@ class photoPreferenceSetType: PreferenceSetType {
         request.enumerateObjectsUsingBlock{(object: AnyObject!,
             count: Int,
             stop: UnsafeMutablePointer<ObjCBool>) in
-            //print("\(object.typeIdentifier)")
-            //if object is PHAssetCollection {
                 let collection = object as! PHCollectionList
-                print("\(collection.localizedTitle)")
                 let gc = PreferenceSetItemCollection()
                 gc.phcl = collection
                 output.append(gc)
-            //}
+
         }
         return output
     }
