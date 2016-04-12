@@ -54,6 +54,10 @@ class DisplayCandidatePreferenceSetsTableViewController: UITableViewController {
         //return "\(count) \(preferenceSetType!.nameForItemsOfThisType(count))"
     }
     
+    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        cell.backgroundColor = PreferenceSetTypeColors.getBGColorForTableCell(preferenceSetType!.id)
+    }
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(Storyboard.CellReuseIdentifier, forIndexPath: indexPath)
         
