@@ -148,7 +148,10 @@ class photoPreferenceSetType: PreferenceSetType {
     }
     
     func itemDetailForDisplay(candidateSet: PreferenceSetItemCollection) -> String {
-        return "Dates"
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateStyle = NSDateFormatterStyle.ShortStyle
+        dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle
+        return ("\(dateFormatter.stringFromDate(candidateSet.phcl!.startDate!)) - \(dateFormatter.stringFromDate(candidateSet.phcl!.endDate!))")
     }
     
     func nameForItemsOfThisType(count: Int) -> String {
