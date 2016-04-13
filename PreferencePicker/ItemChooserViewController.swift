@@ -13,12 +13,10 @@ class ItemChooserViewController: UIViewController {
 
     
     var item: PreferenceSetItem?
-    var mediaItem: MPMediaItem?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        mediaItem = item!.mediaItem
+        mediaItem = item!
         // Do any additional setup after loading the view.
     }
 
@@ -40,11 +38,12 @@ class iTunesItemChooserViewController : ItemChooserViewController {
     
     var player: MPMusicPlayerController?
     var itemCollection: MPMediaItemCollection?
+    var mediaItem: MPMediaItem?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         player = MPMusicPlayerController.applicationMusicPlayer()
-
+        mediaItem = item!.referenceItem.mediaItem
         
         let imageSize = CGSize(width: albumArt.bounds.width, height: albumArt.bounds.width)
         if let artwork = self.mediaItem!.artwork {

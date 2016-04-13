@@ -11,7 +11,7 @@ import UIKit
 class DisplayScoresTableViewController: UITableViewController {
     @IBOutlet var table: UITableView!
     var activeSet: PreferenceSet?
-    var preferenceScores: [(UInt64, Double)]?
+    var preferenceScores: [(MemoryId, Double)]?
     
 
     override func viewWillAppear(animated: Bool) {

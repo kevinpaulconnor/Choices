@@ -47,9 +47,9 @@ class ChoosePreferenceViewController: UIViewController {
     
     func respondToSwipeGesture(gesture: UIGestureRecognizer) {
         if let swipeGesture = gesture as? UISwipeGestureRecognizer {
-            var id = topItem!.mediaItem.persistentID
+            var id = topItem!.memoryId
             if gesture.view!.tag == bottomItemView.tag {
-                id = bottomItem!.mediaItem.persistentID
+                id = bottomItem!.memoryId
             }
             sendComparison(id)
             // should the music stop if it's playing on a swipe?
@@ -58,9 +58,9 @@ class ChoosePreferenceViewController: UIViewController {
     }
     
     // hate 0 for draw as magic number, to-do find a good spot to un-magic it
-    func sendComparison(winningItemId: UInt64) {
-        let id1 = topItem!.mediaItem.persistentID
-        let id2 = bottomItem!.mediaItem.persistentID
+    func sendComparison(winningItemId: MemoryId) {
+        let id1 = topItem!.memoryId
+        let id2 = bottomItem!.memoryId
         activeSet!.registerComparison(id1, id2: id2, result: winningItemId)
     }
     

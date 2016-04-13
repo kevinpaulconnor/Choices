@@ -9,6 +9,14 @@
 import Foundation
 import MediaPlayer
 import CoreData
+import Photos
+
+// PHAsset are persistently identified by strings
+// MPMediaItem are persistently identified by UInt64
+// so, create an in-memory id on import/load
+// and only use the persistent ids for persistence layer
+// typealias in case Int is no good sometime in the future
+typealias MemoryId = Int
 
 // PreferenceSet protocol provides APIs for the presentation
 // and modification of PreferenceSet in view controllers and
@@ -22,15 +30,16 @@ protocol PreferenceSet {
     func itemCount() -> Int
     func getItemsForComparison() -> [PreferenceSetItem]
     func getItemByIndex(index: Int) -> PreferenceSetItem
+    func getNextMemoryId() -> Int
     func getAllItems() -> [PreferenceSetItem]
-    func registerComparison(id1: UInt64, id2: UInt64, result: UInt64)
+    func registerComparison(id1: MemoryId, id2: MemoryId, result: MemoryId)
     func updateRatings()
-    func returnSortedPreferenceScores() -> [(UInt64, Double)]
-    func getItemById(id: UInt64) -> PreferenceSetItem?
-    func getPreferenceScoreById(id: UInt64) -> PreferenceScore?
+    func returnSortedPreferenceScores() -> [(MemoryId, Double)]
+    func getItemById(id: MemoryId) -> PreferenceSetItem?
+    func getPreferenceScoreById(id: MemoryId) -> PreferenceScore?
     func getAllComparisons() -> [NSDate: Comparison]
-    func getAllPreferenceScores() -> [UInt64: PreferenceScore]
-    func restoreScoreManagerScores(candidateComparisons: [Comparison], candidateScores: [UInt64: Double])
+    func getAllPreferenceScores() -> [MemoryId: PreferenceScore]
+    func restoreScoreManagerScores(candidateComparisons: [Comparison], candidateScores: [MemoryId: Double])
 }
 
 // PreferenceSetBase holds common logic for determining
@@ -43,7 +52,8 @@ class PreferenceSetBase : PreferenceSet {
     UIApplication.sharedApplication().delegate as? AppDelegate
     var scoreManager = ELOManager()
     private var items = [PreferenceSetItem]()
-    private var keyedItems = [UInt64 : PreferenceSetItem]()
+    private var keyedItems = [MemoryId : PreferenceSetItem]()
+    private var memoryId = 0
     
     init(title: String) {
         self.title = title
@@ -62,7 +72,13 @@ class PreferenceSetBase : PreferenceSet {
         return items[index]
     }
     
-    func getItemById(id: UInt64) -> PreferenceSetItem? {
+    func getNextMemoryId() -> Int {
+        let ret = memoryId
+        memoryId = memoryId + 1
+        return ret
+    }
+    
+    func getItemById(id: MemoryId) -> PreferenceSetItem? {
         return keyedItems[id]
     }
     
@@ -70,7 +86,7 @@ class PreferenceSetBase : PreferenceSet {
         return items
     }
     
-    func registerComparison(id1: UInt64, id2: UInt64, result: UInt64) {
+    func registerComparison(id1: MemoryId, id2: MemoryId, result: MemoryId) {
         self.scoreManager.createAndAddComparison(id1, id2: id2, result: result)
     }
     
@@ -78,11 +94,11 @@ class PreferenceSetBase : PreferenceSet {
         return self.scoreManager.getAllComparisons()
     }
     
-    func getAllPreferenceScores() -> [UInt64: PreferenceScore] {
+    func getAllPreferenceScores() -> [MemoryId: PreferenceScore] {
         return self.scoreManager.getAllPreferenceScores()
     }
     
-    func getPreferenceScoreById(id: UInt64) -> PreferenceScore? {
+    func getPreferenceScoreById(id: MemoryId) -> PreferenceScore? {
         return self.scoreManager.getPreferenceScoreById(id)
     }
     
@@ -93,11 +109,11 @@ class PreferenceSetBase : PreferenceSet {
 
     }
     
-    func returnSortedPreferenceScores() -> [(UInt64, Double)] {
+    func returnSortedPreferenceScores() -> [(MemoryId, Double)] {
         return self.scoreManager.getUpdatedSortedPreferenceScores()
     }
  
-    func restoreScoreManagerScores(candidateComparisons: [Comparison], candidateScores: [UInt64: Double]) {
+    func restoreScoreManagerScores(candidateComparisons: [Comparison], candidateScores: [MemoryId: Double]) {
         scoreManager.restoreComparisons(candidateComparisons, candidateScores: candidateScores)
     }
     
@@ -105,20 +121,22 @@ class PreferenceSetBase : PreferenceSet {
     //through PreferenceSetBase. That will make it easier to
     //swap persistence layers
     
-    // not crazy about how these build* methods wound up...    
+    // not crazy about how these build* methods wound up...
+    // among other things, they will be fragile as MemoryId typedef changes
+    // decided to live with it for now
     static func buildComparisonArrayFromMOs(managedComparisons: [ComparisonMO]) -> [Comparison] {
         var comparisons = [Comparison]()
         for managedComparison in managedComparisons {
             let items = managedComparison.preferenceSetItem!.allObjects as! [PreferenceSetItemMO]
-            comparisons.append(Comparison(id1: items[0].id!.unsignedLongLongValue, id2: items[1].id!.unsignedLongLongValue, result: managedComparison.result!.unsignedLongLongValue, timestamp: managedComparison.timestamp!))
+            comparisons.append(Comparison(id1: items[0].id!.integerValue, id2: items[1].id!.integerValue, result: managedComparison.result!.integerValue, timestamp: managedComparison.timestamp!))
         }
         return comparisons
     }
     
-    static func buildScoreArrayFromMOs(managedScores: [PreferenceScoreMO]) -> [UInt64: Double] {
-        var output = [UInt64: Double]()
+    static func buildScoreArrayFromMOs(managedScores: [PreferenceScoreMO]) -> [MemoryId: Double] {
+        var output = [MemoryId: Double]()
         for managedScore in managedScores {
-            output[managedScore.preferenceSetItem!.id!.unsignedLongLongValue] = managedScore.score!.doubleValue
+            output[managedScore.preferenceSetItem!.id!.integerValue] = managedScore.score!.doubleValue
         }
         return output
     }
@@ -150,12 +168,30 @@ class iTunesPlaylistPreferenceSet : PreferenceSetBase {
         super.preferenceSetType = PreferenceSetTypeIds.iTunesPlaylist
         
         for item in candidateItems {
-            let newiTunesItem = iTunesPreferenceSetItem(candidateItem: item)
+            let newiTunesItem = iTunesPreferenceSetItem(candidateItem: item, set: self)
             items.append(newiTunesItem)
-            keyedItems[item.persistentID] = newiTunesItem
+            keyedItems[newiTunesItem.memoryId] = newiTunesItem
         }
 
-        self.scoreManager.initializeComparisons(candidateItems)
+        self.scoreManager.initializeComparisons(items)
+    }
+    
+}
+
+// would love to figure out how to classname this programmatically, e.g. PreferenceSetTypeIds.iTunesPlaylist
+class photoMomentPreferenceSet : PreferenceSetBase {
+    
+    init(candidateItems: [PHAsset], title: String) {
+        super.init(title: title)
+        super.preferenceSetType = PreferenceSetTypeIds.iTunesPlaylist
+        
+        for item in candidateItems {
+            let newItem = photoMomentPreferenceSetItem(candidateItem: item, set: self)
+            items.append(newItem)
+            keyedItems[newItem.memoryId] = newItem
+        }
+        
+        self.scoreManager.initializeComparisons(items)
     }
     
 }

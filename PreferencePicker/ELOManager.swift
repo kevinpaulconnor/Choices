@@ -15,10 +15,10 @@ class ELOManager {
     let defaultScore = Double(2000)          //Created PreferenceItems start with a score of 2000
 
     var allTimeComparisons = [NSDate: Comparison]()
-    var recommendedUpcomingComparisons = [(UInt64, UInt64)]()
+    var recommendedUpcomingComparisons = [(MemoryId, MemoryId)]()
     
     //I wonder whether there's a better way to do this than two structures?
-    var keyedPreferenceScores = [UInt64: PreferenceScore]()
+    var keyedPreferenceScores = [MemoryId: PreferenceScore]()
     var preferenceScores = [PreferenceScore]()
 
     // make upcoming comparisons from set including minimumComparisons for set
@@ -26,14 +26,14 @@ class ELOManager {
     // based on # in set, or minimumComparisons, or another factor
     var comparisonConstant = 5
     var minimumComparisonsForSet = 0
-    var minimumComparisonIds = Set<UInt64>()
+    var minimumComparisonIds = Set<MemoryId>()
 
     var latestComparisonInfo = managerFreshComparisonInfo()    
     // store new set-wide comparisons until they are incorporated into scores
     struct managerFreshComparisonInfo {
-        var freshScores = [UInt64 : Double]()
+        var freshScores = [MemoryId : Double]()
         var freshComparisons = [Comparison]()
-        var freshIds = Set<UInt64>()
+        var freshIds = Set<MemoryId>()
     }
     
     // reset set-wide comparisons
@@ -97,7 +97,7 @@ class ELOManager {
             for score in preferenceScores {
                 if score.totalComparisons < newMinimum {
                     newMinimum = score.totalComparisons
-                    minimumComparisonIds = Set<UInt64>()
+                    minimumComparisonIds = Set<MemoryId>()
                     minimumComparisonIds.insert(score.id!)
                 } else if score.totalComparisons == newMinimum {
                     minimumComparisonIds.insert(score.id!)
@@ -119,7 +119,7 @@ class ELOManager {
         }
     }
     
-    private func addScore(id: UInt64, score: Double) -> PreferenceScore {
+    private func addScore(id: MemoryId, score: Double) -> PreferenceScore {
         let score = PreferenceScore(id: id, score: score)
         keyedPreferenceScores[id] = score
         preferenceScores.append(score)
@@ -156,7 +156,7 @@ class ELOManager {
         }
     }
     
-    private func createOrUpdatePreferenceScore(id: UInt64, comparison: Comparison, opponentScore: Double, result: UInt64) {
+    private func createOrUpdatePreferenceScore(id: MemoryId, comparison: Comparison, opponentScore: Double, result: MemoryId) {
         var score = keyedPreferenceScores[id]
         if score == nil {
             score = addScore(id, score: defaultScore)
@@ -165,15 +165,15 @@ class ELOManager {
         score!.updateLatestComparisonInfo(comparison, opponentScore: opponentScore, result: result)
     }
     
-    private func getScoreForItemId(id: UInt64) -> Double {
+    private func getScoreForItemId(id: MemoryId) -> Double {
         return keyedPreferenceScores[id]!.score!
     }
     
     private func resetComparisons() {
-        recommendedUpcomingComparisons = [(UInt64, UInt64)]()
+        recommendedUpcomingComparisons = [(MemoryId, MemoryId)]()
     }
 
-    func getIdsForComparison() -> [UInt64] {
+    func getIdsForComparison() -> [MemoryId] {
         let idTuple = recommendedUpcomingComparisons.removeFirst()
         if recommendedUpcomingComparisons.isEmpty {
             recommendComparisons()
@@ -181,7 +181,7 @@ class ELOManager {
         return [idTuple.0, idTuple.1]
     }
     
-    func createAndAddComparison(id1: UInt64, id2: UInt64, result: UInt64) {
+    func createAndAddComparison(id1: MemoryId, id2: MemoryId, result: MemoryId) {
         let comparison = Comparison(id1: id1, id2: id2, result: result, timestamp: nil)
         latestComparisonInfo.freshComparisons.append(comparison)
         latestComparisonInfo.freshIds.insert(id1)
@@ -196,15 +196,15 @@ class ELOManager {
     }
     
     // on import and from persistence layer
-    func initializeComparisons(candidateItems: [MPMediaItem]) {
+    func initializeComparisons(candidateItems: [PreferenceSetItem]) {
         for item in candidateItems {
-            addScore(item.persistentID, score: defaultScore)
+            addScore(item.memoryId, score: defaultScore)
         }
         recommendComparisons()
     }
     
     // from persistence layer only
-    func restoreComparisons(candidateComparisons: [Comparison], candidateScores: [UInt64: Double]) {
+    func restoreComparisons(candidateComparisons: [Comparison], candidateScores: [MemoryId: Double]) {
         for comparison in candidateComparisons {
             keyedPreferenceScores[comparison.id1]!.allTimeComparisons[comparison.timestamp] = comparison
             keyedPreferenceScores[comparison.id2]!.allTimeComparisons[comparison.timestamp] = comparison
@@ -226,8 +226,8 @@ class ELOManager {
         updateRatings()
     }
     
-    func getUpdatedSortedPreferenceScores() -> [(UInt64, Double)]{
-        var ret = [(UInt64, Double)]()
+    func getUpdatedSortedPreferenceScores() -> [(MemoryId, Double)]{
+        var ret = [(MemoryId, Double)]()
         for score in preferenceScores {
             ret.append((score.id!, score.score!))
         }
@@ -241,14 +241,14 @@ class ELOManager {
         return allTimeComparisons
     }
     
-    func getAllPreferenceScores() -> [UInt64: PreferenceScore] {
+    func getAllPreferenceScores() -> [MemoryId: PreferenceScore] {
         if latestComparisonInfo.freshComparisons.count > 0 {
             updateRatings()
         }
         return keyedPreferenceScores
     }
     
-    func getPreferenceScoreById(id: UInt64) -> PreferenceScore? {
+    func getPreferenceScoreById(id: MemoryId) -> PreferenceScore? {
         if latestComparisonInfo.freshComparisons.count > 0 {
             updateRatings()
         }
@@ -265,13 +265,13 @@ struct scoreFreshComparisonInfo {
 }
 
 class Comparison {
-    var id1: UInt64
-    var id2: UInt64
+    var id1: MemoryId
+    var id2: MemoryId
     var timestamp: NSDate
     // 0 indicates draw, otherwise the persistent id of the winning item
-    var result: UInt64
+    var result: MemoryId
     
-    init(id1: UInt64, id2: UInt64, result: UInt64, timestamp: NSDate?) {
+    init(id1: MemoryId, id2: MemoryId, result: MemoryId, timestamp: NSDate?) {
         self.id1 = id1
         self.id2 = id2
         self.result = result
@@ -280,18 +280,18 @@ class Comparison {
 }
 
 class PreferenceScore {
-    var id: UInt64?
+    var id: MemoryId?
     var score: Double?
     var totalComparisons = 0
     var allTimeComparisons = [NSDate: Comparison]()
     var latestComparisonInfo = scoreFreshComparisonInfo()
     
-    init (id: UInt64, score: Double) {
+    init (id: MemoryId, score: Double) {
         self.id = id
         self.score = score
     }
     
-    func updateLatestComparisonInfo(comparison: Comparison, opponentScore: Double, result: UInt64) {
+    func updateLatestComparisonInfo(comparison: Comparison, opponentScore: Double, result: MemoryId) {
         latestComparisonInfo.comparisonsSinceScoreUpdate += 1
         latestComparisonInfo.freshComparisons.append(comparison)
         latestComparisonInfo.scoresForFreshOpponents.append(opponentScore)
