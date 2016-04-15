@@ -27,6 +27,16 @@ protocol PreferenceSetItem {
 class ReferenceItemContainer {
     var mediaItem: MPMediaItem?
     var asset: PHAsset?
+    
+    func storageIds() -> (UInt64?, String?) {
+        var output: (UInt64?, String?)
+        if mediaItem != nil {
+            output = (mediaItem!.persistentID, nil)
+        } else if asset != nil {
+            output = (nil, asset!.localIdentifier)
+        }
+        return output
+    }
 }
 
 class iTunesPreferenceSetItem : PreferenceSetItem {
@@ -55,12 +65,11 @@ class iTunesPreferenceSetItem : PreferenceSetItem {
     func subtitleForTableDisplay() -> String {
         return (referenceItem.mediaItem!.albumArtist ?? "No Artist")
     }
-    
 }
 
 class photoMomentPreferenceSetItem : PreferenceSetItem {
     var referenceItem: ReferenceItemContainer
-    var memoryId: Int
+    var memoryId: MemoryId
     var storageId: String
     
     init(candidateItem: PHAsset, set: PreferenceSet) {
@@ -81,5 +90,4 @@ class photoMomentPreferenceSetItem : PreferenceSetItem {
     func subtitleForTableDisplay() -> String {
         return ""
     }
-    
 }

@@ -80,9 +80,28 @@ class PreferenceSetDataController : NSObject {
         return existingItems
     }
     
+    private func getFetchPredicateForPreferenceItem(referenceItem: ReferenceItemContainer) -> NSPredicate {
+        let potentialStorageIds = referenceItem.storageIds()
+        if potentialStorageIds.0 != nil {
+            return NSPredicate(format: "id == \(potentialStorageIds.0)")
+        } else if potentialStorageIds.1 != nil {
+            return NSPredicate(format: "stringId == \(potentialStorageIds.1)")
+        }
+    }
+    
+    // might want to return a success/failure condition here eventually
+    private func setStorageIdForPreferenceItemMO(item: PreferenceSetItem, managedItem: PreferenceSetItemMO) {
+        let potentialStorageIds = item.referenceItem.storageIds()
+        if potentialStorageIds.0 != nil {
+            managedItem.setValue(NSNumber(unsignedLongLong: potentialStorageIds.0!), forKey: "id")
+        } else if potentialStorageIds.1 != nil {
+            managedItem.setValue(potentialStorageIds.1!, forKey: "stringId")
+        }
+    }
+    
     // might be able to simplify fetchPSItem and fetchPSScore to run on common code
-    private func fetchPSItem(id: UInt64) -> PreferenceSetItemMO? {
-        let itemPredicate = NSPredicate(format: "id == \(id)")
+    private func fetchPSItem(item: PreferenceSetItem) -> PreferenceSetItemMO? {
+        let itemPredicate = getFetchPredicateForPreferenceItem(item.referenceItem)
         let item = self.fetcher("PreferenceSetItem", predicate: itemPredicate, sortDescriptor: nil, fetchLimit: 1) as? [PreferenceSetItemMO]
         
         if item != nil && item!.count > 0 {
@@ -92,10 +111,9 @@ class PreferenceSetDataController : NSObject {
     }
     
     private func fetchPSScore(id: UInt64) -> PreferenceScoreMO? {
-        // scores are relative to preferenceSet
-        let scorePredicate = NSPredicate(format: "%K==%@ AND %K == \(id)", argumentArray:["preferenceSet.title", activeSet!.title!, "preferenceSetItem.id"])
-        //NSPredicate(format: "%K == %@ AND %K == %@", argumentArray:["key1", "value1", "key2", "value2"])
-        let score = self.fetcher("PreferenceScore", predicate: scorePredicate, sortDescriptor: nil, fetchLimit: 1) as? [PreferenceScoreMO]
+       // scores are relative to preferenceSet
+       let scorePredicate = NSPredicate(format: "%K==%@ AND %K == \(id)", argumentArray:["preferenceSet.title", activeSet!.title!, "preferenceSetItem.id"])
+       let score = self.fetcher("PreferenceScore", predicate: scorePredicate, sortDescriptor: nil, fetchLimit: 1) as? [PreferenceScoreMO]
         
         if score != nil && score!.count > 0 {
             return score![0]
@@ -119,12 +137,11 @@ class PreferenceSetDataController : NSObject {
         managedSet.setValue(preferenceSet.preferenceSetType, forKey: "preferenceSetType")
         
         for item in preferenceSet.getAllItems() {
-            item.mediaItem.persistentID
-            var managedItem = self.fetchPSItem(item.mediaItem.persistentID)
+            var managedItem = self.fetchPSItem(item)
             if managedItem == nil {
                 // try recovery stuff here when recovery is implemented
                 managedItem = NSEntityDescription.insertNewObjectForEntityForName("PreferenceSetItem", inManagedObjectContext: self.managedObjectContext) as? PreferenceSetItemMO
-                managedItem!.setValue(NSNumber(unsignedLongLong: item.mediaItem.persistentID), forKey: "id")
+                setStorageIdForPreferenceItemMO(item, managedItem: managedItem!)
             }
             
             managedSet.addpreferenceSetItemObject(managedItem!)
@@ -208,6 +225,7 @@ class PreferenceSetMO: NSManagedObject {
 
 class PreferenceSetItemMO: NSManagedObject {
     @NSManaged var id: NSNumber?
+    @NSManaged var stringId: String?
     @NSManaged var recoveryProp1: String?
     @NSManaged var recoveryProp2: String?
     
