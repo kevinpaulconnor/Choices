@@ -32,29 +32,29 @@ class LoadExistingSetsTableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return savedSets!.count
     }
     
-    private struct Storyboard {
+    fileprivate struct Storyboard {
         static let CellReuseIdentifier = "ChooseSavedSetCell"
     }
 
-    private func candidateSetTitleForDisplay(indexPath: NSIndexPath) -> String {
+    fileprivate func candidateSetTitleForDisplay(_ indexPath: IndexPath) -> String {
         return savedSets![indexPath.row].title!
     }
     
-    private func candidateSetTypeForDisplay(indexPath: NSIndexPath) -> String {
+    fileprivate func candidateSetTypeForDisplay(_ indexPath: IndexPath) -> String {
         return savedSets![indexPath.row].preferenceSetType!
     }
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ChooseSavedSetCell", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ChooseSavedSetCell", for: indexPath)
 
         cell.textLabel?.text = self.candidateSetTitleForDisplay(indexPath)
         cell.detailTextLabel?.text = self.candidateSetTypeForDisplay(indexPath)
@@ -100,10 +100,10 @@ class LoadExistingSetsTableViewController: UITableViewController {
 
     // MARK: - Navigation
 
-   override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if ( segue.identifier == "chosenExistingSetToActivate") {
-            if let indexPath = tableView.indexPathForCell(sender as! UITableViewCell) {
-                let tabBarVC = segue.destinationViewController as! PreferencePickerTabBarViewController
+            if let indexPath = tableView.indexPath(for: sender as! UITableViewCell) {
+                let tabBarVC = segue.destination as! PreferencePickerTabBarViewController
                 tabBarVC.candidateMO = savedSets![indexPath.row]
             }
         }

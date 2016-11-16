@@ -15,7 +15,7 @@ class PreferenceSetTypeManager {
     static let types = [
         PreferenceSetTypeIds.iTunesPlaylist: iTunesPreferenceSetType(),
         PreferenceSetTypeIds.photoMoment: photoPreferenceSetType()
-    ]
+    ] as [String : Any]
     
     static func allPreferenceSetTypes() -> [PreferenceSetType] {
         var typeArray = [PreferenceSetType]()
@@ -25,7 +25,7 @@ class PreferenceSetTypeManager {
         return typeArray
     }
     
-    static func getSetType(psId: String) -> PreferenceSetType {
+    static func getSetType(_ psId: String) -> PreferenceSetType {
        return types[psId] as! PreferenceSetType
     }
     
@@ -54,11 +54,11 @@ protocol PreferenceSetType {
     var id: String { get }
     
     func getAvailableSetsForImport() -> [PreferenceSetItemCollection]
-    func displayNameForCandidateSet(candidateSet: PreferenceSetItemCollection) -> String
-    func itemDetailForDisplay(candidateSet:PreferenceSetItemCollection) -> String
-    func nameForItemsOfThisType(count: Int) -> String
-    func createPreferenceSet(candidateSet: PreferenceSetItemCollection, title: String) -> PreferenceSet
-    func createPreferenceItemCollectionFromMOs(managedSet: [PreferenceSetItemMO]) -> PreferenceSetItemCollection
+    func displayNameForCandidateSet(_ candidateSet: PreferenceSetItemCollection) -> String
+    func itemDetailForDisplay(_ candidateSet:PreferenceSetItemCollection) -> String
+    func nameForItemsOfThisType(_ count: Int) -> String
+    func createPreferenceSet(_ candidateSet: PreferenceSetItemCollection, title: String) -> PreferenceSet
+    func createPreferenceItemCollectionFromMOs(_ managedSet: [PreferenceSetItemMO]) -> PreferenceSetItemCollection
 }
 
 class iTunesPreferenceSetType: PreferenceSetType {
@@ -69,7 +69,7 @@ class iTunesPreferenceSetType: PreferenceSetType {
     
     func getAvailableSetsForImport() -> [PreferenceSetItemCollection] {
       var output = [PreferenceSetItemCollection]()
-        for collection in MPMediaQuery.playlistsQuery().collections! {
+        for collection in MPMediaQuery.playlists().collections! {
             let gc = PreferenceSetItemCollection()
             gc.mpmic = collection
             output.append(gc)
@@ -77,20 +77,20 @@ class iTunesPreferenceSetType: PreferenceSetType {
         return output
     }
     
-    func displayNameForCandidateSet(candidateSet: PreferenceSetItemCollection) -> String {
+    func displayNameForCandidateSet(_ candidateSet: PreferenceSetItemCollection) -> String {
         let playlist = candidateSet.mpmic as! MPMediaPlaylist
         return playlist.name!
     }
-    func itemDetailForDisplay(candidateSet: PreferenceSetItemCollection) -> String {
+    func itemDetailForDisplay(_ candidateSet: PreferenceSetItemCollection) -> String {
         let count = candidateSet.mpmic!.count
         return "\(count) \(self.nameForItemsOfThisType(count))"
     }
 
-    func nameForItemsOfThisType(count: Int) -> String {
+    func nameForItemsOfThisType(_ count: Int) -> String {
         return (count > 1 ? "songs" : "song")
     }
     
-    func createPreferenceSet(candidateSet: PreferenceSetItemCollection, title: String) -> PreferenceSet {
+    func createPreferenceSet(_ candidateSet: PreferenceSetItemCollection, title: String) -> PreferenceSet {
         var items: [MPMediaItem]
         if candidateSet.mpmic != nil {
             items = candidateSet.mpmic!.items
@@ -101,13 +101,13 @@ class iTunesPreferenceSetType: PreferenceSetType {
         return iTunesPlaylistPreferenceSet(candidateItems: items, title: title)
     }
     
-    func createPreferenceItemCollectionFromMOs(managedSet: [PreferenceSetItemMO]) -> PreferenceSetItemCollection {
-            let mediaItemArray = MPMediaQuery.songsQuery().items!
+    func createPreferenceItemCollectionFromMOs(_ managedSet: [PreferenceSetItemMO]) -> PreferenceSetItemCollection {
+            let mediaItemArray = MPMediaQuery.songs().items!
             let collection = PreferenceSetItemCollection()
             collection.mpmi = [MPMediaItem]()
             for mediaItem in mediaItemArray {
-                let castedId = NSNumber(unsignedLongLong: mediaItem.persistentID)
-                if managedSet.contains({$0.id! == castedId}) {
+                let castedId = NSNumber(value: mediaItem.persistentID as UInt64)
+                if managedSet.contains(where: {$0.id! == castedId}) {
                     collection.mpmi!.append(mediaItem)
                 }
             }
@@ -126,9 +126,9 @@ class photoPreferenceSetType: PreferenceSetType {
         var output = [PreferenceSetItemCollection]()
         
         // this is not the world's finest api, Apple
-        let request = PHCollectionList.fetchMomentListsWithSubtype(PHCollectionListSubtype.MomentListCluster, options: nil)
+        let request = PHCollectionList.fetchMomentLists(with: PHCollectionListSubtype.momentListCluster, options: nil)
         print("\(request.count)")
-        request.enumerateObjectsUsingBlock{(object: AnyObject!,
+        request.enumerateObjects{(object: AnyObject!,
             count: Int,
             stop: UnsafeMutablePointer<ObjCBool>) in
                 let collection = object as! PHCollectionList
@@ -140,26 +140,26 @@ class photoPreferenceSetType: PreferenceSetType {
         return output
     }
     
-    func displayNameForCandidateSet(candidateSet: PreferenceSetItemCollection) -> String {
+    func displayNameForCandidateSet(_ candidateSet: PreferenceSetItemCollection) -> String {
         return candidateSet.phcl!.localizedTitle ?? "(No Title Available)"
     }
     
-    func itemDetailForDisplay(candidateSet: PreferenceSetItemCollection) -> String {
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = NSDateFormatterStyle.ShortStyle
-        dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle
-        return ("\(dateFormatter.stringFromDate(candidateSet.phcl!.startDate!)) - \(dateFormatter.stringFromDate(candidateSet.phcl!.endDate!))")
+    func itemDetailForDisplay(_ candidateSet: PreferenceSetItemCollection) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = DateFormatter.Style.short
+        dateFormatter.timeStyle = DateFormatter.Style.short
+        return ("\(dateFormatter.string(from: candidateSet.phcl!.startDate!)) - \(dateFormatter.string(from: candidateSet.phcl!.endDate!))")
     }
     
-    func nameForItemsOfThisType(count: Int) -> String {
+    func nameForItemsOfThisType(_ count: Int) -> String {
         return (count > 1 ? "photos" : "photo")
     }
     
-    func createPreferenceSet(candidateSet: PreferenceSetItemCollection, title: String) -> PreferenceSet {
+    func createPreferenceSet(_ candidateSet: PreferenceSetItemCollection, title: String) -> PreferenceSet {
         return iTunesPlaylistPreferenceSet(candidateItems: [MPMediaItem](), title: "title")
     }
     
-    func createPreferenceItemCollectionFromMOs(managedSet: [PreferenceSetItemMO]) -> PreferenceSetItemCollection {
+    func createPreferenceItemCollectionFromMOs(_ managedSet: [PreferenceSetItemMO]) -> PreferenceSetItemCollection {
         return PreferenceSetItemCollection()
     }
 }

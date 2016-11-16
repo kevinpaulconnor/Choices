@@ -32,24 +32,24 @@ class DisplayPreferenceSetTypesTableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return types!.count
     }
 
-    private struct Storyboard {
+    fileprivate struct Storyboard {
         static let CellReuseIdentifier = "PreferenceSetType"
     }
     
-    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.backgroundColor = PreferenceSetTypeColors.getBGColorForTableCell(types![indexPath.row].id)
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(Storyboard.CellReuseIdentifier, forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: Storyboard.CellReuseIdentifier, for: indexPath)
         
         cell.textLabel?.text = types![indexPath.row].description
 
@@ -94,10 +94,10 @@ class DisplayPreferenceSetTypesTableViewController: UITableViewController {
     
     // MARK: - Navigation
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if ( segue.identifier == "ChooseImportType") {
-            if let indexPath = tableView.indexPathForCell(sender as! UITableViewCell) {
-                let preferenceSetVC = segue.destinationViewController as! DisplayCandidatePreferenceSetsTableViewController
+            if let indexPath = tableView.indexPath(for: sender as! UITableViewCell) {
+                let preferenceSetVC = segue.destination as! DisplayCandidatePreferenceSetsTableViewController
                 preferenceSetVC.title = types![indexPath.row].description
                 preferenceSetVC.preferenceSetType = types![indexPath.row]
             }

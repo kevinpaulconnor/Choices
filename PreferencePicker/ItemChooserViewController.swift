@@ -17,7 +17,7 @@ class iTunesItemChooserViewController : ItemChooserViewController {
     @IBOutlet weak var albumArt: UIImageView!
     @IBOutlet weak var songTitle: UILabel!
     @IBOutlet weak var artist: UILabel!
-    @IBAction func playPause(sender: UIButton) {
+    @IBAction func playPause(_ sender: UIButton) {
         self.playPause()
     }
     
@@ -33,7 +33,7 @@ class iTunesItemChooserViewController : ItemChooserViewController {
         
         let imageSize = CGSize(width: albumArt.bounds.width, height: albumArt.bounds.width)
         if let artwork = self.mediaItem!.artwork {
-            albumArt.image = artwork.imageWithSize(imageSize)
+            albumArt.image = artwork.image(at: imageSize)
         }
         songTitle.text = self.item!.titleForTableDisplay()
         artist.text = self.item!.subtitleForTableDisplay()
@@ -44,13 +44,13 @@ class iTunesItemChooserViewController : ItemChooserViewController {
         var myItemLoaded = true
         if player!.nowPlayingItem != self.mediaItem {
             itemCollection = MPMediaItemCollection(items: [self.mediaItem!])
-            player!.setQueueWithItemCollection(itemCollection!)
+            player!.setQueue(with: itemCollection!)
             myItemLoaded = false
         }
         switch player!.playbackState {
-        case .Stopped, .Paused:
+        case .stopped, .paused:
             player!.play()
-        case .Playing:
+        case .playing:
             if myItemLoaded {
                 player!.pause()
             } else {

@@ -14,7 +14,7 @@ class DisplayScoresTableViewController: UITableViewController {
     var preferenceScores: [(MemoryId, Double)]?
     
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         preferenceScores = activeSet!.returnSortedPreferenceScores()
         self.table.reloadData()
@@ -31,20 +31,20 @@ class DisplayScoresTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    private struct Storyboard {
+    fileprivate struct Storyboard {
         static let CellReuseIdentifier = "PreferenceScoreCell"
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return preferenceScores!.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(Storyboard.CellReuseIdentifier, forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: Storyboard.CellReuseIdentifier, for: indexPath)
         let scoreTuple = preferenceScores![indexPath.row]
         let item = activeSet!.getItemById(scoreTuple.0)
         cell.textLabel?.text = item!.titleForTableDisplay()

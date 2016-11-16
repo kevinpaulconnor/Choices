@@ -44,7 +44,7 @@ class iTunesPreferenceSetItem : PreferenceSetItem {
     var memoryId: MemoryId
     var storageId: MPMediaEntityPersistentID
     var title: String
-    var songLength: NSTimeInterval
+    var songLength: TimeInterval
     
     init(candidateItem: MPMediaItem, set: PreferenceSet) {
         referenceItem = ReferenceItemContainer()
@@ -81,10 +81,10 @@ class photoMomentPreferenceSetItem : PreferenceSetItem {
     // need to think more about how the UI should work for table view images
     // for these title and subtitle methods
     func titleForTableDisplay() -> String {
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = NSDateFormatterStyle.ShortStyle
-        dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle
-        return (dateFormatter.stringFromDate(referenceItem.asset!.creationDate!) ?? "No Title")
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = DateFormatter.Style.short
+        dateFormatter.timeStyle = DateFormatter.Style.short
+        return (dateFormatter.string(from: referenceItem.asset!.creationDate!) ?? "No Title")
     }
     
     func subtitleForTableDisplay() -> String {

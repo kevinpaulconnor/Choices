@@ -18,39 +18,39 @@ class PreferenceSetDataController : NSObject {
     var activeItems: [Int: PreferenceSetItemMO]?
     
     override init() {
-        self.managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
+        self.managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         //self.activeSet = PreferenceSetMO()
         //self.activeItems = self.getAllSavedItems()
         super.init()
         
-        guard let modelURL = NSBundle.mainBundle().URLForResource("PreferenceSet", withExtension:"momd") else {
+        guard let modelURL = Bundle.main.url(forResource: "PreferenceSet", withExtension:"momd") else {
             fatalError("Error loading model from bundle")
         }
         // The managed object model for the application. It is a fatal error for the application not to be able to find and load its model.
-        guard let mom = NSManagedObjectModel(contentsOfURL: modelURL) else {
+        guard let mom = NSManagedObjectModel(contentsOf: modelURL) else {
             fatalError("Error initializing mom from: \(modelURL)")
         }
         let psc = NSPersistentStoreCoordinator(managedObjectModel: mom)
 
         self.managedObjectContext.persistentStoreCoordinator = psc
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
-            let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.background).async {
+            let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
             let docURL = urls[urls.endIndex-1]
             /* The directory the application uses to store the Core Data store file.
             This code uses a file named "PreferenceSetDataModel.sqlite" in the application's documents directory.
             */
-            let storeURL = docURL.URLByAppendingPathComponent("PreferenceSetDataModel.sqlite")
+            let storeURL = docURL.appendingPathComponent("PreferenceSetDataModel.sqlite")
             do {
-                try psc.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL, options: nil)
+                try psc.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storeURL, options: nil)
             } catch {
                 fatalError("Error migrating store: \(error)")
             }
         }
     }
     
-    private func fetcher(entityName: String, predicate: NSPredicate?, sortDescriptor: NSSortDescriptor?, fetchLimit: Int?) -> [AnyObject] {
+    fileprivate func fetcher(_ entityName: String, predicate: NSPredicate?, sortDescriptor: NSSortDescriptor?, fetchLimit: Int?) -> [AnyObject] {
         let moc = self.managedObjectContext
-        let fetchRequest = NSFetchRequest(entityName: entityName)
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
         if predicate != nil {
             fetchRequest.predicate = predicate!
         }
@@ -61,8 +61,8 @@ class PreferenceSetDataController : NSObject {
             fetchRequest.fetchLimit = fetchLimit!
         }
         do {
-            let fetched = try moc.executeFetchRequest(fetchRequest)
-            return fetched
+            let fetched = try moc.fetch(fetchRequest)
+            return fetched as [AnyObject]
         } catch {
             fatalError("Failed to fetch \(entityName): \(error)")
         }
@@ -72,7 +72,7 @@ class PreferenceSetDataController : NSObject {
         return self.fetcher("PreferenceSet", predicate: nil, sortDescriptor: nil, fetchLimit: nil) as! [PreferenceSetMO]
     }
     
-    private func getAllSavedPSItems() -> [PreferenceSetItemMO] {
+    fileprivate func getAllSavedPSItems() -> [PreferenceSetItemMO] {
         var existingItems = self.fetcher("PreferenceSetItem", predicate: nil, sortDescriptor: nil, fetchLimit: nil) as! [PreferenceSetItemMO]
         if existingItems.count == 0 {
             existingItems = [PreferenceSetItemMO()]
@@ -80,7 +80,7 @@ class PreferenceSetDataController : NSObject {
         return existingItems
     }
     
-    private func getFetchPredicateForPreferenceItem(referenceItem: ReferenceItemContainer) -> NSPredicate {
+    fileprivate func getFetchPredicateForPreferenceItem(_ referenceItem: ReferenceItemContainer) -> NSPredicate {
         let potentialStorageIds = referenceItem.storageIds()
         if potentialStorageIds.0 != nil {
             return NSPredicate(format: "id == \(potentialStorageIds.0)")
@@ -90,17 +90,17 @@ class PreferenceSetDataController : NSObject {
     }
     
     // might want to return a success/failure condition here eventually
-    private func setStorageIdForPreferenceItemMO(item: PreferenceSetItem, managedItem: PreferenceSetItemMO) {
+    fileprivate func setStorageIdForPreferenceItemMO(_ item: PreferenceSetItem, managedItem: PreferenceSetItemMO) {
         let potentialStorageIds = item.referenceItem.storageIds()
         if potentialStorageIds.0 != nil {
-            managedItem.setValue(NSNumber(unsignedLongLong: potentialStorageIds.0!), forKey: "id")
+            managedItem.setValue(NSNumber(value: potentialStorageIds.0! as UInt64), forKey: "id")
         } else if potentialStorageIds.1 != nil {
             managedItem.setValue(potentialStorageIds.1!, forKey: "stringId")
         }
     }
     
     // might be able to simplify fetchPSItem and fetchPSScore to run on common code
-    private func fetchPSItem(item: PreferenceSetItem) -> PreferenceSetItemMO? {
+    fileprivate func fetchPSItem(_ item: PreferenceSetItem) -> PreferenceSetItemMO? {
         let itemPredicate = getFetchPredicateForPreferenceItem(item.referenceItem)
         let item = self.fetcher("PreferenceSetItem", predicate: itemPredicate, sortDescriptor: nil, fetchLimit: 1) as? [PreferenceSetItemMO]
         
@@ -110,7 +110,7 @@ class PreferenceSetDataController : NSObject {
         return nil
     }
     
-    private func fetchPSScore(id: UInt64) -> PreferenceScoreMO? {
+    fileprivate func fetchPSScore(_ id: UInt64) -> PreferenceScoreMO? {
        // scores are relative to preferenceSet
        let scorePredicate = NSPredicate(format: "%K==%@ AND %K == \(id)", argumentArray:["preferenceSet.title", activeSet!.title!, "preferenceSetItem.id"])
        let score = self.fetcher("PreferenceScore", predicate: scorePredicate, sortDescriptor: nil, fetchLimit: 1) as? [PreferenceScoreMO]
@@ -121,7 +121,7 @@ class PreferenceSetDataController : NSObject {
         return nil
     }
     
-    private func fetchNewestSavedComparison() -> ComparisonMO? {
+    fileprivate func fetchNewestSavedComparison() -> ComparisonMO? {
         let comparisonPredicate = NSPredicate(format: "%K == %@", "preferenceSet.title", activeSet!.title!)
         let latestDateSortDescriptor = NSSortDescriptor(key: "timestamp", ascending: false)
         let comparison = self.fetcher("Comparison", predicate: comparisonPredicate, sortDescriptor: latestDateSortDescriptor, fetchLimit: 1) as? [ComparisonMO]
@@ -131,8 +131,8 @@ class PreferenceSetDataController : NSObject {
         return nil
     }
     
-    func createSetMO (preferenceSet: PreferenceSet) {
-        let managedSet = NSEntityDescription.insertNewObjectForEntityForName("PreferenceSet", inManagedObjectContext: self.managedObjectContext) as! PreferenceSetMO
+    func createSetMO (_ preferenceSet: PreferenceSet) {
+        let managedSet = NSEntityDescription.insertNewObject(forEntityName: "PreferenceSet", into: self.managedObjectContext) as! PreferenceSetMO
         managedSet.setValue(preferenceSet.title, forKey: "title")
         managedSet.setValue(preferenceSet.preferenceSetType, forKey: "preferenceSetType")
         
@@ -140,15 +140,15 @@ class PreferenceSetDataController : NSObject {
             var managedItem = self.fetchPSItem(item)
             if managedItem == nil {
                 // try recovery stuff here when recovery is implemented
-                managedItem = NSEntityDescription.insertNewObjectForEntityForName("PreferenceSetItem", inManagedObjectContext: self.managedObjectContext) as? PreferenceSetItemMO
+                managedItem = NSEntityDescription.insertNewObject(forEntityName: "PreferenceSetItem", into: self.managedObjectContext) as? PreferenceSetItemMO
                 setStorageIdForPreferenceItemMO(item, managedItem: managedItem!)
             }
             
             managedSet.addpreferenceSetItemObject(managedItem!)
             managedItem!.addpreferenceSetObject(managedSet)
         
-            let managedScore = NSEntityDescription.insertNewObjectForEntityForName("PreferenceScore", inManagedObjectContext: self.managedObjectContext) as? PreferenceScoreMO
-            managedScore!.setValue(NSNumber(double: preferenceSet.scoreManager.defaultScore), forKey: "score")
+            let managedScore = NSEntityDescription.insertNewObject(forEntityName: "PreferenceScore", into: self.managedObjectContext) as? PreferenceScoreMO
+            managedScore!.setValue(NSNumber(value: preferenceSet.scoreManager.defaultScore as Double), forKey: "score")
             
             managedItem!.addpreferenceScoreObject(managedScore!)
             managedSet.addpreferenceScoreObject(managedScore!)
@@ -159,11 +159,11 @@ class PreferenceSetDataController : NSObject {
         self.activeSet = managedSet
     }
  
-    func updateActiveSetMO(set: PreferenceSetMO) {
+    func updateActiveSetMO(_ set: PreferenceSetMO) {
         self.activeSet = set
     }
     
-    func updateSetMO(preferenceSet: PreferenceSet) {
+    func updateSetMO(_ preferenceSet: PreferenceSet) {
         print("updatingset")
         if activeSet != nil {
             if activeSet!.title == preferenceSet.title {
@@ -173,13 +173,13 @@ class PreferenceSetDataController : NSObject {
                 for comparison in preferenceSet.getAllComparisons() {
                     // oof for timeIntervalSince1970. But at least it's human-readable in the if block.
                     if newestSavedComparison == nil || (comparison.0.timeIntervalSince1970 > newestSavedComparison!.timestamp!.timeIntervalSince1970) {
-                        let managedComparison = NSEntityDescription.insertNewObjectForEntityForName("Comparison", inManagedObjectContext: self.managedObjectContext) as! ComparisonMO
+                        let managedComparison = NSEntityDescription.insertNewObject(forEntityName: "Comparison", into: self.managedObjectContext) as! ComparisonMO
                         managedComparison.setValue(comparison.0, forKey: "timestamp")
-                        managedComparison.setValue(NSNumber(unsignedLongLong: comparison.1.result), forKey: "result")
+                        managedComparison.setValue(NSNumber(value: UInt64(comparison.1.result)), forKey: "result")
 
                         activeSet!.addcomparisonObject(managedComparison)                        
-                        let managedItem1 = fetchPSItem(comparison.1.id1)
-                        let managedItem2 = fetchPSItem(comparison.1.id2)
+                        let managedItem1 = fetchPSItem(comparison.1.id1 as! PreferenceSetItem)
+                        let managedItem2 = fetchPSItem(comparison.1.id2 as! PreferenceSetItem)
                         managedComparison.addpreferenceSetItemObject(managedItem1!)
                         managedComparison.addpreferenceSetItemObject(managedItem2!)
                         managedItem1!.addcomparisonObject(managedComparison)
@@ -189,8 +189,8 @@ class PreferenceSetDataController : NSObject {
                 
                 // fetch preferenceScores from preference set and update with latest score
                 for score in preferenceSet.getAllPreferenceScores() {
-                    let scoreMO = fetchPSScore(score.0)
-                    scoreMO!.setValue(NSNumber(double: score.1.score!), forKey:"score")
+                    let scoreMO = fetchPSScore(UInt64(score.0))
+                    scoreMO!.setValue(NSNumber(value: score.1.score!), forKey:"score")
                 }
             } else {
                 //throw some kind of error
@@ -218,9 +218,9 @@ class PreferenceSetMO: NSManagedObject {
     
     // makes me nuts that relationships have to begin with lowercase
     // but the model enforces that. I blame objective C.
-    @NSManaged func addpreferenceSetItemObject(value:PreferenceSetItemMO)
-    @NSManaged func addpreferenceScoreObject(value: PreferenceScoreMO)
-    @NSManaged func addcomparisonObject(value: ComparisonMO)
+    @NSManaged func addpreferenceSetItemObject(_ value:PreferenceSetItemMO)
+    @NSManaged func addpreferenceScoreObject(_ value: PreferenceScoreMO)
+    @NSManaged func addcomparisonObject(_ value: ComparisonMO)
 }
 
 class PreferenceSetItemMO: NSManagedObject {
@@ -229,9 +229,9 @@ class PreferenceSetItemMO: NSManagedObject {
     @NSManaged var recoveryProp1: String?
     @NSManaged var recoveryProp2: String?
     
-    @NSManaged func addpreferenceSetObject(value: PreferenceSetMO)
-    @NSManaged func addpreferenceScoreObject(value: PreferenceScoreMO)
-    @NSManaged func addcomparisonObject(value: ComparisonMO)
+    @NSManaged func addpreferenceSetObject(_ value: PreferenceSetMO)
+    @NSManaged func addpreferenceScoreObject(_ value: PreferenceScoreMO)
+    @NSManaged func addcomparisonObject(_ value: ComparisonMO)
 
 }
 
@@ -243,10 +243,10 @@ class PreferenceScoreMO: NSManagedObject {
 
 class ComparisonMO: NSManagedObject {
     @NSManaged var result: NSNumber?
-    @NSManaged var timestamp: NSDate?
+    @NSManaged var timestamp: Date?
     @NSManaged var preferenceSetItem: NSSet?
     
-    @NSManaged func addpreferenceSetObject(value: PreferenceSetMO)
-    @NSManaged func addpreferenceSetItemObject(value:PreferenceSetItemMO)
+    @NSManaged func addpreferenceSetObject(_ value: PreferenceSetMO)
+    @NSManaged func addpreferenceSetItemObject(_ value:PreferenceSetItemMO)
 
 }

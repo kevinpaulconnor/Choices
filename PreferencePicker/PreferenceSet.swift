@@ -29,17 +29,17 @@ protocol PreferenceSet {
     var scoreManager: ELOManager { get set }
     func itemCount() -> Int
     func getItemsForComparison() -> [PreferenceSetItem]
-    func getItemByIndex(index: Int) -> PreferenceSetItem
+    func getItemByIndex(_ index: Int) -> PreferenceSetItem
     func getNextMemoryId() -> Int
     func getAllItems() -> [PreferenceSetItem]
-    func registerComparison(id1: MemoryId, id2: MemoryId, result: MemoryId)
+    func registerComparison(_ id1: MemoryId, id2: MemoryId, result: MemoryId)
     func updateRatings()
     func returnSortedPreferenceScores() -> [(MemoryId, Double)]
-    func getItemById(id: MemoryId) -> PreferenceSetItem?
-    func getPreferenceScoreById(id: MemoryId) -> PreferenceScore?
-    func getAllComparisons() -> [NSDate: Comparison]
+    func getItemById(_ id: MemoryId) -> PreferenceSetItem?
+    func getPreferenceScoreById(_ id: MemoryId) -> PreferenceScore?
+    func getAllComparisons() -> [Date: Comparison]
     func getAllPreferenceScores() -> [MemoryId: PreferenceScore]
-    func restoreScoreManagerScores(candidateComparisons: [Comparison], candidateScores: [MemoryId: Double])
+    func restoreScoreManagerScores(_ candidateComparisons: [Comparison], candidateScores: [MemoryId: Double])
 }
 
 // PreferenceSetBase holds common logic for determining
@@ -49,11 +49,11 @@ class PreferenceSetBase : PreferenceSet {
     var title = String()
     var preferenceSetType = String()
     static var appDelegate =
-    UIApplication.sharedApplication().delegate as? AppDelegate
+    UIApplication.shared.delegate as? AppDelegate
     var scoreManager = ELOManager()
-    private var items = [PreferenceSetItem]()
-    private var keyedItems = [MemoryId : PreferenceSetItem]()
-    private var memoryId = 0
+    fileprivate var items = [PreferenceSetItem]()
+    fileprivate var keyedItems = [MemoryId : PreferenceSetItem]()
+    fileprivate var memoryId = 0
     
     init(title: String) {
         self.title = title
@@ -68,7 +68,7 @@ class PreferenceSetBase : PreferenceSet {
         return [keyedItems[ids[0]]!, keyedItems[ids[1]]!]
     }
     
-    func getItemByIndex(index: Int) -> PreferenceSetItem {
+    func getItemByIndex(_ index: Int) -> PreferenceSetItem {
         return items[index]
     }
     
@@ -78,7 +78,7 @@ class PreferenceSetBase : PreferenceSet {
         return ret
     }
     
-    func getItemById(id: MemoryId) -> PreferenceSetItem? {
+    func getItemById(_ id: MemoryId) -> PreferenceSetItem? {
         return keyedItems[id]
     }
     
@@ -86,19 +86,19 @@ class PreferenceSetBase : PreferenceSet {
         return items
     }
     
-    func registerComparison(id1: MemoryId, id2: MemoryId, result: MemoryId) {
+    func registerComparison(_ id1: MemoryId, id2: MemoryId, result: MemoryId) {
         self.scoreManager.createAndAddComparison(id1, id2: id2, result: result)
     }
     
-    func getAllComparisons() -> [NSDate: Comparison] {
-        return self.scoreManager.getAllComparisons()
+    func getAllComparisons() -> [Date: Comparison] {
+        return self.scoreManager.getAllComparisons() as [Date : Comparison]
     }
     
     func getAllPreferenceScores() -> [MemoryId: PreferenceScore] {
         return self.scoreManager.getAllPreferenceScores()
     }
     
-    func getPreferenceScoreById(id: MemoryId) -> PreferenceScore? {
+    func getPreferenceScoreById(_ id: MemoryId) -> PreferenceScore? {
         return self.scoreManager.getPreferenceScoreById(id)
     }
     
@@ -113,7 +113,7 @@ class PreferenceSetBase : PreferenceSet {
         return self.scoreManager.getUpdatedSortedPreferenceScores()
     }
  
-    func restoreScoreManagerScores(candidateComparisons: [Comparison], candidateScores: [MemoryId: Double]) {
+    func restoreScoreManagerScores(_ candidateComparisons: [Comparison], candidateScores: [MemoryId: Double]) {
         scoreManager.restoreComparisons(candidateComparisons, candidateScores: candidateScores)
     }
     
@@ -124,32 +124,32 @@ class PreferenceSetBase : PreferenceSet {
     // not crazy about how these build* methods wound up...
     // among other things, they will be fragile as MemoryId typedef changes
     // decided to live with it for now
-    static func buildComparisonArrayFromMOs(managedComparisons: [ComparisonMO]) -> [Comparison] {
+    static func buildComparisonArrayFromMOs(_ managedComparisons: [ComparisonMO]) -> [Comparison] {
         var comparisons = [Comparison]()
         for managedComparison in managedComparisons {
             let items = managedComparison.preferenceSetItem!.allObjects as! [PreferenceSetItemMO]
-            comparisons.append(Comparison(id1: items[0].id!.integerValue, id2: items[1].id!.integerValue, result: managedComparison.result!.integerValue, timestamp: managedComparison.timestamp!))
+            comparisons.append(Comparison(id1: items[0].id!.intValue, id2: items[1].id!.intValue, result: managedComparison.result!.intValue, timestamp: managedComparison.timestamp!))
         }
         return comparisons
     }
     
-    static func buildScoreArrayFromMOs(managedScores: [PreferenceScoreMO]) -> [MemoryId: Double] {
+    static func buildScoreArrayFromMOs(_ managedScores: [PreferenceScoreMO]) -> [MemoryId: Double] {
         var output = [MemoryId: Double]()
         for managedScore in managedScores {
-            output[managedScore.preferenceSetItem!.id!.integerValue] = managedScore.score!.doubleValue
+            output[managedScore.preferenceSetItem!.id!.intValue] = managedScore.score!.doubleValue
         }
         return output
     }
     
-    static func updateActiveSetForModel(setMO: PreferenceSetMO) {
+    static func updateActiveSetForModel(_ setMO: PreferenceSetMO) {
         appDelegate!.dataController!.updateActiveSetMO(setMO)
     }
     
-    static func create(preferenceSet: PreferenceSet) {
+    static func create(_ preferenceSet: PreferenceSet) {
         appDelegate!.dataController!.createSetMO(preferenceSet)
     }
     
-    static func update(preferenceSet: PreferenceSet) {
+    static func update(_ preferenceSet: PreferenceSet) {
         appDelegate!.dataController!.updateSetMO(preferenceSet)
     }
     

@@ -12,7 +12,7 @@ import MediaPlayer
 class ChoosePreferenceViewController: UIViewController {
     @IBOutlet weak var topItemView: UIView!
     @IBOutlet weak var bottomItemView: UIView!
-    @IBAction func aboutTheSame(sender: UIButton) {
+    @IBAction func aboutTheSame(_ sender: UIButton) {
         sendComparison(0)
         self.reset()
     }
@@ -38,14 +38,14 @@ class ChoosePreferenceViewController: UIViewController {
         self.setSwipeOnItemViews(bottomItemView)
     }
     
-    func setSwipeOnItemViews(view: UIView) {
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
-        swipeRight.direction = UISwipeGestureRecognizerDirection.Right
+    func setSwipeOnItemViews(_ view: UIView) {
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(ChoosePreferenceViewController.respondToSwipeGesture(_:)))
+        swipeRight.direction = UISwipeGestureRecognizerDirection.right
         view.addGestureRecognizer(swipeRight)
     }
     
     
-    func respondToSwipeGesture(gesture: UIGestureRecognizer) {
+    func respondToSwipeGesture(_ gesture: UIGestureRecognizer) {
         if let swipeGesture = gesture as? UISwipeGestureRecognizer {
             var id = topItem!.memoryId
             if gesture.view!.tag == bottomItemView.tag {
@@ -58,7 +58,7 @@ class ChoosePreferenceViewController: UIViewController {
     }
     
     // hate 0 for draw as magic number, to-do find a good spot to un-magic it
-    func sendComparison(winningItemId: MemoryId) {
+    func sendComparison(_ winningItemId: MemoryId) {
         let id1 = topItem!.memoryId
         let id2 = bottomItem!.memoryId
         activeSet!.registerComparison(id1, id2: id2, result: winningItemId)
@@ -90,25 +90,25 @@ class ChoosePreferenceViewController: UIViewController {
         bottomViewController = self.setContainerView(bottomItemView, tag: 2, item: bottomItem!)
     }
     
-    private struct vcGenerators {
+    fileprivate struct vcGenerators {
         static let music = {(myVC: ChoosePreferenceViewController) -> UIViewController in
-                return myVC.storyboard?.instantiateViewControllerWithIdentifier("iTunesItemController") as! iTunesItemChooserViewController
+                return myVC.storyboard?.instantiateViewController(withIdentifier: "iTunesItemController") as! iTunesItemChooserViewController
         }
     }
     
-    func setContainerView(containerView: UIView, tag: Int, item: PreferenceSetItem) -> ItemChooserViewController {
+    func setContainerView(_ containerView: UIView, tag: Int, item: PreferenceSetItem) -> ItemChooserViewController {
         let itemViewController = self.chooserItemControllersByPreferenceSetType() as! ItemChooserViewController
         itemViewController.item = item
         self.addChildViewController(itemViewController)
-        itemViewController.view.frame = CGRectMake(0, 0, containerView.frame.size.width, containerView.frame.size.height)
+        itemViewController.view.frame = CGRect(x: 0, y: 0, width: containerView.frame.size.width, height: containerView.frame.size.height)
         containerView.tag = tag
         containerView.addSubview(itemViewController.view)
-        itemViewController.didMoveToParentViewController(self)
+        itemViewController.didMove(toParentViewController: self)
         return itemViewController
     }
     
     // preference set type tells the view what kind of view controllers to load
-    private func chooserItemControllersByPreferenceSetType () -> (UIViewController) {
+    fileprivate func chooserItemControllersByPreferenceSetType () -> (UIViewController) {
         var controllerIdentifier: UIViewController?
         switch activeSet!.preferenceSetType {
         case PreferenceSetTypeIds.iTunesPlaylist:

@@ -30,36 +30,36 @@ class DisplayCandidatePreferenceSetsTableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return candidateSets.count
     }
 
-    private struct Storyboard {
+    fileprivate struct Storyboard {
         static let CellReuseIdentifier = "ChooseSetCell"
     }
     
-    private func candidateSetTitleForDisplay(indexPath: NSIndexPath) -> String {
+    fileprivate func candidateSetTitleForDisplay(_ indexPath: IndexPath) -> String {
         return preferenceSetType!.displayNameForCandidateSet(candidateSets[indexPath.row])
     }
     
-    private func candidateSetItemDetailForDisplay(indexPath: NSIndexPath) -> String {
+    fileprivate func candidateSetItemDetailForDisplay(_ indexPath: IndexPath) -> String {
         return preferenceSetType!.itemDetailForDisplay(candidateSets[indexPath.row])
         //let count = preferenceSetType!.count(candidateSets[indexPath.row])
         //return "\(count) \(preferenceSetType!.nameForItemsOfThisType(count))"
     }
     
-    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.backgroundColor = PreferenceSetTypeColors.getBGColorForTableCell(preferenceSetType!.id)
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(Storyboard.CellReuseIdentifier, forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: Storyboard.CellReuseIdentifier, for: indexPath)
         
         cell.textLabel?.text = self.candidateSetTitleForDisplay(indexPath)
         cell.detailTextLabel?.text = self.candidateSetItemDetailForDisplay(indexPath)
@@ -104,10 +104,10 @@ class DisplayCandidatePreferenceSetsTableViewController: UITableViewController {
     
     // MARK: - Navigation
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if ( segue.identifier == "ImportSetPopover") {
-            if let indexPath = tableView.indexPathForCell(sender as! UITableViewCell) {
-                let importController = segue.destinationViewController as! ImportSetViewController
+            if let indexPath = tableView.indexPath(for: sender as! UITableViewCell) {
+                let importController = segue.destination as! ImportSetViewController
                 importController.candidateSetTitle = self.candidateSetTitleForDisplay(indexPath)
                 importController.candidateSetItemCount = self.candidateSetItemDetailForDisplay(indexPath)
                 importController.candidateSet = self.candidateSets[indexPath.row]

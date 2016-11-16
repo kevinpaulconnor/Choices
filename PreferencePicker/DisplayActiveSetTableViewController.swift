@@ -28,30 +28,30 @@ class DisplayActiveSetTableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //let count = (activeSet ?? activeSet.items.count)
         return (activeSet != nil ? activeSet!.itemCount() : 0)
     }
     
-    private struct Storyboard {
+    fileprivate struct Storyboard {
         static let CellReuseIdentifier = "ChooseActiveSetCell"
     }
     
-    private func activeItemTitleForDisplay(indexPath: NSIndexPath) -> String {
+    fileprivate func activeItemTitleForDisplay(_ indexPath: IndexPath) -> String {
         return activeSet!.getItemByIndex(indexPath.row).titleForTableDisplay()
     }
     
-    private func activeItemSubtitleForTableDisplay(indexPath: NSIndexPath) -> String {
+    fileprivate func activeItemSubtitleForTableDisplay(_ indexPath: IndexPath) -> String {
         return activeSet!.getItemByIndex(indexPath.row).subtitleForTableDisplay()
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(Storyboard.CellReuseIdentifier, forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: Storyboard.CellReuseIdentifier, for: indexPath)
         
         cell.textLabel?.text = self.activeItemTitleForDisplay(indexPath)
         cell.detailTextLabel?.text = self.activeItemSubtitleForTableDisplay(indexPath)

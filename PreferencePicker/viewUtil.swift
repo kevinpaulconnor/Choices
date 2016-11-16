@@ -12,7 +12,7 @@ import UIKit
 // storage for view util methods that might be necessary
 // globally
 struct PreferenceSetTypeColors {
-    static func getBGColorForTableCell(type: String) -> UIColor {
+    static func getBGColorForTableCell(_ type: String) -> UIColor {
         var color = UIColor()
         switch type {
         case PreferenceSetTypeIds.iTunesPlaylist:

@@ -13,7 +13,7 @@ class SetLoaderViewController: UIViewController {
     @IBOutlet weak var currentSetLabel: UILabel!
     
     var activeSet: PreferenceSet?
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if activeSet != nil {
             currentSetLabel.text = activeSet!.title
