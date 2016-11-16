@@ -128,15 +128,15 @@ class photoPreferenceSetType: PreferenceSetType {
         // this is not the world's finest api, Apple
         let request = PHCollectionList.fetchMomentLists(with: PHCollectionListSubtype.momentListCluster, options: nil)
         print("\(request.count)")
-        request.enumerateObjects{(object: AnyObject!,
+        request.enumerateObjects({(object: AnyObject!,
             count: Int,
             stop: UnsafeMutablePointer<ObjCBool>) in
-                let collection = object as! PHCollectionList
-                let gc = PreferenceSetItemCollection()
-                gc.phcl = collection
-                output.append(gc)
-
-        }
+            let collection = object as! PHCollectionList
+            let gc = PreferenceSetItemCollection()
+            gc.phcl = collection
+            output.append(gc)
+            
+        })
         return output
     }
     

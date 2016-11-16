@@ -84,7 +84,7 @@ class photoMomentPreferenceSetItem : PreferenceSetItem {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = DateFormatter.Style.short
         dateFormatter.timeStyle = DateFormatter.Style.short
-        return (dateFormatter.string(from: referenceItem.asset!.creationDate!) ?? "No Title")
+        return (dateFormatter.string(from: referenceItem.asset!.creationDate!) )
     }
     
     func subtitleForTableDisplay() -> String {

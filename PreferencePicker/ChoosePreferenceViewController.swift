@@ -46,7 +46,7 @@ class ChoosePreferenceViewController: UIViewController {
     
     
     func respondToSwipeGesture(_ gesture: UIGestureRecognizer) {
-        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+        if gesture is UISwipeGestureRecognizer {
             var id = topItem!.memoryId
             if gesture.view!.tag == bottomItemView.tag {
                 id = bottomItem!.memoryId
