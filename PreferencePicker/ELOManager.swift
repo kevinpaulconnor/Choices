@@ -222,6 +222,7 @@ class ELOManager {
     // on import and from persistence layer
     func initializeComparisons(_ candidateItems: [PreferenceSetItem]) {
         for item in candidateItems {
+            // FIXME: on initialization, why does this use a method that returns a score?
             addScore(item.memoryId, score: defaultScore)
         }
         recommendComparisons()
