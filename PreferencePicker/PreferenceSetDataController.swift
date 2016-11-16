@@ -82,11 +82,11 @@ class PreferenceSetDataController : NSObject {
     
     fileprivate func getFetchPredicateForPreferenceItem(_ referenceItem: ReferenceItemContainer) -> NSPredicate {
         let potentialStorageIds = referenceItem.storageIds()
-        if potentialStorageIds.0 != nil {
-            return NSPredicate(format: "id == \(potentialStorageIds.0)")
-        } else if potentialStorageIds.1 != nil {
+        if potentialStorageIds.1 != nil {
             return NSPredicate(format: "stringId == \(potentialStorageIds.1)")
         }
+        //FIXME don't just want to default to id0 here. or do we?
+        return NSPredicate(format: "id == \(potentialStorageIds.0)")
     }
     
     // might want to return a success/failure condition here eventually
