@@ -79,14 +79,25 @@ class PreferenceSetDataController : NSObject {
         }
         return existingItems
     }
-    
+    //TO-DO: Combine getFetchPredicateForPreferenceItem and PreferenceScore
     fileprivate func getFetchPredicateForPreferenceItem(_ referenceItem: ReferenceItemContainer) -> NSPredicate {
         let potentialStorageIds = referenceItem.storageIds()
         if potentialStorageIds.1 != nil {
-            return NSPredicate(format: "stringId == \(potentialStorageIds.1)")
+            return NSPredicate(format: "stringId == \(potentialStorageIds.1!)")
         }
         //FIXME don't just want to default to id0 here. or do we?
-        return NSPredicate(format: "id == \(potentialStorageIds.0)")
+        print(potentialStorageIds.0!)
+        return NSPredicate(format: "id == \(potentialStorageIds.0!)")
+    }
+    
+    fileprivate func getFetchPredicateForPreferenceScore(_ referenceItem: ReferenceItemContainer) -> NSPredicate {
+        let potentialStorageIds = referenceItem.storageIds()
+        if potentialStorageIds.1 != nil {
+            return NSPredicate(format: "preferenceSetItem.stringId == \(potentialStorageIds.1!)")
+        }
+        //FIXME don't just want to default to id0 here. or do we?
+        print(potentialStorageIds.0!)
+        return NSPredicate(format: "preferenceSetItem.id == \(potentialStorageIds.0!)")
     }
     
     // might want to return a success/failure condition here eventually
@@ -110,10 +121,11 @@ class PreferenceSetDataController : NSObject {
         return nil
     }
     
-    fileprivate func fetchPSScore(_ id: UInt64) -> PreferenceScoreMO? {
-       // scores are relative to preferenceSet
-       let scorePredicate = NSPredicate(format: "%K==%@ AND %K == \(id)", argumentArray:["preferenceSet.title", activeSet!.title!, "preferenceSetItem.id"])
-       let score = self.fetcher("PreferenceScore", predicate: scorePredicate, sortDescriptor: nil, fetchLimit: 1) as? [PreferenceScoreMO]
+    fileprivate func fetchPSScore(_ predicate: NSPredicate) -> PreferenceScoreMO? {
+        // scores are relative to preferenceSet
+        let scorePredicate = NSPredicate(format: "%K==%@", argumentArray:["preferenceSet.title", activeSet!.title!])
+        let compoundPredicate = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.and, subpredicates: [scorePredicate, predicate])
+        let score = self.fetcher("PreferenceScore", predicate: compoundPredicate, sortDescriptor: nil, fetchLimit: 1) as? [PreferenceScoreMO]
         
         if score != nil && score!.count > 0 {
             return score![0]
@@ -189,7 +201,8 @@ class PreferenceSetDataController : NSObject {
                 
                 // fetch preferenceScores from preference set and update with latest score
                 for score in preferenceSet.getAllPreferenceScores() {
-                    let scoreMO = fetchPSScore(UInt64(score.0))
+                    let itemPredicate = getFetchPredicateForPreferenceScore(preferenceSet.getItemById(score.0)!.referenceItem)
+                    let scoreMO = fetchPSScore(itemPredicate)
                     scoreMO!.setValue(NSNumber(value: score.1.score!), forKey:"score")
                 }
             } else {
