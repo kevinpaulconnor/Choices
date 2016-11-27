@@ -1,15 +1,14 @@
 //
-//  PreferencePickerTests.swift
-//  PreferencePickerTests
+//  ELOManagerTests.swift
+//  PreferencePicker
 //
-//  Created by Kevin Connor on 2/18/16.
+//  Created by Kevin Connor on 11/16/16.
 //  Copyright © 2016 Kevin Connor. All rights reserved.
 //
 
 import XCTest
-@testable import PreferencePicker
 
-class PreferencePickerTests: XCTestCase {
+class ELOManagerTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
