@@ -189,9 +189,9 @@ class PreferenceSetDataController : NSObject {
                         managedComparison.setValue(comparison.0, forKey: "timestamp")
                         managedComparison.setValue(NSNumber(value: UInt64(comparison.1.result)), forKey: "result")
 
-                        activeSet!.addcomparisonObject(managedComparison)                        
-                        let managedItem1 = fetchPSItem(comparison.1.id1 as! PreferenceSetItem)
-                        let managedItem2 = fetchPSItem(comparison.1.id2 as! PreferenceSetItem)
+                        activeSet!.addcomparisonObject(managedComparison)
+                        let managedItem1 = fetchPSItem(preferenceSet.getItemById(comparison.1.id1)!)
+                        let managedItem2 = fetchPSItem(preferenceSet.getItemById(comparison.1.id2)!)
                         managedComparison.addpreferenceSetItemObject(managedItem1!)
                         managedComparison.addpreferenceSetItemObject(managedItem2!)
                         managedItem1!.addcomparisonObject(managedComparison)
