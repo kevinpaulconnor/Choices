@@ -282,19 +282,27 @@ class ELOManager {
     
 }
 
-struct scoreFreshComparisonInfo {
+struct scoreFreshComparisonInfo : Equatable {
     var freshComparisons = [Comparison]()
     var scoresForFreshOpponents = [Double]()
     var points = Double(0)
     var comparisonsSinceScoreUpdate = 0
+    
+    static func ==(lhs: scoreFreshComparisonInfo, rhs: scoreFreshComparisonInfo) -> Bool {
+        return lhs.freshComparisons == rhs.freshComparisons && lhs.scoresForFreshOpponents == rhs.scoresForFreshOpponents && lhs.points == rhs.points && lhs.comparisonsSinceScoreUpdate == rhs.comparisonsSinceScoreUpdate
+    }
 }
 
-class Comparison {
+class Comparison : Equatable {
     var id1: MemoryId
     var id2: MemoryId
     var timestamp: Date
     // 0 indicates draw, otherwise the persistent id of the winning item
     var result: MemoryId
+
+    static func ==(lhs: Comparison, rhs: Comparison) -> Bool {
+        return lhs.id1 == rhs.id1 && lhs.id2 == rhs.id2 && lhs.timestamp == rhs.timestamp && lhs.result == rhs.result
+    }
     
     init(id1: MemoryId, id2: MemoryId, result: MemoryId, timestamp: Date?) {
         self.id1 = id1
@@ -302,6 +310,8 @@ class Comparison {
         self.result = result
         self.timestamp = timestamp ?? Date()
     }
+    
+
 }
 
 class PreferenceScore {
