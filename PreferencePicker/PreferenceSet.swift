@@ -126,10 +126,20 @@ class PreferenceSetBase : PreferenceSet {
     // decided to live with it for now
     static func buildComparisonArrayFromMOs(_ managedComparisons: [ComparisonMO]) -> [Comparison] {
         var comparisons = [Comparison]()
-        for managedComparison in managedComparisons {
-            let items = managedComparison.preferenceSetItem!.allObjects as! [PreferenceSetItemMO]
-            comparisons.append(Comparison(id1: items[0].id!.intValue, id2: items[1].id!.intValue, result: managedComparison.result!.intValue, timestamp: managedComparison.timestamp!))
+        
+        do {
+            for managedComparison in managedComparisons {
+                let items = managedComparison.preferenceSetItem!.allObjects as! [PreferenceSetItemMO]
+                comparisons.append(try Comparison(id1: items[0].id!.intValue, id2: items[1].id!.intValue, result: managedComparison.result!.intValue, timestamp: managedComparison.timestamp!))
+            }
         }
+        catch let error as ManagerError {
+            ELOManager.errorHandler(error: error)
+        }
+        catch {
+            print("Error creating comparison")
+        }
+        
         return comparisons
     }
     
