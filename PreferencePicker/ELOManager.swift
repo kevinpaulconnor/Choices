@@ -32,6 +32,12 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
+enum ManagerError : Error {
+    case idOutOfScope(id:MemoryId)
+    case scoreOutOfScope(score: Double)
+    case resultOutOfScope(id: MemoryId)
+}
+
 
 //ELOManager handles ELO calculations for Preference Sets
 
@@ -206,16 +212,25 @@ class ELOManager {
     }
     
     func createAndAddComparison(_ id1: MemoryId, id2: MemoryId, result: MemoryId) {
-        let comparison = Comparison(id1: id1, id2: id2, result: result, timestamp: nil)
-        latestComparisonInfo.freshComparisons.append(comparison)
-        latestComparisonInfo.freshIds.insert(id1)
-        latestComparisonInfo.freshIds.insert(id2)
-        createOrUpdatePreferenceScore(id1, comparison: comparison, opponentScore: getScoreForItemId(id2), result: result)
-        createOrUpdatePreferenceScore(id2, comparison: comparison, opponentScore: getScoreForItemId(id1), result: result)
-        print("fresh comparison added, total fresh: \(latestComparisonInfo.freshComparisons.count)")
-        //print("\(latestComparisonInfo.freshComparisons)")
-        if updateDecision() {
-            updateRatings()
+        do {
+            let comparison = try Comparison(id1: id1, id2: id2, result: result, timestamp: nil)
+        
+            latestComparisonInfo.freshComparisons.append(comparison)
+            latestComparisonInfo.freshIds.insert(id1)
+            latestComparisonInfo.freshIds.insert(id2)
+            createOrUpdatePreferenceScore(id1, comparison: comparison, opponentScore: getScoreForItemId(id2), result: result)
+            createOrUpdatePreferenceScore(id2, comparison: comparison, opponentScore: getScoreForItemId(id1), result: result)
+            print("fresh comparison added, total fresh: \(latestComparisonInfo.freshComparisons.count)")
+            //print("\(latestComparisonInfo.freshComparisons)")
+            if updateDecision() {
+                updateRatings()
+            }
+        }
+        catch let error as ManagerError {
+            ELOManager.errorHandler(error: error)
+        }
+        catch {
+            print("Error creating comparison")
         }
     }
     
@@ -280,6 +295,16 @@ class ELOManager {
         return keyedPreferenceScores[id]
     }
     
+    static func errorHandler(error: ManagerError) {
+        switch error {
+        case .idOutOfScope(let id):
+            print("id \(id) out of allowed scope (> 0)")
+        case .scoreOutOfScope(let score):
+            print("score \(score) out of allowed scope (> 0)")
+        case .resultOutOfScope(let result):
+            print("result \(result) out of allowed scope. Must match id in comparison or 0")
+        }
+    }
 }
 
 struct scoreFreshComparisonInfo : Equatable {
@@ -304,14 +329,23 @@ class Comparison : Equatable {
         return lhs.id1 == rhs.id1 && lhs.id2 == rhs.id2 && lhs.timestamp == rhs.timestamp && lhs.result == rhs.result
     }
     
-    init(id1: MemoryId, id2: MemoryId, result: MemoryId, timestamp: Date?) {
+    init(id1: MemoryId, id2: MemoryId, result: MemoryId, timestamp: Date?) throws {
+        guard (id1 > 0 && id2 > 0) else {
+            var problemId = id1
+            if id2 <= 0 {
+                problemId = id2
+            }
+            throw ManagerError.idOutOfScope(id: problemId)
+        }
+        guard (id1 == result || id2 == result || 0 == result) else {
+            throw ManagerError.resultOutOfScope(id: result)
+        }
+        
         self.id1 = id1
         self.id2 = id2
         self.result = result
         self.timestamp = timestamp ?? Date()
     }
-    
-
 }
 
 class PreferenceScore {
