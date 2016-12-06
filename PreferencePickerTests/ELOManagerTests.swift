@@ -91,6 +91,33 @@ class ELOManagerTests: XCTestCase {
 
     }
     
+    func testCreatePreferenceScore() {
+        let score = PreferenceScore(id:1, score: 2000)
+        XCTAssertEqual(score.id,1)
+        XCTAssertEqual(score.score,2000)
+        XCTAssertEqual(score.totalComparisons,0)
+        XCTAssertTrue(score.allTimeComparisons == [Date: Comparison]())
+        XCTAssertEqual(score.latestComparisonInfo, scoreFreshComparisonInfo())
+        
+        
+        XCTAssertThrowsError(PreferenceScore(id:-1, score: 2000))
+        XCTAssertThrowsError(PreferenceScore(id:0, score: 2000))
+        XCTAssertThrowsError(PreferenceScore(id:1, score: 0))
+        XCTAssertThrowsError(PreferenceScore(id:1, score: -2000))
+    }
+    
+    func testPreferenceScoreUpdateLatestComparisonInfo() {
+        let score = PreferenceScore(id:1, score:2000)
+        let comparison = Comparison(id1: 1, id2: 2, result: 1, timestamp: nil)
+        score.updateLatestComparisonInfo(comparison, opponentScore: 2000, result: 1)
+        
+        XCTAssertEqual(score.latestComparisonInfo.comparisonsSinceScoreUpdate, 1)
+        XCTAssertEqual(score.latestComparisonInfo.freshComparisons, [comparison])
+        XCTAssertEqual(score.latestComparisonInfo.scoresForFreshOpponents, [2000])
+        
+        
+    }
+    
     func testCreateAndAddComparison() {
         manager.initializeComparisons([preferenceSetItemForTests(id: 1), preferenceSetItemForTests(id:2)])
         manager.createAndAddComparison(1, id2: 2, result: 1)
