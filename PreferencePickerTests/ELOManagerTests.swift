@@ -82,7 +82,7 @@ class ELOManagerTests: XCTestCase {
         //comparison should timestamp with the current date if none is passed in
         XCTAssertNotNil(comparison1.timestamp)
         
-        //bad input validation
+        //input validation
         XCTAssertThrowsError(Comparison(id1: -1, id2: 2, result: 1, timestamp: nil))
         XCTAssertThrowsError(Comparison(id1: 1, id2: -2, result: 1, timestamp: nil))
         XCTAssertThrowsError(Comparison(id1: 1, id2: 2, result: -1, timestamp: nil))
@@ -93,13 +93,14 @@ class ELOManagerTests: XCTestCase {
     
     func testCreatePreferenceScore() {
         let score = PreferenceScore(id:1, score: 2000)
+        // check correct default initialization
         XCTAssertEqual(score.id,1)
         XCTAssertEqual(score.score,2000)
         XCTAssertEqual(score.totalComparisons,0)
         XCTAssertTrue(score.allTimeComparisons == [Date: Comparison]())
         XCTAssertEqual(score.latestComparisonInfo, scoreFreshComparisonInfo())
         
-        
+        // input validation
         XCTAssertThrowsError(PreferenceScore(id:-1, score: 2000))
         XCTAssertThrowsError(PreferenceScore(id:0, score: 2000))
         XCTAssertThrowsError(PreferenceScore(id:1, score: 0))
@@ -110,11 +111,23 @@ class ELOManagerTests: XCTestCase {
         let score = PreferenceScore(id:1, score:2000)
         let comparison = Comparison(id1: 1, id2: 2, result: 1, timestamp: nil)
         score.updateLatestComparisonInfo(comparison, opponentScore: 2000, result: 1)
-        
         XCTAssertEqual(score.latestComparisonInfo.comparisonsSinceScoreUpdate, 1)
         XCTAssertEqual(score.latestComparisonInfo.freshComparisons, [comparison])
         XCTAssertEqual(score.latestComparisonInfo.scoresForFreshOpponents, [2000])
+        XCTAssertEqual(score.latestComparisonInfo.points, 1)
         
+        let comparison1 = Comparison(id1: 1, id2: 2, result: 0, timestamp: nil)
+        score.updateLatestComparisonInfo(comparison1, opponentScore: 2000, result: 0)
+        XCTAssertEqual(score.latestComparisonInfo.comparisonsSinceScoreUpdate, 2)
+        XCTAssertEqual(score.latestComparisonInfo.freshComparisons, [comparison, comparison1])
+        XCTAssertEqual(score.latestComparisonInfo.scoresForFreshOpponents, [2000, 2000])
+        XCTAssertEqual(score.latestComparisonInfo.points, 1.5)
+        
+        score.saveAndRefreshComparisonInfo()
+        XCTAssertEqual(score.totalComparisons, 2)
+        XCTAssertEqual(score.allTimeComparisons[comparison.timestamp], comparison)
+        XCTAssertEqual(score.allTimeComparisons[comparison1.timestamp], comparison1)
+        XCTAssertEqual(score.latestComparisonInfo, scoreFreshComparisonInfo())
         
     }
     
@@ -132,6 +145,10 @@ class ELOManagerTests: XCTestCase {
         XCTAssertEqual(manager.latestComparisonInfo.freshComparisons.count, 1)
         let testSet = Set<MemoryId>([1,2])
         XCTAssertEqual(testSet, manager.latestComparisonInfo.freshIds)
+        
+    }
+    
+    func testRestoreComparisons() {
         
     }
     
