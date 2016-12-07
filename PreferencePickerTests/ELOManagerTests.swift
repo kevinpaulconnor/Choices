@@ -96,7 +96,8 @@ class ELOManagerTests: XCTestCase {
     }
     
     func testCreatePreferenceScore() {
-        let score = PreferenceScore(id:1, score: 2000)
+        do {
+        let score = try PreferenceScore(id:1, score: 2000)
         // check correct default initialization
         XCTAssertEqual(score.id,1)
         XCTAssertEqual(score.score,2000)
@@ -105,15 +106,19 @@ class ELOManagerTests: XCTestCase {
         XCTAssertEqual(score.latestComparisonInfo, scoreFreshComparisonInfo())
         
         // input validation
-        XCTAssertThrowsError(PreferenceScore(id:-1, score: 2000))
-        XCTAssertThrowsError(PreferenceScore(id:0, score: 2000))
-        XCTAssertThrowsError(PreferenceScore(id:1, score: 0))
-        XCTAssertThrowsError(PreferenceScore(id:1, score: -2000))
+        XCTAssertThrowsError(try PreferenceScore(id:-1, score: 2000))
+        XCTAssertThrowsError(try PreferenceScore(id:0, score: 2000))
+        XCTAssertThrowsError(try PreferenceScore(id:1, score: 0))
+        XCTAssertThrowsError(try PreferenceScore(id:1, score: -2000))
+        }
+        catch {
+            print("DANGER DANGER, TESTCREATEPREFERENCESCORE THREW AN ERROR")
+        }
     }
     
     func testPreferenceScoreUpdateLatestComparisonInfo() {
         do {
-        let score = PreferenceScore(id:1, score:2000)
+        let score = try PreferenceScore(id:1, score:2000)
         let comparison = try Comparison(id1: 1, id2: 2, result: 1, timestamp: nil)
         score.updateLatestComparisonInfo(comparison, opponentScore: 2000, result: 1)
         XCTAssertEqual(score.latestComparisonInfo.comparisonsSinceScoreUpdate, 1)
@@ -135,7 +140,7 @@ class ELOManagerTests: XCTestCase {
         XCTAssertEqual(score.latestComparisonInfo, scoreFreshComparisonInfo())
         }
         catch {
-            // suppress testing errors
+            print("DANGER DANGER, TESTPREFERENCESCOREUPDATELATESTCOMPARISONINFO THREW AN ERROR")
         }
         
     }
