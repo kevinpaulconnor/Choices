@@ -36,6 +36,7 @@ enum ManagerError : Error {
     case idOutOfScope(id:MemoryId)
     case scoreOutOfScope(score: Double)
     case resultOutOfScope(id: MemoryId)
+    case noScoreForId(id: MemoryId)
 }
 
 
@@ -149,11 +150,18 @@ class ELOManager {
         }
     }
     
-    fileprivate func addScore(_ id: MemoryId, score: Double) -> PreferenceScore {
-        let score = PreferenceScore(id: id, score: score)
-        keyedPreferenceScores[id] = score
-        preferenceScores.append(score)
-        return score
+    fileprivate func addScore(_ id: MemoryId, score: Double) {
+        do {
+            let score = try PreferenceScore(id: id, score: score)
+            keyedPreferenceScores[id] = score
+            preferenceScores.append(score)
+        }
+        catch let error as ManagerError {
+            ELOManager.errorHandler(error: error)
+        }
+        catch {
+            print("Error creating score")
+        }
     }
     
     fileprivate func recommendComparisons() {
@@ -186,13 +194,12 @@ class ELOManager {
         }
     }
     
-    fileprivate func createOrUpdatePreferenceScore(_ id: MemoryId, comparison: Comparison, opponentScore: Double, result: MemoryId) {
-        var score = keyedPreferenceScores[id]
-        if score == nil {
-            score = addScore(id, score: defaultScore)
-            
+    fileprivate func updatePreferenceScore(_ id: MemoryId, comparison: Comparison, opponentScore: Double, result: MemoryId) throws {
+        guard let score = keyedPreferenceScores[id] else {
+            throw ManagerError.noScoreForId(id: id)
         }
-        score!.updateLatestComparisonInfo(comparison, opponentScore: opponentScore, result: result)
+        
+        score.updateLatestComparisonInfo(comparison, opponentScore: opponentScore, result: result)
     }
     
     fileprivate func getScoreForItemId(_ id: MemoryId) -> Double {
@@ -218,8 +225,8 @@ class ELOManager {
             latestComparisonInfo.freshComparisons.append(comparison)
             latestComparisonInfo.freshIds.insert(id1)
             latestComparisonInfo.freshIds.insert(id2)
-            createOrUpdatePreferenceScore(id1, comparison: comparison, opponentScore: getScoreForItemId(id2), result: result)
-            createOrUpdatePreferenceScore(id2, comparison: comparison, opponentScore: getScoreForItemId(id1), result: result)
+            try updatePreferenceScore(id1, comparison: comparison, opponentScore: getScoreForItemId(id2), result: result)
+            try updatePreferenceScore(id2, comparison: comparison, opponentScore: getScoreForItemId(id1), result: result)
             print("fresh comparison added, total fresh: \(latestComparisonInfo.freshComparisons.count)")
             //print("\(latestComparisonInfo.freshComparisons)")
             if updateDecision() {
@@ -237,7 +244,6 @@ class ELOManager {
     // on import and from persistence layer
     func initializeComparisons(_ candidateItems: [PreferenceSetItem]) {
         for item in candidateItems {
-            // FIXME: on initialization, why does this use a method that returns a score?
             addScore(item.memoryId, score: defaultScore)
         }
         recommendComparisons()
@@ -297,12 +303,15 @@ class ELOManager {
     
     static func errorHandler(error: ManagerError) {
         switch error {
+        // need to do more thinking about how to actually handle these errors
         case .idOutOfScope(let id):
             print("id \(id) out of allowed scope (> 0)")
         case .scoreOutOfScope(let score):
             print("score \(score) out of allowed scope (> 0)")
         case .resultOutOfScope(let result):
             print("result \(result) out of allowed scope. Must match id in comparison or 0")
+        case .noScoreForId(let id):
+            print("No score initialized for id: \(id)")
         }
     }
 }
@@ -355,7 +364,13 @@ class PreferenceScore {
     var allTimeComparisons = [Date: Comparison]()
     var latestComparisonInfo = scoreFreshComparisonInfo()
     
-    init (id: MemoryId, score: Double) {
+    init (id: MemoryId, score: Double) throws {
+        guard (id > 0) else {
+            throw ManagerError.idOutOfScope(id: id)
+        }
+        guard (score > 0) else {
+            throw ManagerError.scoreOutOfScope(score: score)
+        }
         self.id = id
         self.score = score
     }
