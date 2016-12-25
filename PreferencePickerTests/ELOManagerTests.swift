@@ -42,11 +42,6 @@ class ELOManagerTests: XCTestCase {
         manager = nil;
     }
     
-    /*func initializeComparisons(items: [preferenceSetItemForTests]) {
-        let items =
-        manager.initializeComparisons(items)
-    }*/
-    
     func testInitializeComparisons() {
         //should throw error at preferencesetitem creation time
         //saving this commented out for when i write those tests
@@ -121,9 +116,13 @@ class ELOManagerTests: XCTestCase {
         let score = try PreferenceScore(id:1, score:2000)
         let comparison = try Comparison(id1: 1, id2: 2, result: 1, timestamp: nil)
         score.updateLatestComparisonInfo(comparison, opponentScore: 2000, result: 1)
+        // should be one comparison since last update
         XCTAssertEqual(score.latestComparisonInfo.comparisonsSinceScoreUpdate, 1)
+        // and it should be stored in fresh comparisons
         XCTAssertEqual(score.latestComparisonInfo.freshComparisons, [comparison])
+        // and the score should be stored in the scoresforfreshopponents
         XCTAssertEqual(score.latestComparisonInfo.scoresForFreshOpponents, [2000])
+        // and one point for the win in the comparison
         XCTAssertEqual(score.latestComparisonInfo.points, 1)
         
         let comparison1 = try Comparison(id1: 1, id2: 2, result: 0, timestamp: nil)
@@ -134,9 +133,11 @@ class ELOManagerTests: XCTestCase {
         XCTAssertEqual(score.latestComparisonInfo.points, 1.5)
         
         score.saveAndRefreshComparisonInfo()
+        // total and allTime comparisons should be updated
         XCTAssertEqual(score.totalComparisons, 2)
         XCTAssertEqual(score.allTimeComparisons[comparison.timestamp], comparison)
         XCTAssertEqual(score.allTimeComparisons[comparison1.timestamp], comparison1)
+        // fresh comparisons should be reinitialized
         XCTAssertEqual(score.latestComparisonInfo, scoreFreshComparisonInfo())
         }
         catch {
@@ -170,7 +171,9 @@ class ELOManagerTests: XCTestCase {
             let candidateScores = [MemoryId(1):Double(2025), MemoryId(2):Double(2000)]
             try manager.restoreComparisons(candidateComparisons, candidateScores: candidateScores)
             
+            // old comparisons from store should be in memory at alltimecomparisons
             XCTAssertEqual(manager.allTimeComparisons[comparison.timestamp], comparison)
+            // and upcoming comparisons should be set, and minimum comparisons calculated
             XCTAssertEqual(manager.minimumComparisonsForSet, 2)
             XCTAssertEqual(manager.recommendedUpcomingComparisons.count, 2)
         }
@@ -178,13 +181,6 @@ class ELOManagerTests: XCTestCase {
             print("DANGER DANGER, TESTRESTORECOMPARISONS THREW AN ERROR")
         }
         
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
     }
     
 }
