@@ -60,7 +60,7 @@ class ELOManagerTests: XCTestCase {
         
         //recommendComparisons should run and fill upcoming comparisons,
         //to half of the # of preference scores in the set + 1
-        XCTAssertEqual(manager.recommendedUpcomingComparisons.count, ((manager.preferenceScores.count / 2)+1))
+        XCTAssertEqual(manager.recommendedUpcomingComparisons.count, ((manager.keyedPreferenceScores.count / 2)+1))
     }
     
     func testGetIdsForComparison() {
@@ -163,6 +163,20 @@ class ELOManagerTests: XCTestCase {
     }
     
     func testRestoreComparisons() {
+        do {
+            let comparison = try Comparison(id1: 1, id2: 2, result: 1, timestamp: nil)
+            let comparison1 = try Comparison(id1: 1, id2: 2, result: 0, timestamp: nil)
+            let candidateComparisons = [comparison, comparison1]
+            let candidateScores = [MemoryId(1):Double(2025), MemoryId(2):Double(2000)]
+            try manager.restoreComparisons(candidateComparisons, candidateScores: candidateScores)
+            
+            XCTAssertEqual(manager.allTimeComparisons[comparison.timestamp], comparison)
+            XCTAssertEqual(manager.minimumComparisonsForSet, 2)
+            XCTAssertEqual(manager.recommendedUpcomingComparisons.count, 2)
+        }
+        catch {
+            print("DANGER DANGER, TESTRESTORECOMPARISONS THREW AN ERROR")
+        }
         
     }
     
