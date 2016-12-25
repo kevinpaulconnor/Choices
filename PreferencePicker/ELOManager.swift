@@ -47,10 +47,7 @@ class ELOManager {
 
     var allTimeComparisons = [Date: Comparison]()
     var recommendedUpcomingComparisons = [(MemoryId, MemoryId)]()
-    
-    //I wonder whether there's a better way to do this than two structures?
     var keyedPreferenceScores = [MemoryId: PreferenceScore]()
-    var preferenceScores = [PreferenceScore]()
 
     // make upcoming comparisons from set including minimumComparisons for set
     // plus comparison constant. Can improve by floating comparisonConstant
@@ -101,12 +98,6 @@ class ELOManager {
         for id in latestComparisonInfo.freshScores {
             keyedPreferenceScores[id.0]!.score = id.1
         }
-        preferenceScores = keyedPreferenceScores.values.sorted(by: { $0.score > $1.score })
-        for pscore in preferenceScores {
-            print ("\(pscore.score)")
-        }
-        //print("\(preferenceScores)")
-
         saveAndRefreshAfterUpdate()
     }
 
@@ -125,13 +116,13 @@ class ELOManager {
     fileprivate func checkMinimumComparisons() {
         if minimumComparisonIds.isEmpty {
             var newMinimum = Int.max
-            for score in preferenceScores {
-                if score.totalComparisons < newMinimum {
-                    newMinimum = score.totalComparisons
+            for score in keyedPreferenceScores {
+                if score.value.totalComparisons < newMinimum {
+                    newMinimum = score.value.totalComparisons
                     minimumComparisonIds = Set<MemoryId>()
-                    minimumComparisonIds.insert(score.id!)
-                } else if score.totalComparisons == newMinimum {
-                    minimumComparisonIds.insert(score.id!)
+                    minimumComparisonIds.insert(score.value.id!)
+                } else if score.value.totalComparisons == newMinimum {
+                    minimumComparisonIds.insert(score.value.id!)
                 }
             }
             minimumComparisonsForSet = newMinimum
@@ -154,7 +145,6 @@ class ELOManager {
         do {
             let score = try PreferenceScore(id: id, score: score)
             keyedPreferenceScores[id] = score
-            preferenceScores.append(score)
         }
         catch let error as ManagerError {
             ELOManager.errorHandler(error: error)
@@ -166,17 +156,17 @@ class ELOManager {
     
     fileprivate func recommendComparisons() {
         print("recommending comparisons")
-        let comparisonsToStore = preferenceScores.count / 2
+        let comparisonsToStore = keyedPreferenceScores.count / 2
 
         // filter for the PSs with the least comparisons
-        var minimumComparisonPreferenceScores = preferenceScores.filter({$0.totalComparisons <= (minimumComparisonsForSet + comparisonConstant)})
+        var minimumComparisonPreferenceScores = keyedPreferenceScores.filter({$0.value.totalComparisons <= (minimumComparisonsForSet + comparisonConstant)})
         while recommendedUpcomingComparisons.count <= comparisonsToStore {
             let firstItem = minimumComparisonPreferenceScores[Int(arc4random_uniform(UInt32(minimumComparisonPreferenceScores.count)))]
             var secondItem = firstItem
-            while firstItem.id == secondItem.id {
+            while firstItem.value.id == secondItem.value.id {
                 secondItem = minimumComparisonPreferenceScores[Int(arc4random_uniform(UInt32(minimumComparisonPreferenceScores.count)))]
             }
-            recommendedUpcomingComparisons.append((firstItem.id!, secondItem.id!))
+            recommendedUpcomingComparisons.append((firstItem.value.id!, secondItem.value.id!))
         }
         
     }
@@ -256,11 +246,6 @@ class ELOManager {
             keyedPreferenceScores[comparison.id2]!.allTimeComparisons[comparison.timestamp] = comparison
             allTimeComparisons[comparison.timestamp] = comparison
         }
-        
-        for score in preferenceScores {
-            score.score = candidateScores[score.id!]
-            score.totalComparisons = score.allTimeComparisons.count
-        }
 
         resetComparisons()
         checkMinimumComparisons()
@@ -273,11 +258,8 @@ class ELOManager {
     }
     
     func getUpdatedSortedPreferenceScores() -> [(MemoryId, Double)]{
-        var ret = [(MemoryId, Double)]()
-        for score in preferenceScores {
-            ret.append((score.id!, score.score!))
-        }
-        return ret
+        let sortedScores = keyedPreferenceScores.values.sorted(by: { $0.score > $1.score })
+        return sortedScores.map({($0.id!, $0.score!)})
     }
     
     func getAllComparisons() -> [Date: Comparison] {
