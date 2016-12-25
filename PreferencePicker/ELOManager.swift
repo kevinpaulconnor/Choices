@@ -72,24 +72,15 @@ class ELOManager {
     
     
     // turn fresh comparisons into scores
-    fileprivate func updateRatings() {
+    fileprivate func updateRatings() throws {
         print("updating rankings")
-        let kValue = Double(eloKValueForSet())
     
         // calculate for individual PreferenceScores, but do not save yet
         for id in latestComparisonInfo.freshIds {
-            let score = keyedPreferenceScores[id]!
-            let opponentScores = score.latestComparisonInfo.scoresForFreshOpponents
-            let averageOpponentRating = opponentScores.reduce(0) { $0 + $1 } / Double(opponentScores.count)
-            let numerator = (score.latestComparisonInfo.points * score.score!)
-            let denominator = (averageOpponentRating * Double(opponentScores.count))
-            let ratingRatio = numerator / denominator
-            //print("id: \(id), opponentScores: \(opponentScores), averageOpponentRating: \(averageOpponentRating), numerator: \(numerator), denominator: \(denominator), ratingRatio: \(ratingRatio)")
-            latestComparisonInfo.freshScores[id] = score.score! - (kValue * (0.5 - ratingRatio))
-            score.saveAndRefreshComparisonInfo()
-            if minimumComparisonIds.contains(id) && score.totalComparisons > minimumComparisonsForSet {
-                minimumComparisonIds.remove(id)
+            guard let score = keyedPreferenceScores[id] else {
+                throw ManagerError.noScoreForId(id: id);
             }
+            updateScore(score: score, id: id)
         }
         
         /* when finished with all PreferenceScores, save permanently
@@ -100,6 +91,21 @@ class ELOManager {
             keyedPreferenceScores[id.0]!.score = id.1
         }
         saveAndRefreshAfterUpdate()
+    }
+    
+    fileprivate func updateScore(score: PreferenceScore, id: MemoryId) {
+        let kValue = eloKValueForSet()
+        let opponentScores = score.latestComparisonInfo.scoresForFreshOpponents
+        let averageOpponentRating = opponentScores.reduce(0) { $0 + $1 } / Double(opponentScores.count)
+        let numerator = (score.latestComparisonInfo.points * score.score!)
+        let denominator = (averageOpponentRating * Double(opponentScores.count))
+        let ratingRatio = numerator / denominator
+        latestComparisonInfo.freshScores[id] = score.score! - (kValue * (0.5 - ratingRatio))
+        score.saveAndRefreshComparisonInfo()
+        if minimumComparisonIds.contains(id) && score.totalComparisons > minimumComparisonsForSet {
+            minimumComparisonIds.remove(id)
+        }
+
     }
 
     //
@@ -134,9 +140,9 @@ class ELOManager {
     }
     
     // determine constant for value of each comparison. Bigger when we have less information
-    fileprivate func eloKValueForSet() -> Int {
+    fileprivate func eloKValueForSet() -> Double {
         switch minimumComparisonsForSet {
-        case 50..<Int.max:
+        case 50..<Double.max:
             return 32
         case 0..<32:
             return 50
