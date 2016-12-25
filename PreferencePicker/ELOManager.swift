@@ -83,12 +83,9 @@ class ELOManager {
             updateScore(score: score, id: id)
         }
         
-        /* when finished with all PreferenceScores, save permanently
-            and sort preferenceScore array for easy presentation
-            seems fragile with id.0 etc.
-        */
+        // when finished with all PreferenceScores, save permanently
         for id in latestComparisonInfo.freshScores {
-            keyedPreferenceScores[id.0]!.score = id.1
+            keyedPreferenceScores[id.key]!.score = id.value
         }
         saveAndRefreshAfterUpdate()
     }
