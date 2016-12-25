@@ -114,7 +114,14 @@ class PreferenceSetBase : PreferenceSet {
     }
  
     func restoreScoreManagerScores(_ candidateComparisons: [Comparison], candidateScores: [MemoryId: Double]) {
-        scoreManager.restoreComparisons(candidateComparisons, candidateScores: candidateScores)
+        do {
+           try scoreManager.restoreComparisons(candidateComparisons, candidateScores: candidateScores)
+        } catch let error as ManagerError {
+            ELOManager.errorHandler(error: error)
+        }
+        catch {
+            print("Error restoring scores")
+        }
     }
     
     //Decided to manage all persistence layer api
