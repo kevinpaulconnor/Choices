@@ -8,29 +8,6 @@
 
 import Foundation
 import MediaPlayer
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
-
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l > r
-  default:
-    return rhs < lhs
-  }
-}
 
 enum ManagerError : Error {
     case idOutOfScope(id:MemoryId)
@@ -39,7 +16,6 @@ enum ManagerError : Error {
     case noScoreForId(id: MemoryId)
     case noScoreForComparison(comparsion: Comparison)
 }
-
 
 //ELOManager handles ELO calculations for Preference Sets
 
@@ -139,11 +115,11 @@ class ELOManager {
     // determine constant for value of each comparison. Bigger when we have less information
     fileprivate func eloKValueForSet() -> Double {
         switch minimumComparisonsForSet {
-        case 50..<Double.max:
+        case 50..<Int.max:
             return 32
         case 0..<32:
             return 50
-        default: return 50 - (minimumComparisonsForSet - 32)
+        default: return Double(50 - (minimumComparisonsForSet - 32))
         }
     }
     
@@ -222,7 +198,7 @@ class ELOManager {
             print("fresh comparison added, total fresh: \(latestComparisonInfo.freshComparisons.count)")
             //print("\(latestComparisonInfo.freshComparisons)")
             if updateDecision() {
-                updateRatings()
+                try updateRatings()
             }
         }
         catch let error as ManagerError {
@@ -260,31 +236,63 @@ class ELOManager {
     
     func update() {
         //might need to do other stuff here in the public api
-        updateRatings()
+        do {
+            try updateRatings()
+        }   catch let error as ManagerError {
+            ELOManager.errorHandler(error: error)
+        }
+        catch {
+            print("Error updating ratings")
+        }
     }
     
     func getUpdatedSortedPreferenceScores() -> [(MemoryId, Double)]{
-        let sortedScores = keyedPreferenceScores.values.sorted(by: { $0.score > $1.score })
+        let sortedScores = keyedPreferenceScores.values.sorted(
+            by: {
+                guard let score1 = $0.score,let score2 = $1.score else { return false }
+                return score1 > score2
+            })
         return sortedScores.map({($0.id!, $0.score!)})
     }
     
     func getAllComparisons() -> [Date: Comparison] {
         if latestComparisonInfo.freshComparisons.count > 0 {
-            updateRatings()
+            do {
+                try updateRatings()
+            }   catch let error as ManagerError {
+                ELOManager.errorHandler(error: error)
+            }
+            catch {
+                print("Error updating ratings")
+            }
         }
         return allTimeComparisons
     }
     
     func getAllPreferenceScores() -> [MemoryId: PreferenceScore] {
         if latestComparisonInfo.freshComparisons.count > 0 {
-            updateRatings()
+            do {
+                try updateRatings()
+            }   catch let error as ManagerError {
+                ELOManager.errorHandler(error: error)
+            }
+            catch {
+                print("Error updating ratings")
+            }
         }
         return keyedPreferenceScores
     }
     
     func getPreferenceScoreById(_ id: MemoryId) -> PreferenceScore? {
         if latestComparisonInfo.freshComparisons.count > 0 {
-            updateRatings()
+            do {
+                try updateRatings()
+            }   catch let error as ManagerError {
+                ELOManager.errorHandler(error: error)
+            }
+            catch {
+                print("Error updating ratings")
+            }
         }
         return keyedPreferenceScores[id]
     }
