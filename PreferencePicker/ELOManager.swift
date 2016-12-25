@@ -37,6 +37,7 @@ enum ManagerError : Error {
     case scoreOutOfScope(score: Double)
     case resultOutOfScope(id: MemoryId)
     case noScoreForId(id: MemoryId)
+    case noScoreForComparison(comparsion: Comparison)
 }
 
 
@@ -112,7 +113,9 @@ class ELOManager {
         recommendComparisons()
 
     }
-    
+    // track Comparisons about which we know the least, and
+    // try to operate on those first.
+    // when we run out, recalculate the set
     fileprivate func checkMinimumComparisons() {
         if minimumComparisonIds.isEmpty {
             var newMinimum = Int.max
@@ -236,10 +239,14 @@ class ELOManager {
     }
     
     // from persistence layer only
-    func restoreComparisons(_ candidateComparisons: [Comparison], candidateScores: [MemoryId: Double]) {
+    func restoreComparisons(_ candidateComparisons: [Comparison], candidateScores: [MemoryId: Double]) throws {
         for comparison in candidateComparisons {
-            keyedPreferenceScores[comparison.id1]!.allTimeComparisons[comparison.timestamp] = comparison
-            keyedPreferenceScores[comparison.id2]!.allTimeComparisons[comparison.timestamp] = comparison
+            guard let score1 = keyedPreferenceScores[comparison.id1],let score2 = keyedPreferenceScores[comparison.id2]
+            else {
+                throw ManagerError.noScoreForComparison(comparsion: comparison)
+            }
+            score1.allTimeComparisons[comparison.timestamp] = comparison
+            score2.allTimeComparisons[comparison.timestamp] = comparison
             allTimeComparisons[comparison.timestamp] = comparison
         }
 
@@ -290,6 +297,8 @@ class ELOManager {
             print("result \(result) out of allowed scope. Must match id in comparison or 0")
         case .noScoreForId(let id):
             print("No score initialized for id: \(id)")
+        case .noScoreForComparison(let comparison):
+            print("No scores initialized for comparison: \(comparison)")
         }
     }
 }
