@@ -195,10 +195,6 @@ class ELOManager {
     fileprivate func getScoreForItemId(_ id: MemoryId) -> Double {
         return keyedPreferenceScores[id]!.score!
     }
-    
-    fileprivate func resetComparisons() {
-        recommendedUpcomingComparisons = [(MemoryId, MemoryId)]()
-    }
 
     func getIdsForComparison() -> [MemoryId] {
         let idTuple = recommendedUpcomingComparisons.removeFirst()
@@ -247,7 +243,7 @@ class ELOManager {
             allTimeComparisons[comparison.timestamp] = comparison
         }
 
-        resetComparisons()
+        recommendedUpcomingComparisons = [(MemoryId, MemoryId)]()
         checkMinimumComparisons()
         recommendComparisons()
     }
