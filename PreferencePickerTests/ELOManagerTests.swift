@@ -102,7 +102,6 @@ class ELOManagerTests: XCTestCase {
         
         // input validation
         XCTAssertThrowsError(try PreferenceScore(id:-1, score: 2000))
-        XCTAssertThrowsError(try PreferenceScore(id:0, score: 2000))
         XCTAssertThrowsError(try PreferenceScore(id:1, score: 0))
         XCTAssertThrowsError(try PreferenceScore(id:1, score: -2000))
         }

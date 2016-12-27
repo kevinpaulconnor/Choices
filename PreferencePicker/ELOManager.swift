@@ -337,9 +337,9 @@ class Comparison : Equatable {
     }
     
     init(id1: MemoryId, id2: MemoryId, result: MemoryId, timestamp: Date?) throws {
-        guard (id1 > 0 && id2 > 0) else {
+        guard (id1 >= 0 && id2 >= 0) else {
             var problemId = id1
-            if id2 <= 0 {
+            if id2 < 0 {
                 problemId = id2
             }
             throw ManagerError.idOutOfScope(id: problemId)
@@ -363,7 +363,7 @@ class PreferenceScore {
     var latestComparisonInfo = scoreFreshComparisonInfo()
     
     init (id: MemoryId, score: Double) throws {
-        guard (id > 0) else {
+        guard (id >= 0) else {
             throw ManagerError.idOutOfScope(id: id)
         }
         guard (score > 0) else {
