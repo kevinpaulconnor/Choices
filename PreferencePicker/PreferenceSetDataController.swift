@@ -110,6 +110,15 @@ class PreferenceSetDataController : NSObject {
         }
     }
     
+    fileprivate func setStorageIdForComparisonMO(_ item: PreferenceSetItem, managedComparison: ComparisonMO) {
+        let potentialStorageIds = item.referenceItem.storageIds()
+        if potentialStorageIds.0 != nil {
+            managedComparison.setValue(NSNumber(value: potentialStorageIds.0! as UInt64), forKey: "result")
+        } else if potentialStorageIds.1 != nil {
+            managedComparison.setValue(potentialStorageIds.1!, forKey: "stringId")
+        }
+    }
+    
     // might be able to simplify fetchPSItem and fetchPSScore to run on common code
     fileprivate func fetchPSItem(_ item: PreferenceSetItem) -> PreferenceSetItemMO? {
         let itemPredicate = getFetchPredicateForPreferenceItem(item.referenceItem)
@@ -184,10 +193,10 @@ class PreferenceSetDataController : NSObject {
                 let newestSavedComparison = fetchNewestSavedComparison()
                 for comparison in preferenceSet.getAllComparisons() {
                     // oof for timeIntervalSince1970. But at least it's human-readable in the if block.
-                    if newestSavedComparison == nil || (comparison.0.timeIntervalSince1970 > newestSavedComparison!.timestamp!.timeIntervalSince1970) {
+                    if newestSavedComparison == nil || (comparison.key.timeIntervalSince1970 > newestSavedComparison!.timestamp!.timeIntervalSince1970) {
                         let managedComparison = NSEntityDescription.insertNewObject(forEntityName: "Comparison", into: self.managedObjectContext) as! ComparisonMO
-                        managedComparison.setValue(comparison.0, forKey: "timestamp")
-                        managedComparison.setValue(NSNumber(value: UInt64(comparison.1.result)), forKey: "result")
+                        managedComparison.setValue(comparison.key, forKey: "timestamp")
+                        setStorageIdForComparisonMO(preferenceSet.getItemById(comparison.1.result)!, managedComparison: managedComparison)
 
                         activeSet!.addcomparisonObject(managedComparison)
                         let managedItem1 = fetchPSItem(preferenceSet.getItemById(comparison.1.id1)!)
