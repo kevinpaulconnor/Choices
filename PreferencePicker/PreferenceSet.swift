@@ -40,6 +40,16 @@ protocol PreferenceSet {
     func getAllComparisons() -> [Date: Comparison]
     func getAllPreferenceScores() -> [MemoryId: PreferenceScore]
     func restoreScoreManagerScores(_ candidateComparisons: [Comparison], candidateScores: [MemoryId: Double])
+    func getMemoryIdByPreferenceSetItemMO(_ item: PreferenceSetItemMO) -> MemoryId
+    func getMemoryIdsFromManagedComparison(_ comparison: ComparisonMO) -> MemoryIdResult
+    func buildComparisonArrayFromMOs(_ managedComparisons: [ComparisonMO]) -> [Comparison]
+    func buildScoreArrayFromMOs(_ managedScores: [PreferenceScoreMO]) -> [MemoryId: Double]
+}
+
+struct MemoryIdResult {
+    var id1: MemoryId
+    var id2: MemoryId
+    var result: MemoryId
 }
 
 // PreferenceSetBase holds common logic for determining
@@ -77,7 +87,7 @@ class PreferenceSetBase : PreferenceSet {
         memoryId = memoryId + 1
         return ret
     }
-    
+
     func getItemById(_ id: MemoryId) -> PreferenceSetItem? {
         return keyedItems[id]
     }
@@ -131,13 +141,13 @@ class PreferenceSetBase : PreferenceSet {
     // not crazy about how these build* methods wound up...
     // among other things, they will be fragile as MemoryId typedef changes
     // decided to live with it for now
-    static func buildComparisonArrayFromMOs(_ managedComparisons: [ComparisonMO]) -> [Comparison] {
+    func buildComparisonArrayFromMOs(_ managedComparisons: [ComparisonMO]) -> [Comparison] {
         var comparisons = [Comparison]()
         
         do {
             for managedComparison in managedComparisons {
-                let items = managedComparison.preferenceSetItem!.allObjects as! [PreferenceSetItemMO]
-                comparisons.append(try Comparison(id1: items[0].id!.intValue, id2: items[1].id!.intValue, result: managedComparison.result!.intValue, timestamp: managedComparison.timestamp!))
+                let memoryIdResult = getMemoryIdsFromManagedComparison(managedComparison)
+                comparisons.append(try Comparison(id1: memoryIdResult.id1, id2: memoryIdResult.id2, result: memoryIdResult.result, timestamp: managedComparison.timestamp!))
             }
         }
         catch let error as ManagerError {
@@ -150,10 +160,12 @@ class PreferenceSetBase : PreferenceSet {
         return comparisons
     }
     
-    static func buildScoreArrayFromMOs(_ managedScores: [PreferenceScoreMO]) -> [MemoryId: Double] {
+    func buildScoreArrayFromMOs(_ managedScores: [PreferenceScoreMO]) -> [MemoryId: Double] {
         var output = [MemoryId: Double]()
+        var memoryId = 0
         for managedScore in managedScores {
-            output[managedScore.preferenceSetItem!.id!.intValue] = managedScore.score!.doubleValue
+            memoryId = getMemoryIdByPreferenceSetItemMO(managedScore.preferenceSetItem!)
+            output[memoryId] = managedScore.score!.doubleValue
         }
         return output
     }
@@ -173,13 +185,38 @@ class PreferenceSetBase : PreferenceSet {
     static func getAllSavedSets() -> [PreferenceSetMO] {
         return appDelegate!.dataController!.getAllSavedSets()
     }
+    
+    // these need to be overridden by specific type
+    func getMemoryIdByPreferenceSetItemMO(_ item: PreferenceSetItemMO) -> MemoryId {
+        return -1
+    }
+    func getMemoryIdByPreferenceScoreMO(_ scoreMO: PreferenceScoreMO) -> MemoryId {
+        return -1
+    }
+
+    func getMemoryIdsFromManagedComparison(_ comparison: ComparisonMO) -> MemoryIdResult {
+        let items = comparison.preferenceSetItem!.allObjects as! [PreferenceSetItemMO]
+        var result = 0
+        let id1 = getMemoryIdByPreferenceSetItemMO(items[0])
+        let id2 = getMemoryIdByPreferenceSetItemMO(items[1])
+        
+        if (comparison.result! == items[0].id) {
+            result = id1
+        } else if (comparison.result! == items[0].id) {
+            result = id2
+        }
+        return MemoryIdResult(id1: id1,
+                            id2: id2,
+                            result: result)
+    }
 }
 
 // Preference Sets should conform to PreferenceSet, and subclass PreferenceSetBase
 
 // would love to figure out how to classname this programmatically, e.g. PreferenceSetTypeIds.iTunesPlaylist
 class iTunesPlaylistPreferenceSet : PreferenceSetBase {
- 
+    var referencedItems = [UInt64 : MemoryId]()
+    
     init(candidateItems: [MPMediaItem], title: String) {
         super.init(title: title)
         super.preferenceSetType = PreferenceSetTypeIds.iTunesPlaylist
@@ -188,11 +225,14 @@ class iTunesPlaylistPreferenceSet : PreferenceSetBase {
             let newiTunesItem = iTunesPreferenceSetItem(candidateItem: item, set: self)
             items.append(newiTunesItem)
             keyedItems[newiTunesItem.memoryId] = newiTunesItem
+            referencedItems[item.persistentID] = newiTunesItem.memoryId
         }
-
         self.scoreManager.initializeComparisons(items)
     }
     
+    override func getMemoryIdByPreferenceSetItemMO(_ item: PreferenceSetItemMO) -> MemoryId {
+        return self.referencedItems[UInt64(item.id!)] ?? -1
+    }
 }
 
 // would love to figure out how to classname this programmatically, e.g. PreferenceSetTypeIds.iTunesPlaylist

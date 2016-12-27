@@ -80,42 +80,33 @@ class PreferenceSetDataController : NSObject {
         return existingItems
     }
     //TO-DO: Combine getFetchPredicateForPreferenceItem and PreferenceScore
-    fileprivate func getFetchPredicateForPreferenceItem(_ referenceItem: ReferenceItemContainer) -> NSPredicate {
-        let potentialStorageIds = referenceItem.storageIds()
-        if potentialStorageIds.1 != nil {
-            return NSPredicate(format: "stringId == \(potentialStorageIds.1!)")
-        }
+    fileprivate func getFetchPredicateForPreferenceItem(_ referenceItem: ReferenceItem) -> NSPredicate {
         //FIXME don't just want to default to id0 here. or do we?
-        print(potentialStorageIds.0!)
-        return NSPredicate(format: "id == \(potentialStorageIds.0!)")
+        let ret = referenceItem.asset != nil ? NSPredicate(format: "stringId == \(referenceItem.asset!.localIdentifier)") :
+            NSPredicate(format: "id == \(referenceItem.mediaItem!.persistentID)")
+        return ret
     }
     
-    fileprivate func getFetchPredicateForPreferenceScore(_ referenceItem: ReferenceItemContainer) -> NSPredicate {
-        let potentialStorageIds = referenceItem.storageIds()
-        if potentialStorageIds.1 != nil {
-            return NSPredicate(format: "preferenceSetItem.stringId == \(potentialStorageIds.1!)")
-        }
-        //FIXME don't just want to default to id0 here. or do we?
-        print(potentialStorageIds.0!)
-        return NSPredicate(format: "preferenceSetItem.id == \(potentialStorageIds.0!)")
+    fileprivate func getFetchPredicateForPreferenceScore(_ referenceItem: ReferenceItem) -> NSPredicate {
+        let ret = referenceItem.asset != nil ? NSPredicate(format: "preferenceSetItem.stringId == \(referenceItem.asset!.localIdentifier)") :
+            NSPredicate(format: "preferenceSetItem.id == \(referenceItem.mediaItem!.persistentID)")
+        return ret
     }
     
     // might want to return a success/failure condition here eventually
     fileprivate func setStorageIdForPreferenceItemMO(_ item: PreferenceSetItem, managedItem: PreferenceSetItemMO) {
-        let potentialStorageIds = item.referenceItem.storageIds()
-        if potentialStorageIds.0 != nil {
-            managedItem.setValue(NSNumber(value: potentialStorageIds.0! as UInt64), forKey: "id")
-        } else if potentialStorageIds.1 != nil {
-            managedItem.setValue(potentialStorageIds.1!, forKey: "stringId")
+        if (item.referenceItem.asset != nil) {
+            managedItem.setValue(item.referenceItem.asset!.localIdentifier, forKey: "stringId")
+        } else {
+            managedItem.setValue(NSNumber(value: item.referenceItem.mediaItem!.persistentID as UInt64), forKey: "id")
         }
     }
     
     fileprivate func setStorageIdForComparisonMO(_ item: PreferenceSetItem, managedComparison: ComparisonMO) {
-        let potentialStorageIds = item.referenceItem.storageIds()
-        if potentialStorageIds.0 != nil {
-            managedComparison.setValue(NSNumber(value: potentialStorageIds.0! as UInt64), forKey: "result")
-        } else if potentialStorageIds.1 != nil {
-            managedComparison.setValue(potentialStorageIds.1!, forKey: "stringId")
+        if (item.referenceItem.asset != nil) {
+            managedComparison.setValue(item.referenceItem.asset!.localIdentifier, forKey: "stringId")
+        } else  {
+            managedComparison.setValue(NSNumber(value: item.referenceItem.mediaItem!.persistentID as UInt64), forKey: "result")
         }
     }
     

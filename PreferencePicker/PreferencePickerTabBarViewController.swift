@@ -39,11 +39,11 @@ class PreferencePickerTabBarViewController: UITabBarController, UITabBarControll
             let managedComparisons = managedSet.comparison!.allObjects as! [ComparisonMO]
             let managedScores = managedSet.preferenceScore!.allObjects as! [PreferenceScoreMO]
             
-            let candidateComparisons = PreferenceSetBase.buildComparisonArrayFromMOs(managedComparisons)
-            let candidateScores = PreferenceSetBase.buildScoreArrayFromMOs(managedScores)
             let type = PreferenceSetTypeManager.getSetType(managedSet.preferenceSetType!)
             let candidateSet = type.createPreferenceItemCollectionFromMOs(managedItems)
             self.activeSet = type.createPreferenceSet(candidateSet, title: managedSet.title!)
+            let candidateComparisons = activeSet!.buildComparisonArrayFromMOs(managedComparisons)
+            let candidateScores = activeSet!.buildScoreArrayFromMOs(managedScores)
             activeSet!.restoreScoreManagerScores(candidateComparisons, candidateScores: candidateScores)
             PreferenceSetBase.updateActiveSetForModel(candidateMO!)
             self.goToActiveSetView()

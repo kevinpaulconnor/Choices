@@ -228,7 +228,9 @@ class ELOManager {
             score2.allTimeComparisons[comparison.timestamp] = comparison
             allTimeComparisons[comparison.timestamp] = comparison
         }
-
+        for candidateScore in candidateScores {
+            keyedPreferenceScores[candidateScore.key]?.score = candidateScore.value
+        }
         recommendedUpcomingComparisons = [(MemoryId, MemoryId)]()
         checkMinimumComparisons()
         recommendComparisons()

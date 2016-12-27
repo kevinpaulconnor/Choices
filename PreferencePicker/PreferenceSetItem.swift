@@ -11,12 +11,11 @@ import MediaPlayer
 import Photos
 
 protocol PreferenceSetItem {
-    var referenceItem: ReferenceItemContainer {get set}
+    var referenceItem: ReferenceItem {get set}
     var memoryId: Int {get set}
     
     func titleForTableDisplay() -> String
     func subtitleForTableDisplay() -> String
-    
 }
 
 // pass-through container that enables PreferenceSetItem
@@ -24,30 +23,20 @@ protocol PreferenceSetItem {
 // with the same view and persistence layer code.
 // PSI implementations know which variable(s) to fill and use internally
 // but that is abstracted from view and persistence layers
-class ReferenceItemContainer {
+class ReferenceItem {
     var mediaItem: MPMediaItem?
     var asset: PHAsset?
-    
-    func storageIds() -> (UInt64?, String?) {
-        var output: (UInt64?, String?)
-        if mediaItem != nil {
-            output = (mediaItem!.persistentID, nil)
-        } else if asset != nil {
-            output = (nil, asset!.localIdentifier)
-        }
-        return output
-    }
 }
 
 class iTunesPreferenceSetItem : PreferenceSetItem {
-    var referenceItem: ReferenceItemContainer
+    var referenceItem: ReferenceItem
     var memoryId: MemoryId
     var storageId: MPMediaEntityPersistentID
     var title: String
     var songLength: TimeInterval
     
     init(candidateItem: MPMediaItem, set: PreferenceSet) {
-        referenceItem = ReferenceItemContainer()
+        referenceItem = ReferenceItem()
         referenceItem.mediaItem = candidateItem
         storageId = candidateItem.persistentID
 
@@ -65,15 +54,16 @@ class iTunesPreferenceSetItem : PreferenceSetItem {
     func subtitleForTableDisplay() -> String {
         return (referenceItem.mediaItem!.albumArtist ?? "No Artist")
     }
+    
 }
 
 class photoMomentPreferenceSetItem : PreferenceSetItem {
-    var referenceItem: ReferenceItemContainer
+    var referenceItem: ReferenceItem
     var memoryId: MemoryId
     var storageId: String
     
     init(candidateItem: PHAsset, set: PreferenceSet) {
-        referenceItem = ReferenceItemContainer()
+        referenceItem = ReferenceItem()
         storageId = candidateItem.localIdentifier
         memoryId = set.getNextMemoryId()
     }
