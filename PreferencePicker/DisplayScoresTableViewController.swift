@@ -9,7 +9,6 @@
 import UIKit
 
 class DisplayScoresTableViewController: UITableViewController {
-    @IBOutlet var table: UITableView!
     var activeSet: PreferenceSet?
     var preferenceScores: [(MemoryId, Double)]?
     
@@ -17,7 +16,6 @@ class DisplayScoresTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         preferenceScores = activeSet!.returnSortedPreferenceScores()
-        self.table.reloadData()
     }
     
     override func viewDidLoad() {

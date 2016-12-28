@@ -101,9 +101,12 @@ class PreferencePickerTabBarViewController: UITabBarController, UITabBarControll
                         present(alert, animated: true, completion: nil)
                 }
                 // propogate activeSet to DisplayScores view
+                // FIXME: manage activeSet in DisplayScoresTableViewController, not here
                 if activeSet != nil && restId == "DisplayScores" {
-                    let displayScoresVC = viewController as! DisplayScoresTableViewController
+                    let navController = self.viewControllers![TabIndex.ViewScores] as! UINavigationController
+                    let displayScoresVC = navController.topViewController as! DisplayScoresTableViewController
                     displayScoresVC.activeSet = self.activeSet
+                    displayScoresVC.title = activeSet!.title + " Scores"
                 }
                 // propogate activeSet to LoadSet view
                 // there's got to be a better way to combine this with DisplayScores
