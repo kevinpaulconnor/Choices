@@ -46,6 +46,7 @@ class PreferencePickerTabBarViewController: UITabBarController, UITabBarControll
             let candidateScores = activeSet!.buildScoreArrayFromMOs(managedScores)
             activeSet!.restoreScoreManagerScores(candidateComparisons, candidateScores: candidateScores)
             PreferenceSetBase.updateActiveSetForModel(candidateMO!)
+            self.viewControllers![TabIndex.Load] = storyboard!.instantiateViewController(withIdentifier: "LoadNavigationController")
             self.goToActiveSetView()
         }
     }
