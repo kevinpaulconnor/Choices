@@ -26,7 +26,7 @@
                                 <rect key="frame" x="16" y="155" width="343" height="41"/>
                                 <color key="backgroundColor" red="0.44979607944201427" green="0.97464087990635062" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <state key="normal" title="Load an Existing Set"/>
+                                <state key="normal" title="Restore an Existing Set"/>
                                 <connections>
                                     <segue destination="nkX-Wo-0ce" kind="show" id="tB7-FP-Z5j"/>
                                 </connections>
@@ -35,7 +35,7 @@
                                 <rect key="frame" x="16" y="204" width="343" height="40"/>
                                 <color key="backgroundColor" red="0.44979607944201427" green="0.97464087990635062" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="24"/>
-                                <state key="normal" title="Load a New Set"/>
+                                <state key="normal" title="Create or Import a New Set"/>
                                 <connections>
                                     <segue destination="aJV-kX-tSv" kind="show" id="wt3-lS-HsW"/>
                                 </connections>
@@ -105,7 +105,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aC2-cM-Xnz" id="g5G-3U-gNs">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="H3t-4s-4Qw">
@@ -223,7 +223,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2G7-OT-CHk" id="r3H-nx-a6j">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
@@ -254,7 +254,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="HDC-QN-v6N" id="JvH-Cb-e41">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -328,7 +328,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Ept-AW-C8j" id="GyV-oi-Okg">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yji-lE-ocp">
@@ -445,7 +445,7 @@
                             </mask>
                         </variation>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Choose" image="second" id="cPa-gy-q4n"/>
+                    <tabBarItem key="tabBarItem" title="Choose" image="Connection_1pt" selectedImage="Connection_solid" id="cPa-gy-q4n"/>
                     <connections>
                         <outlet property="bottomItemView" destination="rFH-Th-oQH" id="2ga-uG-Kku"/>
                         <outlet property="topItemView" destination="f1e-Rh-HTl" id="9B9-Nf-V5W"/>
@@ -643,7 +643,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="D48-93-umz" id="UNp-54-fFv">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="nWb-TU-Vv6">
@@ -684,6 +684,8 @@
                         <rect key="frame" x="0.0" y="975" width="768" height="49"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="selectedImageTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
                         <segue destination="mGS-vd-IcI" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
@@ -709,7 +711,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RyO-Rz-YgE" id="p07-e9-e2p">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0Ux-xp-IHI">
@@ -748,11 +750,12 @@
         <scene sceneID="Yy8-bk-MLR">
             <objects>
                 <navigationController storyboardIdentifier="LoadNavigationController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="mGS-vd-IcI" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Load" image="first" id="acW-dT-cKf"/>
+                    <tabBarItem key="tabBarItem" title="Load" image="Upload_1pt" selectedImage="Upload_solid" id="acW-dT-cKf"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="4j0-M5-bsu">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="4j0-M5-bsu">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -767,11 +770,12 @@
         <scene sceneID="8Ct-IR-hxx">
             <objects>
                 <navigationController storyboardIdentifier="ActiveSet" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="mvR-N5-pVL" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Active" image="second" id="ebf-Iy-usb"/>
+                    <tabBarItem key="tabBarItem" title="Active" image="Music_1pt" selectedImage="Music_solid" id="ebf-Iy-usb"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="1p0-pw-Wxo">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -786,11 +790,12 @@
         <scene sceneID="n2z-X4-oWe">
             <objects>
                 <navigationController storyboardIdentifier="DisplayScores" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Zf9-UX-PeL" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Rankings" image="first" id="9bM-Wx-3tv"/>
+                    <tabBarItem key="tabBarItem" title="Rankings" image="Chart-Bars_1pt" selectedImage="Chart-Bars_solid" id="9bM-Wx-3tv"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="bRZ-NC-jcU">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -803,7 +808,13 @@
         </scene>
     </scenes>
     <resources>
-        <image name="first" width="30" height="30"/>
-        <image name="second" width="30" height="30"/>
+        <image name="Chart-Bars_1pt" width="30" height="30"/>
+        <image name="Chart-Bars_solid" width="30" height="30"/>
+        <image name="Connection_1pt" width="30" height="30"/>
+        <image name="Connection_solid" width="30" height="30"/>
+        <image name="Music_1pt" width="30" height="30"/>
+        <image name="Music_solid" width="30" height="30"/>
+        <image name="Upload_1pt" width="30" height="30"/>
+        <image name="Upload_solid" width="30" height="30"/>
     </resources>
 </document>

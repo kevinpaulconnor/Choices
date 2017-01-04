@@ -27,7 +27,6 @@ class CreateImportViewController: UIViewController {
         let status = MPMediaLibrary.authorizationStatus()
         if (status == MPMediaLibraryAuthorizationStatus.authorized)
         {
-            
             return true
         }
         return false
