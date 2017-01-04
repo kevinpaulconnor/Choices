@@ -26,6 +26,7 @@
 		6D14970D1C90B8C4004E6017 /* PreferenceSet.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6D14970B1C90B8C4004E6017 /* PreferenceSet.xcdatamodeld */; };
 		6D1497301C90C354004E6017 /* PreferenceSetDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D14972F1C90C354004E6017 /* PreferenceSetDataController.swift */; };
 		6D1497321C90F1C8004E6017 /* LoadExistingSetsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1497311C90F1C8004E6017 /* LoadExistingSetsTableViewController.swift */; };
+		6D2029D01E16F8DD001C3424 /* CreateImportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2029CF1E16F8DD001C3424 /* CreateImportViewController.swift */; };
 		6D2DE96B1CA2094A00C234D7 /* DisplayScoresTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2DE96A1CA2094A00C234D7 /* DisplayScoresTableViewController.swift */; };
 		6D4230651C9A067A006F65DD /* ELOManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4230641C9A067A006F65DD /* ELOManager.swift */; };
 		6D8D38911DDD15FC003B969E /* ELOManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8D38901DDD15FC003B969E /* ELOManagerTests.swift */; };
@@ -75,6 +76,7 @@
 		6D14970C1C90B8C4004E6017 /* PreferenceSet.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PreferenceSet.xcdatamodel; sourceTree = "<group>"; };
 		6D14972F1C90C354004E6017 /* PreferenceSetDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceSetDataController.swift; sourceTree = "<group>"; };
 		6D1497311C90F1C8004E6017 /* LoadExistingSetsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadExistingSetsTableViewController.swift; sourceTree = "<group>"; };
+		6D2029CF1E16F8DD001C3424 /* CreateImportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateImportViewController.swift; sourceTree = "<group>"; };
 		6D2DE96A1CA2094A00C234D7 /* DisplayScoresTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayScoresTableViewController.swift; sourceTree = "<group>"; };
 		6D4230641C9A067A006F65DD /* ELOManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ELOManager.swift; sourceTree = "<group>"; };
 		6D8D38901DDD15FC003B969E /* ELOManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ELOManagerTests.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				6D1496C31C765704004E6017 /* SetLoaderViewController.swift */,
 				6D1496C51C765704004E6017 /* ChoosePreferenceViewController.swift */,
 				6D1496C71C765704004E6017 /* Main.storyboard */,
+				6D2029CF1E16F8DD001C3424 /* CreateImportViewController.swift */,
 				6D2DE96A1CA2094A00C234D7 /* DisplayScoresTableViewController.swift */,
 				6D1497311C90F1C8004E6017 /* LoadExistingSetsTableViewController.swift */,
 				6D1497091C88F886004E6017 /* ItemChooserViewController.swift */,
@@ -314,6 +317,7 @@
 				6D1496FA1C7BC9BF004E6017 /* DisplayCandidatePreferenceSetsTableViewController.swift in Sources */,
 				6D1496C21C765704004E6017 /* AppDelegate.swift in Sources */,
 				6D1497321C90F1C8004E6017 /* LoadExistingSetsTableViewController.swift in Sources */,
+				6D2029D01E16F8DD001C3424 /* CreateImportViewController.swift in Sources */,
 				6D1496FE1C7BCDBF004E6017 /* PreferenceSet.swift in Sources */,
 				6D4230651C9A067A006F65DD /* ELOManager.swift in Sources */,
 				6D1497041C7FB45C004E6017 /* PreferenceSetItem.swift in Sources */,
