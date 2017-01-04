@@ -11,9 +11,17 @@ import MediaPlayer
 
 class ItemChooserViewController: UIViewController {
     var item: PreferenceSetItem?
+    
+    //api for parent controller to inform ItemChooser
+    // that it has lost control of a shared resource,
+    // so that it can adjust its state if necessary
+    func updateAfterLosingControl() {
+        
+    }
 }
 
 class iTunesItemChooserViewController : ItemChooserViewController {
+    @IBOutlet weak var playerButton: UIButton!
     @IBOutlet weak var albumArt: UIImageView!
     @IBOutlet weak var songTitle: UILabel!
     @IBOutlet weak var artist: UILabel!
@@ -39,14 +47,34 @@ class iTunesItemChooserViewController : ItemChooserViewController {
         artist.text = self.item!.subtitleForTableDisplay()
     }
     
+    override func updateAfterLosingControl() {
+        if (player!.nowPlayingItem == self.mediaItem && player!.playbackState == .playing) {
+            swapMyImage()
+        }
+    }
+    
+    func swapMyImage() {
+        //FIXME it would be nice if a relevant control state applied here,
+        //but it doesn't look like one does
+        if (playerButton.currentImage == #imageLiteral(resourceName: "Play-play_solid")) {
+            playerButton!.setImage(#imageLiteral(resourceName: "Play-stop_solid"), for: UIControlState.normal)
+        } else {
+            playerButton!.setImage(#imageLiteral(resourceName: "Play-play_solid"), for: UIControlState.normal)
+        }
+    }
+    
     func playPause() {
         // have to share applicationMusicPlayer with other ItemChoosers
         var myItemLoaded = true
         if player!.nowPlayingItem != self.mediaItem {
+            if let parent = self.parent as! ChoosePreferenceViewController! {
+                    parent.itemChooserGrabbedControl(controllingItem: self)
+            }
             itemCollection = MPMediaItemCollection(items: [self.mediaItem!])
             player!.setQueue(with: itemCollection!)
             myItemLoaded = false
         }
+        swapMyImage()
         switch player!.playbackState {
         case .stopped, .paused:
             player!.play()

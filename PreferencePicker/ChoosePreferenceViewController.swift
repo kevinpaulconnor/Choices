@@ -78,6 +78,15 @@ class ChoosePreferenceViewController: UIViewController {
         
         self.setItems()
     }
+    // itemChooser grabbed control of, e.g. the music player. Let the other item
+    // chooser know so that it can update as necessary
+    func itemChooserGrabbedControl(controllingItem: ItemChooserViewController) {
+        if (controllingItem == topViewController!) {
+            bottomViewController!.updateAfterLosingControl()
+        } else {
+            topViewController!.updateAfterLosingControl()
+        }
+    }
     
     func setItems() {
         // less awkward if a way to return a tuple here.
