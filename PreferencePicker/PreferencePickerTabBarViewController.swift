@@ -16,7 +16,7 @@ class PreferencePickerTabBarViewController: UITabBarController, UITabBarControll
     var candidateMO: PreferenceSetMO?
     fileprivate struct TabIndex {
         static let Load = 0
-        static let Second = 1
+        static let Choose = 1
         static let ActiveSet = 2
         static let ViewScores = 3
     }
@@ -89,7 +89,7 @@ class PreferencePickerTabBarViewController: UITabBarController, UITabBarControll
                         }
                         let alert = UIAlertController(
                             title: "No Active Set",
-                            message: "Load or Create a Preference Set",
+                            message: "",
                             preferredStyle: UIAlertControllerStyle.alert
                         )
                         alert.addAction(UIAlertAction(
