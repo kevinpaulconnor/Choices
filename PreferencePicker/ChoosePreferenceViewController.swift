@@ -26,6 +26,8 @@ class ChoosePreferenceViewController: UIViewController {
     var topItem: PreferenceSetItem?
     var topViewController: ItemChooserViewController?
     var bottomViewController: ItemChooserViewController?
+    var viewCenter: CGPoint?
+    var viewAnimator: UIViewPropertyAnimator?
     var bottomItem: PreferenceSetItem?
     
     override func viewDidLoad() {
@@ -34,16 +36,53 @@ class ChoosePreferenceViewController: UIViewController {
         activeSet = barViewController.activeSet
 
         self.setItems()
-        self.setSwipeOnItemViews(topItemView)
-        self.setSwipeOnItemViews(bottomItemView)
+        //keeping swipe code around for now
+        //self.setSwipeOnItemViews(topItemView)
+        //self.setSwipeOnItemViews(bottomItemView)
+        self.setPanOnItemViews(topItemView)
+        self.setPanOnItemViews(bottomItemView)
     }
     
+    func setPanOnItemViews(_ view: UIView) {
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(ChoosePreferenceViewController.respondToPanGesture(gesture:)))
+        //swipeRight.direction = UISwipeGestureRecognizerDirection.right
+        view.addGestureRecognizer(pan)
+    }
+    
+    
+    func respondToPanGesture(gesture: UIPanGestureRecognizer) {
+        let target = gesture.view!
+        
+        switch gesture.state {
+        case .began:
+            viewCenter = target.center
+        case .changed:
+            let translation = gesture.translation(in: self.view)
+            target.center = CGPoint(x: viewCenter!.x + translation.x, y: viewCenter!.y + translation.y)
+        case .ended:
+            //viewCenter = target.center
+            let v = gesture.velocity(in: target)
+            dump(v)
+            // 500 is an arbitrary value that looked pretty good, you may want to base this on device resolution or view size.
+            // The y component of the velocity is usually ignored, but is used when animating the center of a view
+            let velocity = CGVector(dx: v.x / 500, dy: v.y / 500)
+            dump(velocity)
+            let springParameters = UISpringTimingParameters(mass: 2.5, stiffness: 70, damping: 55, initialVelocity: velocity)
+            viewAnimator = UIViewPropertyAnimator(duration: 0.0, timingParameters: springParameters)
+            
+            viewAnimator!.addAnimations({
+                target.center = self.viewCenter!
+            })
+            viewAnimator!.startAnimation()
+        default: break
+        }
+    }
+
     func setSwipeOnItemViews(_ view: UIView) {
         let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(ChoosePreferenceViewController.respondToSwipeGesture(_:)))
         swipeRight.direction = UISwipeGestureRecognizerDirection.right
         view.addGestureRecognizer(swipeRight)
     }
-    
     
     func respondToSwipeGesture(_ gesture: UIGestureRecognizer) {
         if gesture is UISwipeGestureRecognizer {
