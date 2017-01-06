@@ -13,14 +13,12 @@ class ChoosePreferenceViewController: UIViewController {
     @IBOutlet weak var topItemView: UIView!
     @IBOutlet weak var bottomItemView: UIView!
     @IBAction func aboutTheSame(_ sender: UIButton) {
-        sendComparison(0)
+        setComparison(0)
         self.reset()
     }
     @IBAction func getNewChoices() {
         self.reset()
     }
-
-
 
     var activeSet: PreferenceSet?
     var topItem: PreferenceSetItem?
@@ -36,16 +34,12 @@ class ChoosePreferenceViewController: UIViewController {
         activeSet = barViewController.activeSet
 
         self.setItems()
-        //keeping swipe code around for now
-        //self.setSwipeOnItemViews(topItemView)
-        //self.setSwipeOnItemViews(bottomItemView)
         self.setPanOnItemViews(topItemView)
         self.setPanOnItemViews(bottomItemView)
     }
     
     func setPanOnItemViews(_ view: UIView) {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(ChoosePreferenceViewController.respondToPanGesture(gesture:)))
-        //swipeRight.direction = UISwipeGestureRecognizerDirection.right
         view.addGestureRecognizer(pan)
     }
     
@@ -60,44 +54,55 @@ class ChoosePreferenceViewController: UIViewController {
             let translation = gesture.translation(in: self.view)
             target.center = CGPoint(x: viewCenter!.x + translation.x, y: viewCenter!.y + translation.y)
         case .ended:
-            //viewCenter = target.center
             let v = gesture.velocity(in: target)
-            dump(v)
-            // 500 is an arbitrary value that looked pretty good, you may want to base this on device resolution or view size.
-            // The y component of the velocity is usually ignored, but is used when animating the center of a view
-            let velocity = CGVector(dx: v.x / 500, dy: v.y / 500)
-            dump(velocity)
-            let springParameters = UISpringTimingParameters(mass: 2.5, stiffness: 70, damping: 55, initialVelocity: velocity)
-            viewAnimator = UIViewPropertyAnimator(duration: 0.0, timingParameters: springParameters)
+            // FIXME: 500 is a magic number
+            // if we're moving fast enough left or right at end of pan, animate view off screen
+            // and register the relevant comparison
+            var xValueToAnimateTo = self.viewCenter!.x
+            var winningMemoryId:MemoryId? = nil
+            switch v.x {
+            case 1000 ..< .greatestFiniteMagnitude:
+                xValueToAnimateTo = self.viewCenter!.x + 500
+                winningMemoryId = getWinningIdFromPanDirection(target: target, xDirection: .greatestFiniteMagnitude)
+            case -.greatestFiniteMagnitude ..< -1000:
+                xValueToAnimateTo = self.viewCenter!.x + -500
+                winningMemoryId = getWinningIdFromPanDirection(target: target, xDirection: -.greatestFiniteMagnitude)
+            // really wish this wasn't required
+            default: break
+            }
             
-            viewAnimator!.addAnimations({
-                target.center = self.viewCenter!
-            })
+            viewAnimator = UIViewPropertyAnimator(duration: 0.5, curve: .easeOut)
+            let animationObject = { target.center = CGPoint(x: xValueToAnimateTo, y: self.viewCenter!.y) }
+            viewAnimator!.addAnimations(animationObject)
+            viewAnimator!.addCompletion({ _ in self.resolvePan(winningId: winningMemoryId) })
             viewAnimator!.startAnimation()
         default: break
         }
     }
-
-    func setSwipeOnItemViews(_ view: UIView) {
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(ChoosePreferenceViewController.respondToSwipeGesture(_:)))
-        swipeRight.direction = UISwipeGestureRecognizerDirection.right
-        view.addGestureRecognizer(swipeRight)
-    }
     
-    func respondToSwipeGesture(_ gesture: UIGestureRecognizer) {
-        if gesture is UISwipeGestureRecognizer {
-            var id = topItem!.memoryId
-            if gesture.view!.tag == bottomItemView.tag {
-                id = bottomItem!.memoryId
+    func getWinningIdFromPanDirection(target: UIView, xDirection: CGFloat) -> MemoryId {
+        switch target.tag {
+        case topItemView.tag:
+            if xDirection == .greatestFiniteMagnitude { return topItem!.memoryId } else {
+                return bottomItem!.memoryId
             }
-            sendComparison(id)
-            // should the music stop if it's playing on a swipe?
-            self.reset()
+        case bottomItemView.tag:
+            if xDirection == -.greatestFiniteMagnitude { return bottomItem!.memoryId } else {
+                return topItem!.memoryId
+            }
+        default: fatalError()
         }
     }
     
+    func resolvePan(winningId: MemoryId?) {
+        guard let id = winningId else { return }
+        
+        setComparison(id)
+        self.reset()
+    }
+    
     // hate 0 for draw as magic number, to-do find a good spot to un-magic it
-    func sendComparison(_ winningItemId: MemoryId) {
+    func setComparison(_ winningItemId: MemoryId) {
         let id1 = topItem!.memoryId
         let id2 = bottomItem!.memoryId
         activeSet!.registerComparison(id1, id2: id2, result: winningItemId)
