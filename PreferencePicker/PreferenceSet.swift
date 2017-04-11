@@ -240,7 +240,7 @@ class photoMomentPreferenceSet : PreferenceSetBase {
     
     init(candidateItems: [PHAsset], title: String) {
         super.init(title: title)
-        super.preferenceSetType = PreferenceSetTypeIds.iTunesPlaylist
+        super.preferenceSetType = PreferenceSetTypeIds.photoMoment
         
         for item in candidateItems {
             let newItem = photoMomentPreferenceSetItem(candidateItem: item, set: self)

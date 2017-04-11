@@ -44,7 +44,7 @@ struct PreferenceSetTypeIds {
 class PreferenceSetItemCollection {
     var mpmic: MPMediaItemCollection?
     var mpmi: [MPMediaItem]?
-    var phcl: PHCollectionList?
+    var phac: PHAssetCollection?
 }
 
 protocol PreferenceSetType {
@@ -126,14 +126,14 @@ class photoPreferenceSetType: PreferenceSetType {
         var output = [PreferenceSetItemCollection]()
         
         // this is not the world's finest api, Apple
-        let request = PHCollectionList.fetchMomentLists(with: PHCollectionListSubtype.momentListCluster, options: nil)
-        print("\(request.count)")
-        request.enumerateObjects({(object: AnyObject!,
+        let fetchResult = PHAssetCollection.fetchMoments(with: nil)
+        print("\(fetchResult.count)")
+        fetchResult.enumerateObjects({(object: AnyObject!,
             count: Int,
             stop: UnsafeMutablePointer<ObjCBool>) in
-            let collection = object as! PHCollectionList
+            let collection = object as! PHAssetCollection
             let gc = PreferenceSetItemCollection()
-            gc.phcl = collection
+            gc.phac = collection
             output.append(gc)
             
         })
@@ -141,14 +141,14 @@ class photoPreferenceSetType: PreferenceSetType {
     }
     
     func displayNameForCandidateSet(_ candidateSet: PreferenceSetItemCollection) -> String {
-        return candidateSet.phcl!.localizedTitle ?? "(No Title Available)"
+        return candidateSet.phac!.localizedTitle ?? "(No Title Available)"
     }
     
     func itemDetailForDisplay(_ candidateSet: PreferenceSetItemCollection) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = DateFormatter.Style.short
         dateFormatter.timeStyle = DateFormatter.Style.short
-        return ("\(dateFormatter.string(from: candidateSet.phcl!.startDate!)) - \(dateFormatter.string(from: candidateSet.phcl!.endDate!))")
+        return ("\(dateFormatter.string(from: candidateSet.phac!.startDate!)) - \(dateFormatter.string(from: candidateSet.phac!.endDate!))")
     }
     
     func nameForItemsOfThisType(_ count: Int) -> String {
@@ -156,7 +156,19 @@ class photoPreferenceSetType: PreferenceSetType {
     }
     
     func createPreferenceSet(_ candidateSet: PreferenceSetItemCollection, title: String) -> PreferenceSet {
-        return iTunesPlaylistPreferenceSet(candidateItems: [MPMediaItem](), title: "title")
+        var items = [PHAsset]()
+        // this seems awkward...
+        if candidateSet.phac != nil {
+            let fetchResult = PHAsset.fetchAssets(in: candidateSet.phac!, options: nil)
+            fetchResult.enumerateObjects({(object: AnyObject!,
+                count: Int,
+                stop: UnsafeMutablePointer<ObjCBool>) in
+                let item = object as! PHAsset
+                items.append(item)
+            })
+        }
+        
+        return photoMomentPreferenceSet(candidateItems: items, title: "title")
     }
     
     func createPreferenceItemCollectionFromMOs(_ managedSet: [PreferenceSetItemMO]) -> PreferenceSetItemCollection {
