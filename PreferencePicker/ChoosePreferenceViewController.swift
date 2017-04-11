@@ -83,11 +83,12 @@ class ChoosePreferenceViewController: UIViewController {
     func getWinningIdFromPanDirection(target: UIView, xDirection: CGFloat) -> MemoryId {
         switch target.tag {
         case topItemView.tag:
-            if xDirection == .greatestFiniteMagnitude { return topItem!.memoryId } else {
+            if xDirection == .greatestFiniteMagnitude { return topItem!.memoryId }
+                else {
                 return bottomItem!.memoryId
             }
         case bottomItemView.tag:
-            if xDirection == -.greatestFiniteMagnitude { return bottomItem!.memoryId } else {
+            if xDirection == .greatestFiniteMagnitude { return bottomItem!.memoryId } else {
                 return topItem!.memoryId
             }
         default: fatalError()
