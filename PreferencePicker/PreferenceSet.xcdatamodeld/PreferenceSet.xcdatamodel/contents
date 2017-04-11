@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15E65" minimumToolsVersion="Xcode 7.0">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16E195" minimumToolsVersion="Xcode 7.0" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="Comparison" representedClassName=".ComparisonMO" syncable="YES">
-        <attribute name="result" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="timestamp" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="result" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="preferenceSet" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PreferenceSet" inverseName="comparison" inverseEntity="PreferenceSet" syncable="YES"/>
         <relationship name="preferenceSetItem" optional="YES" toMany="YES" maxCount="2" deletionRule="Nullify" destinationEntity="PreferenceSetItem" inverseName="comparison" inverseEntity="PreferenceSetItem" syncable="YES"/>
     </entity>
     <entity name="PreferenceScore" representedClassName=".PreferenceScoreMO" syncable="YES">
-        <attribute name="score" optional="YES" attributeType="Integer 64" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="score" optional="YES" attributeType="Integer 64" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="preferenceSet" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PreferenceSet" inverseName="preferenceScore" inverseEntity="PreferenceSet" syncable="YES"/>
         <relationship name="preferenceSetItem" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PreferenceSetItem" inverseName="preferenceScore" inverseEntity="PreferenceSetItem" syncable="YES"/>
     </entity>
@@ -19,9 +19,10 @@
         <relationship name="preferenceSetItem" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PreferenceSetItem" inverseName="preferenceSet" inverseEntity="PreferenceSetItem" syncable="YES"/>
     </entity>
     <entity name="PreferenceSetItem" representedClassName=".PreferenceSetItemMO" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="recoveryProp1" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="recoveryProp2" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="stringId" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="comparison" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Comparison" inverseName="preferenceSetItem" inverseEntity="Comparison" syncable="YES"/>
         <relationship name="preferenceScore" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PreferenceScore" inverseName="preferenceSetItem" inverseEntity="PreferenceScore" syncable="YES"/>
         <relationship name="preferenceSet" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PreferenceSet" inverseName="preferenceSetItem" inverseEntity="PreferenceSet" syncable="YES"/>
@@ -30,6 +31,6 @@
         <element name="Comparison" positionX="-279" positionY="578" width="128" height="105"/>
         <element name="PreferenceScore" positionX="-308" positionY="144" width="128" height="88"/>
         <element name="PreferenceSet" positionX="-344" positionY="335" width="128" height="118"/>
-        <element name="PreferenceSetItem" positionX="-65" positionY="290" width="128" height="133"/>
+        <element name="PreferenceSetItem" positionX="-65" positionY="290" width="128" height="150"/>
     </elements>
 </model>
