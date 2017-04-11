@@ -64,6 +64,7 @@ class photoMomentPreferenceSetItem : PreferenceSetItem {
     
     init(candidateItem: PHAsset, set: PreferenceSet) {
         referenceItem = ReferenceItem()
+        referenceItem.asset = candidateItem
         storageId = candidateItem.localIdentifier
         memoryId = set.getNextMemoryId()
     }

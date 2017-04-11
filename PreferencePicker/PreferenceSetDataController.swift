@@ -82,7 +82,7 @@ class PreferenceSetDataController : NSObject {
     //TO-DO: Combine getFetchPredicateForPreferenceItem and PreferenceScore
     fileprivate func getFetchPredicateForPreferenceItem(_ referenceItem: ReferenceItem) -> NSPredicate {
         //FIXME don't just want to default to id0 here. or do we?
-        let ret = referenceItem.asset != nil ? NSPredicate(format: "stringId == \(referenceItem.asset!.localIdentifier)") :
+        let ret = referenceItem.asset != nil ? NSPredicate(format: "stringId matches[c] %@", referenceItem.asset!.localIdentifier) :
             NSPredicate(format: "id == \(referenceItem.mediaItem!.persistentID)")
         return ret
     }
