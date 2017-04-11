@@ -14,12 +14,12 @@ class ELOManagerTests: XCTestCase {
     
     // This isn't the best place for this definition in the medium term
     class preferenceSetItemForTests : PreferenceSetItem {
-        var referenceItem: ReferenceItemContainer
+        var referenceItem: ReferenceItem
         var memoryId: MemoryId
         
         init(id: MemoryId) {
             self.memoryId = id
-            self.referenceItem = ReferenceItemContainer()
+            self.referenceItem = ReferenceItem()
         }
         
         func titleForTableDisplay() -> String {
