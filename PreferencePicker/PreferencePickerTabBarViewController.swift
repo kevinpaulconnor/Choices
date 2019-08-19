@@ -90,11 +90,11 @@ class PreferencePickerTabBarViewController: UITabBarController, UITabBarControll
                         let alert = UIAlertController(
                             title: "No Active Set",
                             message: "",
-                            preferredStyle: UIAlertControllerStyle.alert
+                            preferredStyle: UIAlertController.Style.alert
                         )
                         alert.addAction(UIAlertAction(
                             title: "Create Or Load A Set",
-                            style: UIAlertActionStyle.default,
+                            style: UIAlertAction.Style.default,
                             handler: alertHandler
                             ))
                         

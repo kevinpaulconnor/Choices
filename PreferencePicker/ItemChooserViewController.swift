@@ -36,7 +36,7 @@ class iTunesItemChooserViewController : ItemChooserViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        player = MPMusicPlayerController.applicationMusicPlayer()
+        player = MPMusicPlayerController.applicationMusicPlayer
         mediaItem = item!.referenceItem.mediaItem
         
         let imageSize = CGSize(width: albumArt.bounds.width, height: albumArt.bounds.width)
@@ -57,9 +57,9 @@ class iTunesItemChooserViewController : ItemChooserViewController {
         //FIXME it would be nice if a relevant control state applied here,
         //but it doesn't look like one does
         if (playerButton.currentImage == #imageLiteral(resourceName: "Play-play_solid")) {
-            playerButton!.setImage(#imageLiteral(resourceName: "Play-stop_solid"), for: UIControlState.normal)
+            playerButton!.setImage(#imageLiteral(resourceName: "Play-stop_solid"), for: UIControl.State.normal)
         } else {
-            playerButton!.setImage(#imageLiteral(resourceName: "Play-play_solid"), for: UIControlState.normal)
+            playerButton!.setImage(#imageLiteral(resourceName: "Play-play_solid"), for: UIControl.State.normal)
         }
     }
     

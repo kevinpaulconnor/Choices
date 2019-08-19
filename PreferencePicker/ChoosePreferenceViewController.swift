@@ -110,16 +110,16 @@ class ChoosePreferenceViewController: UIViewController {
     }
     
     func reset() {
-        let player = MPMusicPlayerController.applicationMusicPlayer()
+        let player = MPMusicPlayerController.applicationMusicPlayer
         player.stop()
         self.resetItems()
     }
     
     func resetItems() {
         topViewController!.view.removeFromSuperview()
-        topViewController!.removeFromParentViewController()
+        topViewController!.removeFromParent()
         bottomViewController!.view.removeFromSuperview()
-        bottomViewController!.removeFromParentViewController()
+        bottomViewController!.removeFromParent()
         
         self.setItems()
     }
@@ -153,11 +153,11 @@ class ChoosePreferenceViewController: UIViewController {
     func setContainerView(_ containerView: UIView, tag: Int, item: PreferenceSetItem) -> ItemChooserViewController {
         let itemViewController = self.chooserItemControllersByPreferenceSetType() as! ItemChooserViewController
         itemViewController.item = item
-        self.addChildViewController(itemViewController)
+        self.addChild(itemViewController)
         itemViewController.view.frame = CGRect(x: 0, y: 0, width: containerView.frame.size.width, height: containerView.frame.size.height)
         containerView.tag = tag
         containerView.addSubview(itemViewController.view)
-        itemViewController.didMove(toParentViewController: self)
+        itemViewController.didMove(toParent: self)
         return itemViewController
     }
     
