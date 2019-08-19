@@ -67,7 +67,7 @@ class iTunesItemChooserViewController : ItemChooserViewController {
         // have to share applicationMusicPlayer with other ItemChoosers
         var myItemLoaded = true
         if player!.nowPlayingItem != self.mediaItem {
-            if let parent = self.parent as! ChoosePreferenceViewController! {
+            if let parent = self.parent as? ChoosePreferenceViewController {
                     parent.itemChooserGrabbedControl(controllingItem: self)
             }
             itemCollection = MPMediaItemCollection(items: [self.mediaItem!])

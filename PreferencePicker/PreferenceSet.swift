@@ -231,7 +231,7 @@ class iTunesPlaylistPreferenceSet : PreferenceSetBase {
     }
     
     override func getMemoryIdByPreferenceSetItemMO(_ item: PreferenceSetItemMO) -> MemoryId {
-        return self.referencedItems[UInt64(item.id!)] ?? -1
+        return self.referencedItems[UInt64(truncating: item.id!)] ?? -1
     }
 }
 

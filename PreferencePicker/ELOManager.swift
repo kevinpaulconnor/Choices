@@ -145,10 +145,10 @@ class ELOManager {
         while recommendedUpcomingComparisons.count <= comparisonsToStore {
             let firstItem = minimumComparisonPreferenceScores[Int(arc4random_uniform(UInt32(minimumComparisonPreferenceScores.count)))]
             var secondItem = firstItem
-            while firstItem.value.id == secondItem.value.id {
+            while firstItem!.id == secondItem!.id {
                 secondItem = minimumComparisonPreferenceScores[Int(arc4random_uniform(UInt32(minimumComparisonPreferenceScores.count)))]
             }
-            recommendedUpcomingComparisons.append((firstItem.value.id!, secondItem.value.id!))
+            recommendedUpcomingComparisons.append((firstItem!.id!, secondItem!.id!))
         }
         
     }

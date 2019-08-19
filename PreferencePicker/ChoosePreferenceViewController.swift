@@ -38,13 +38,13 @@ class ChoosePreferenceViewController: UIViewController {
         self.setPanOnItemViews(bottomItemView)
     }
     
-    func setPanOnItemViews(_ view: UIView) {
+    @objc func setPanOnItemViews(_ view: UIView) {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(ChoosePreferenceViewController.respondToPanGesture(gesture:)))
         view.addGestureRecognizer(pan)
     }
     
     
-    func respondToPanGesture(gesture: UIPanGestureRecognizer) {
+    @objc func respondToPanGesture(gesture: UIPanGestureRecognizer) {
         let target = gesture.view!
         
         switch gesture.state {
